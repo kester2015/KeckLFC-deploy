@@ -121,6 +121,10 @@ class KeckLFC(object):
             self.rbclock = RbClock(addr=rbclock_addr, name=rbclock_name)
 
             self._dev_list = [self.amamp, self.amamp2, self.ptamp, self.RFampPS, self.RFoscPS, self.rbclock]
+
+        self.addr_book = {}
+        self.addr_book['ptamp'] = "ASTR"
+
         '''
         self.osa = AndoOSA_AQ6315E(addr='GPIB1::1::INSTR', name='Ando AQ6317B OSA')
 
@@ -378,7 +382,7 @@ class KeckLFC(object):
         if value == None:
             from Hardware.USB2408 import USB2408
             daq1 = USB2408(addr=1)
-            daq1.connect()    
+            daq1.connect()
             temp1 = daq1.get_temp_all()
             # print(temp1)
             daq1.disconnect()
