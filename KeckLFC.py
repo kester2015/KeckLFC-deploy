@@ -498,19 +498,22 @@ class KeckLFC(object):
 
 
     def LFC_RIO_T(self, value=None):
+        from Hardware.ORIONLaser import ORIONLaser
+        rio = ORIONLaser(addr=f'ASRL{14}::INSTR')
+        rio.connect()
 
         if value == None:
-            addr = 0
-            chan = 6 # Bottom rack temperature  need recheck
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
-            daq.connect()
-            temp = daq.get_temp(chan)
-            daq.disconnect()
-            return temp
+            
+            ii=rio.readTECsetpoint()
+            print(f'RIO_T: {ii} C')
+            rio.disconnect()
+            return ii
+            #rio.printStatus()
         else:
-            raise ValueError("LFC_T_RACK_BOT is read-only")
-            return
+            rio.writeTECsetpoint(value)
+            # need set default
+            ii=rio.readTECsetpoint()
+            return ii
         # ==============================
         # if value == None:
         #     # This is called periodically
@@ -525,7 +528,7 @@ class KeckLFC(object):
         #     return 0  # return
 
     def LFC_RIO_I(self, value=None):
-        from KeckLFC.Hardware.ORIONLaser import ORIONLaser
+        from Hardware.ORIONLaser import ORIONLaser
         rio = ORIONLaser(addr=f'ASRL{14}::INSTR')
         rio.connect()
 
@@ -543,7 +546,7 @@ class KeckLFC(object):
             return ii
 
     def LFC_EDFA27_P(self, value=None):
-        from KeckLFC.Hardware.AmonicsEDFA import AmonicsEDFA
+        from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic27 = AmonicsEDFA(addr=f'ASRL{6}::INSTR', name='Amonics EDFA 27 dBm')
         amonic27.connect()
         if value == None:
@@ -565,7 +568,7 @@ class KeckLFC(object):
 
     def LFC_EDFA27_ONOFF(self, value=None):
 
-        from KeckLFC.Hardware.AmonicsEDFA import AmonicsEDFA
+        from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic27 = AmonicsEDFA(addr=f'ASRL{6}::INSTR', name='Amonics EDFA 27 dBm')
         amonic27.connect()
         if value == None:
@@ -583,7 +586,7 @@ class KeckLFC(object):
             return edfa27onoff
 
     def LFC_EDFA13_P(self, value=None):
-        from KeckLFC.Hardware.AmonicsEDFA import AmonicsEDFA
+        from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic13 = AmonicsEDFA(addr=f'ASRL{9}::INSTR', name='Amonics EDFA 13 dBm')
         amonic13.connect()
 
@@ -604,7 +607,7 @@ class KeckLFC(object):
             return edfa27p
 
     def LFC_EDFA13_ONOFF(self, value=None):
-        from KeckLFC.Hardware.AmonicsEDFA import AmonicsEDFA
+        from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic13 = AmonicsEDFA(addr=f'ASRL{9}::INSTR', name='Amonics EDFA 13 dBm')
         amonic13.connect()
 
@@ -623,7 +626,7 @@ class KeckLFC(object):
             return edfa27onoff
 
     def LFC_EDFA23_P(self, value=None):
-        from KeckLFC.Hardware.AmonicsEDFA import AmonicsEDFA
+        from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic23 = AmonicsEDFA(addr=f'ASRL{12}::INSTR', name='Amonics EDFA 23 dBm')
         amonic23.connect()
 
@@ -644,7 +647,7 @@ class KeckLFC(object):
             return edfa27p
 
     def LFC_EDFA23_ONOFF(self, value=None):
-        from KeckLFC.Hardware.AmonicsEDFA import AmonicsEDFA
+        from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic23 = AmonicsEDFA(addr=f'ASRL{12}::INSTR', name='Amonics EDFA 23 dBm')
         amonic23.connect()
 
@@ -663,7 +666,7 @@ class KeckLFC(object):
             return edfa27onoff
 
     def LFC_RFAMP_I(self, value=None):
-        from KeckLFC.Hardware.InstekGppDCSupply import InstekGppDCSupply
+        from Hardware.InstekGppDCSupply import InstekGppDCSupply
         rfampPS = InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
         rfampPS.connect()
 
@@ -683,7 +686,7 @@ class KeckLFC(object):
             
 
     def LFC_RFAMP_V(self, value=None):
-        from KeckLFC.Hardware.InstekGppDCSupply import InstekGppDCSupply
+        from Hardware.InstekGppDCSupply import InstekGppDCSupply
         rfampPS = InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
         rfampPS.connect()
 
@@ -702,7 +705,7 @@ class KeckLFC(object):
             return rfampPS_i
 
     def LFC_RFOSCI_I(self, value=None):
-        from KeckLFC.Hardware.InstekGPD_4303S import InstekGPD_4303S
+        from Hardware.InstekGPD_4303S import InstekGPD_4303S
         rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
         rfoscPS.connect()
         if value == None:
@@ -719,7 +722,7 @@ class KeckLFC(object):
 
     def LFC_RFOSCI_V(self, value=None):
 
-        from KeckLFC.Hardware.InstekGPD_4303S import InstekGPD_4303S
+        from Hardware.InstekGPD_4303S import InstekGPD_4303S
         rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
         rfoscPS.connect()
         if value == None:
@@ -736,7 +739,7 @@ class KeckLFC(object):
 
     def LFC_IM_BIAS(self, value=None):
 
-        from KeckLFC.Hardware.SRS_SIM900 import SRS_SIM900, SRS_PIDcontrol_SIM960
+        from Hardware.SRS_SIM900 import SRS_SIM900, SRS_PIDcontrol_SIM960
         srs = SRS_SIM900(addr='GPIB0::2::INSTR')
         srs.connect()
         servo_IM = SRS_PIDcontrol_SIM960(srs, 3, name='Minicomb Intensity Lock Servo')
@@ -758,7 +761,7 @@ class KeckLFC(object):
 
     def LFC_IM_RF_ATT(self, value=None):
 
-        from KeckLFC.Hardware.InstekGPD_4303S import InstekGPD_4303S
+        from Hardware.InstekGPD_4303S import InstekGPD_4303S
         rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
         rfoscPS.connect()
         if value == None:
@@ -776,7 +779,7 @@ class KeckLFC(object):
     def LFC_WSP_PHASE(self, value=None):
 
         if value != None:
-            from KeckLFC.Hardware.Waveshaper import Waveshaper
+            from Hardware.Waveshaper import Waveshaper
             ws = Waveshaper()
             ws.connect()
 
@@ -803,7 +806,7 @@ class KeckLFC(object):
             return 0  # return
 
     def LFC_PTAMP_PRE_P(self, value=None):
-        from KeckLFC.Hardware.PritelAmp import PritelAmp
+        from Hardware.PritelAmp import PritelAmp
         ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
         ptamp.connect()
         if value != None:
@@ -820,7 +823,7 @@ class KeckLFC(object):
     def LFC_PTAMP_OUT(self, value=None):
         if value != None:
 
-            from KeckLFC.Hardware.PritelAmp import PritelAmp
+            from Hardware.PritelAmp import PritelAmp
             ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
             ptamp.connect()
 
@@ -833,7 +836,7 @@ class KeckLFC(object):
 
     def LFC_PTAMP_I(self, value=None):
 
-        from KeckLFC.Hardware.PritelAmp import PritelAmp
+        from Hardware.PritelAmp import PritelAmp
         ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
         ptamp.connect()
 
@@ -850,7 +853,7 @@ class KeckLFC(object):
 
     def LFC_PTAMP_ONOFF(self, value=None):
 
-        from KeckLFC.Hardware.PritelAmp import PritelAmp
+        from Hardware.PritelAmp import PritelAmp
         ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
         ptamp.connect()
 
@@ -868,7 +871,7 @@ class KeckLFC(object):
 
     def LFC_PTAMP_LATCH(self, value=None):
         if value == None:
-            from KeckLFC.Hardware.Arduino_relay import Arduino_relay
+            from Hardware.Arduino_relay import Arduino_relay
             arduino = Arduino_relay(addr=f"COM3")
             # print(f'com={i}')
             arduino.connect()
@@ -882,7 +885,7 @@ class KeckLFC(object):
 
     def LFC_WGD_T(self, value=None):
 
-        from KeckLFC.Hardware.TEC_TC720 import TEC_TC720
+        from Hardware.TEC_TC720 import TEC_TC720
 
         tec_ppln = TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
         tec_ppln.connect()
@@ -900,7 +903,7 @@ class KeckLFC(object):
 
     def LFC_PPLN_T(self, value=None):
 
-        from KeckLFC.Hardware.TEC_TC720 import TEC_TC720
+        from Hardware.TEC_TC720 import TEC_TC720
         # tec_PPLN = TEC_TC720(addr='ASRL46::INSTR')
         tec_wg = TEC_TC720(addr='COM16', name='Octave Waveguide TEC (TC720)')
         tec_wg.connect()
