@@ -400,13 +400,13 @@
 		<capability type="write">True</capability>
 		<format>%.1f</format>
 	</keyword>-->
-        <keyword>
+    <!--    <keyword>
                 <name>LFC_T_GLY_RACK_IN</name>
                 <type>double</type>
                 <help level="brief">Glycol inlet temp to instrument rack</help>
                 <help level="verbose">Glycol inlet temp to instrument rack</help>
-                <capability type="read">False</capability>
-                <format>%.3f</format>
+                <capability type="write">False</capability>
+                <format>%.3f</format> -->
         </keyword><!--
         <keyword>
                 <name>LFC_T_GLY_RACK_OUT</name>

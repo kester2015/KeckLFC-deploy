@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<bundle name="LFC" service="nslfc">
+	<dispatcher>
+		<name>+service+_dispatch_3</name>
+	</dispatcher>
+	<keyword>
+		<name>ICETEST</name>
+		<type>integer</type>
+		<help level="brief">test integer</help>
+		<help level="verbose">test integer</help>
+		<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+		<name>ICEARRAY</name>
+		<type>double array</type>
+		<help level="brief">test double array</help>
+		<help level="verbose">test double array</help>
+		<capability type="write">True</capability>
+		<elements>
+			<entry>
+				<index>0</index>
+				<label>Element_0</label>
+			</entry>
+			<entry>
+				<index>1</index>
+				<label>Element_1</label>
+			</entry>
+		</elements>
+	</keyword>
+	<keyword>
+		<name>ICESTA</name>
+		<type>enumerated</type>
+		<help level="brief">Ice connection status</help>
+		<help level="verbose">Ice connection status</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>1</key>
+				<value>Connected</value>
+			</entry>
+			<entry>
+				<key>2</key>
+				<value>Disconnected</value>
+			</entry>
+			<entry>
+				<key>3</key>
+				<value>Initializing</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>ICECLK</name>
+		<type>string</type>
+		<help level="brief">current time returned by ICE</help>
+		<help level="verbose">current time returned by ICE</help>
+		<capability type="write">False</capability>
+	</keyword>
+	<keyword>
+		<name>ICECLK_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">turn on / turn off the ICECLK</help>
+		<help level="verbose">turn on / turn off the ICECLK</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>SHOW_ALL_VAL</name>
+		<type>boolean</type>
+		<help level="brief">show all</help>
+		<help level="verbose"> show all</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+</bundle>

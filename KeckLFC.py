@@ -10,6 +10,7 @@ from Hardware import *
 import numpy as np
 import time
 
+icetest_mode = True
 
 class EquipmentManager(object):
 
@@ -75,8 +76,7 @@ def parse_xml(xmlfile):
         name = keyword.find('name').text
         keyword_type = keyword.find('type').text
         #capability_type = keyword.find('capability').get('type')
-
-        print('Parsed keyword: name=%s\ttype=%s' % (name, keyword_type))
+        # print('Parsed keyword: name=%s\ttype=%s' % (name, keyword_type))
         keyword_names.append(name)
         keyword_types.append(keyword_type)
 
@@ -139,7 +139,10 @@ class KeckLFC(object):
         '''
 
         ''' KTL keywords'''
-        keyword_names, keyword_types = parse_xml(r"LFC.xml.sin")
+        if icetest_mode: 
+            keyword_names, keyword_types = parse_xml(r"../testLFC.xml.sin")
+        else:
+            keyword_names, keyword_types = parse_xml(r"../LFC.xml.sin")
 
         self.keywords = {keyword: None for keyword in keyword_names}
         self.types = {keyword: keyword_type for keyword, keyword_type in zip(keyword_names, keyword_types)}

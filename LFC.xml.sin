@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<!-- <?xml version="1.0" ?>
 <bundle name="LFC" service="nslfc">
 	<dispatcher>
 		<name>+service+_dispatch_3</name>
@@ -606,4 +606,4 @@
 			</entry>
 		</values>
 	</keyword>
-</bundle>
+</bundle> -->
