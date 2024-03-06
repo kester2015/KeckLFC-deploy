@@ -5,7 +5,6 @@ import Demo
 
 sys.path.append('../')
 
-use_mock = False
 
 #import random, threading
 if not use_mock:
@@ -16,13 +15,20 @@ else:
     from mockKeckLFC import *
 
 
+icetest_mode = True
+use_mock = False
+
 class LfcI(Demo.Lfc):
 
     def __init__(self):
 
         #== List of the KTL keywords that should be monitored
         #self.keyword_names = ['ICEINT','ICEBOOL','ICEENUM','ICESTRING', 'ICESTA']
-        keyword_names, keyword_types = parse_xml('LFC.xml.sin')
+        if icetest_mode:
+            keyword_names, keyword_types = parse_xml('testLFC.xml.sin')
+        else:
+            keyword_names, keyword_types = parse_xml('LFC.xml.sin')
+
         self.keyword_names = keyword_names
 
         #== Define mockKeckLFC class object as mkl
