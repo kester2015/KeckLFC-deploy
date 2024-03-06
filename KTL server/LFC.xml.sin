@@ -83,7 +83,7 @@
 			</entry>
 		</elements>
 	</keyword>
-	<!-- <keyword>
+	<keyword>
 		<name>LFC_RIO_T</name>
 		<type>double</type>
 		<help level="brief">RIO pump laser temperature</help>
@@ -237,11 +237,11 @@
 		<help level="verbose">RF Oscillator input voltage</help>
 		<capability type="write">True</capability>
 		<range>
-			<minimum>15</minimum>
-			<maximum>15</maximum>
+			<minimum>14.95</minimum>
+			<maximum>15.05</maximum>
 		</range>
 		<units>V</units>
-		<format>%.1f</format>
+		<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_IM_BIAS</name>
@@ -351,6 +351,15 @@
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
+		<name>LFC_PTAMP_PRE_I</name>
+		<type>double</type>
+		<help level="brief">Pritel PreAmp current</help>
+		<help level="verbose">Pritel PreAmp current</help>
+		<capability type="write">False</capability>
+		<units>Amp</units>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
 		<name>LFC_PTAMP_ONOFF</name>
 		<type>boolean</type>
 		<help level="brief">High-power EDFA emission on/standby</help>
@@ -399,127 +408,153 @@
 		<help level="verbose">PPLN TEC control</help>
 		<capability type="write">True</capability>
 		<format>%.1f</format>
-	</keyword>-->
-    <!--    <keyword>
-                <name>LFC_T_GLY_RACK_IN</name>
-                <type>double</type>
-                <help level="brief">Glycol inlet temp to instrument rack</help>
-                <help level="verbose">Glycol inlet temp to instrument rack</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format> -->
-        </keyword><!--
-        <keyword>
-                <name>LFC_T_GLY_RACK_OUT</name>
-                <type>double</type>
-                <help level="brief">Glycol outlet temp from instrument rack</help>
-                <help level="verbose">Glycol outlet temp from instrument rack</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_EOCB_IN</name>
-                <type>double</type>
-                <help level="brief">Glycol inlet temp to EO comb board</help>
-                <help level="verbose">Glycol inlet temp to EO comb board</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_EOCB_OUT</name>
-                <type>double</type>
-                <help level="brief">Glycol outlet temp from EO comb board</help>
-                <help level="verbose">Glycol outlet temp from EO comb board</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_FLB_IN</name>
-                <type>double</type>
-                <help level="brief">Glycol inlet temp to fiber laser comb board</help>
-                <help level="verbose">Glycol inlet temp to fiber laser comb board</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_FLB_OUT</name>
-                <type>double</type>
-                <help level="brief">Glycol outlet temp from fiber laser comb board</help>
-                <help level="verbose">Glycol outlet temp from fiber laser comb board</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_RFAMP1_IN</name>
-                <type>double</type>
-                <help level="brief">Glycol inlet temp to RF amplifier block 1</help>
-                <help level="verbose">Glycol inlet temp to RF amplifier block 1</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_RFAMP1_OUT</name>
-                <type>double</type>
-                <help level="brief">Glycol outlet temp from RF amplifier block 1</help>
-                <help level="verbose">Glycol outlet temp from RF amplifier block 1</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_RFAMP2_IN</name>
-                <type>double</type>
-                <help level="brief">Glycol inlet temp to RF amplifier block 2</help>
-                <help level="verbose">Glycol inlet temp to RF amplifier block 2</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_GLY_RFAMP2_OUT</name>
-                <type>double</type>
-                <help level="brief">Glycol outlet temp from RF amplifier block 2</help>
-                <help level="verbose">Glycol outlet temp from RF amplifier block 2</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_RACK_TOP</name>
-                <type>double</type>
-                <help level="brief">Instrument rack top temp</help>
-                <help level="verbose">Instrument rack top temp</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_RACK_MID</name>
-                <type>double</type>
-                <help level="brief">Instrument rack middle temp</help>
-                <help level="verbose">Instrument rack middle temp</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_RACK_BOT</name>
-                <type>double</type>
-                <help level="brief">Instrument rack bottom temp</help>
-                <help level="verbose">Instrument rack bottom temp</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_FLAT</name>
-                <type>double</type>
-                <help level="brief">Flattener temp</help>
-                <help level="verbose">Flattener temp</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword>
-        <keyword>
-                <name>LFC_T_FILT</name>
-                <type>double</type>
-                <help level="brief">Filter cavity temperature</help>
-                <help level="verbose">Filter cavity temperature</help>
-                <capability type="write">False</capability>
-                <format>%.3f</format>
-        </keyword> -->
+	</keyword>
+    <keyword>
+			<name>LFC_T_GLY_RACK_IN</name>
+			<type>double</type>
+			<help level="brief">Glycol inlet temp to instrument rack</help>
+			<help level="verbose">Glycol inlet temp to instrument rack</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format> 
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_RACK_OUT</name>
+			<type>double</type>
+			<help level="brief">Glycol outlet temp from instrument rack</help>
+			<help level="verbose">Glycol outlet temp from instrument rack</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_EOCB_IN</name>
+			<type>double</type>
+			<help level="brief">Glycol inlet temp to EO comb board</help>
+			<help level="verbose">Glycol inlet temp to EO comb board</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_EOCB_OUT</name>
+			<type>double</type>
+			<help level="brief">Glycol outlet temp from EO comb board</help>
+			<help level="verbose">Glycol outlet temp from EO comb board</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_FLB_IN</name>
+			<type>double</type>
+			<help level="brief">Glycol inlet temp to fiber laser comb board</help>
+			<help level="verbose">Glycol inlet temp to fiber laser comb board</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_FLB_OUT</name>
+			<type>double</type>
+			<help level="brief">Glycol outlet temp from fiber laser comb board</help>
+			<help level="verbose">Glycol outlet temp from fiber laser comb board</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_RFAMP1_IN</name>
+			<type>double</type>
+			<help level="brief">Glycol inlet temp to RF amplifier block 1</help>
+			<help level="verbose">Glycol inlet temp to RF amplifier block 1</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_RFAMP1_OUT</name>
+			<type>double</type>
+			<help level="brief">Glycol outlet temp from RF amplifier block 1</help>
+			<help level="verbose">Glycol outlet temp from RF amplifier block 1</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_RFAMP2_IN</name>
+			<type>double</type>
+			<help level="brief">Glycol inlet temp to RF amplifier block 2</help>
+			<help level="verbose">Glycol inlet temp to RF amplifier block 2</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_GLY_RFAMP2_OUT</name>
+			<type>double</type>
+			<help level="brief">Glycol outlet temp from RF amplifier block 2</help>
+			<help level="verbose">Glycol outlet temp from RF amplifier block 2</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_RACK_TOP</name>
+			<type>double</type>
+			<help level="brief">Instrument rack top temp</help>
+			<help level="verbose">Instrument rack top temp</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_RACK_MID</name>
+			<type>double</type>
+			<help level="brief">Instrument rack middle temp</help>
+			<help level="verbose">Instrument rack middle temp</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_RACK_BOT</name>
+			<type>double</type>
+			<help level="brief">Instrument rack bottom temp</help>
+			<help level="verbose">Instrument rack bottom temp</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_FLAT</name>
+			<type>double</type>
+			<help level="brief">Flattener temp</help>
+			<help level="verbose">Flattener temp</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_T_FILT</name>
+			<type>double</type>
+			<help level="brief">Filter cavity temperature</help>
+			<help level="verbose">Filter cavity temperature</help>
+			<capability type="write">False</capability>
+			<format>%.3f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_YJ_OR_HK</name>
+			<type>string</type>
+			<help level="brief">Select whether YJ or HK comb are selected</help>
+			<help level="verbose">Select whether YJ or HK comb are selected</help>
+			<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+			<name>LFC_YJ_SHUTTER</name>
+			<type>string</type>
+			<help level="brief">YJ shutter status</help>
+			<help level="verbose">YJ shutter status</help>
+			<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+			<name>LFC_PMP_ATT</name>
+			<type>double</type>
+			<help level="brief">Pump Attenuation (Intensity)</help>
+			<help level="verbose">Pump Attenuation (Intensity)</help>
+			<range>
+				<minimum>0.01</minimum>
+				<maximum>60</maximum>
+			</range>
+			<units>dB</units>
+			<format>%.2f</format>
+	</keyword>
 	<keyword>
 		<name>ICETEST</name>
 		<type>integer</type>

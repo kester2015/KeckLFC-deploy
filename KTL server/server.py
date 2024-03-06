@@ -5,6 +5,8 @@ import Demo
 
 sys.path.append('../')
 
+icetest_mode = True
+use_mock = False
 
 #import random, threading
 if not use_mock:
@@ -15,8 +17,6 @@ else:
     from mockKeckLFC import *
 
 
-icetest_mode = True
-use_mock = False
 
 class LfcI(Demo.Lfc):
 
