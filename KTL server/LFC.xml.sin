@@ -3,86 +3,7 @@
 	<dispatcher>
 		<name>+service+_dispatch_3</name>
 	</dispatcher>
-	<keyword>
-		<name>LFC_TEMP_TEST1</name>
-		<type>double array</type>
-		<help level="brief">Temperature test 1</help>
-		<capability type="write">False</capability>
-		<elements>
-			<entry>
-				<index>0</index>
-				<label>Element_0</label>
-			</entry>
-			<entry>
-				<index>1</index>
-				<label>Element_1</label>
-			</entry>
-			<entry>
-				<index>2</index>
-				<label>Element_2</label>
-			</entry>
-			<entry>
-				<index>3</index>
-				<label>Element_3</label>
-			</entry>
-			<entry>
-				<index>4</index>
-				<label>Element_4</label>
-			</entry>
-			<entry>
-				<index>5</index>
-				<label>Element_5</label>
-			</entry>
-			<entry>
-				<index>6</index>
-				<label>Element_6</label>
-			</entry>
-			<entry>
-				<index>7</index>
-				<label>Element_7</label>
-			</entry>
-		</elements>
-	</keyword>
-	<keyword>
-		<name>LFC_TEMP_TEST2</name>
-		<type>double array</type>
-		<help level="brief">Temperature test 2</help>
-		<capability type="write">False</capability>
-		<elements>
-			<entry>
-				<index>0</index>
-				<label>Element_0</label>
-			</entry>
-			<entry>
-				<index>1</index>
-				<label>Element_1</label>
-			</entry>
-			<entry>
-				<index>2</index>
-				<label>Element_2</label>
-			</entry>
-			<entry>
-				<index>3</index>
-				<label>Element_3</label>
-			</entry>
-			<entry>
-				<index>4</index>
-				<label>Element_4</label>
-			</entry>
-			<entry>
-				<index>5</index>
-				<label>Element_5</label>
-			</entry>
-			<entry>
-				<index>6</index>
-				<label>Element_6</label>
-			</entry>
-			<entry>
-				<index>7</index>
-				<label>Element_7</label>
-			</entry>
-		</elements>
-	</keyword>
+	<!-- Test cases-->
 	<keyword>
 		<name>LFC_RIO_T</name>
 		<type>double</type>
@@ -105,6 +26,132 @@
 		<units>mA</units>
 		<format>%.1f</format>
 	</keyword>
+	<!--<keyword>
+		<name>LFC_RFOSCI_I</name>
+		<type>double</type>
+		<help level="brief">RF Oscillator input current</help>
+		<help level="verbose">RF Oscillator input current</help>
+		<capability type="write">False</capability>
+		<range>
+			<minimum>0.35</minimum>
+			<maximum>0.7</maximum>
+		</range>
+		<units>mA</units>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_RFOSCI_V</name>
+		<type>double</type>
+		<help level="brief">RF Oscillator input voltage</help>
+		<help level="verbose">RF Oscillator input voltage</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>14.95</minimum>
+			<maximum>15.05</maximum>
+		</range>
+		<units>V</units>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_RFAMP_I</name>
+		<type>double</type>
+		<help level="brief">RF Amp current</help>
+		<help level="verbose">RF Amp current</help>
+		<capability type="write">False</capability>
+		<units>Amp</units>
+		<format>%.1f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_RFAMP_V</name>
+		<type>double</type>
+		<help level="brief">RF Amp voltage</help>
+		<help level="verbose">RF Amp voltage</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>30</minimum>
+			<maximum>30</maximum>
+		</range>
+		<units>V</units>
+		<format>%.1f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_IM_BIAS</name>
+		<type>double</type>
+		<help level="brief">Mini-comb amplitude lock offset bias</help>
+		<help level="verbose">Mini-comb amplitude lock offset bias</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>-3</minimum>
+			<maximum>3</maximum>
+		</range>
+		<units>V</units>
+		<format>%.1f</format>
+	</keyword>
+	<keyword>
+			<name>LFC_YJ_OR_HK</name>
+			<type>string</type>
+			<help level="brief">Select whether YJ or HK comb are selected</help>
+			<help level="verbose">Select whether YJ or HK comb are selected</help>
+			<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+			<name>LFC_YJ_SHUTTER</name>
+			<type>string</type>
+			<help level="brief">YJ shutter status</help>
+			<help level="verbose">YJ shutter status</help>
+			<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+			<name>LFC_PMP_ATT</name>
+			<type>double</type>
+			<help level="brief">Pump Attenuation (Intensity)</help>
+			<help level="verbose">Pump Attenuation (Intensity)</help>
+			<range>
+				<minimum>0.01</minimum>
+				<maximum>60</maximum>
+			</range>
+			<units>dB</units>
+			<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_PTAMP_OUT</name>
+		<type>double</type>
+		<help level="brief">High-power EDFA output power</help>
+		<help level="verbose">High-power EDFA output power</help>
+		<capability type="write">False</capability>
+		<range>
+			<minimum>0</minimum>
+			<maximum>4</maximum>
+		</range>
+		<units>W</units>
+		<format>%.1f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_PTAMP_I</name>
+		<type>double</type>
+		<help level="brief">High-power EDFA pump current</help>
+		<help level="verbose">High-power EDFA pump current</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>0</minimum>
+			<maximum>4.2</maximum>
+		</range>
+		<units>Amp</units>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_PTAMP_PRE_I</name>
+		<type>double</type>
+		<help level="brief">Pritel PreAmp current</help>
+		<help level="verbose">Pritel PreAmp current</help>
+		<capability type="write">False</capability>
+		<units>Amp</units>
+		<format>%.2f</format>
+	</keyword>-->
+
+	<!--end of the test cases-->
+	
+	<!--
 	<keyword>
 		<name>LFC_EDFA27_P</name>
 		<type>double</type>
@@ -196,67 +243,6 @@
 		</values>
 	</keyword>
 	<keyword>
-		<name>LFC_RFAMP_I</name>
-		<type>double</type>
-		<help level="brief">RF Amp current</help>
-		<help level="verbose">RF Amp current</help>
-		<capability type="write">False</capability>
-		<units>Amp</units>
-		<format>%.1f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_RFAMP_V</name>
-		<type>double</type>
-		<help level="brief">RF Amp voltage</help>
-		<help level="verbose">RF Amp voltage</help>
-		<capability type="write">True</capability>
-		<range>
-			<minimum>30</minimum>
-			<maximum>30</maximum>
-		</range>
-		<units>V</units>
-		<format>%.1f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_RFOSCI_I</name>
-		<type>double</type>
-		<help level="brief">RF Oscillator input current</help>
-		<help level="verbose">RF Oscillator input current</help>
-		<capability type="write">False</capability>
-		<range>
-			<minimum>0.35</minimum>
-			<maximum>0.7</maximum>
-		</range>
-		<units>mA</units>
-		<format>%.2f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_RFOSCI_V</name>
-		<type>double</type>
-		<help level="brief">RF Oscillator input voltage</help>
-		<help level="verbose">RF Oscillator input voltage</help>
-		<capability type="write">True</capability>
-		<range>
-			<minimum>14.95</minimum>
-			<maximum>15.05</maximum>
-		</range>
-		<units>V</units>
-		<format>%.2f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_IM_BIAS</name>
-		<type>double</type>
-		<help level="brief">Mini-comb amplitude lock offset bias</help>
-		<help level="verbose">Mini-comb amplitude lock offset bias</help>
-		<capability type="write">True</capability>
-		<range>
-			<minimum>-3</minimum>
-			<maximum>3</maximum>
-		</range>
-		<units>V</units>
-		<format>%.1f</format>
-	</keyword>
-	<keyword>
 		<name>LFC_IM_RF_ATT</name>
 		<type>double</type>
 		<help level="brief">Mini-comb RF voltage controlled variable attenuation setting</help>
@@ -324,41 +310,7 @@
 		<units>mW</units>
 		<format>%.1f</format>
 	</keyword>
-	<keyword>
-		<name>LFC_PTAMP_OUT</name>
-		<type>double</type>
-		<help level="brief">High-power EDFA output power</help>
-		<help level="verbose">High-power EDFA output power</help>
-		<capability type="write">False</capability>
-		<range>
-			<minimum>0</minimum>
-			<maximum>4</maximum>
-		</range>
-		<units>W</units>
-		<format>%.1f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_PTAMP_I</name>
-		<type>double</type>
-		<help level="brief">High-power EDFA pump current</help>
-		<help level="verbose">High-power EDFA pump current</help>
-		<capability type="write">True</capability>
-		<range>
-			<minimum>0</minimum>
-			<maximum>4.2</maximum>
-		</range>
-		<units>Amp</units>
-		<format>%.2f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_PTAMP_PRE_I</name>
-		<type>double</type>
-		<help level="brief">Pritel PreAmp current</help>
-		<help level="verbose">Pritel PreAmp current</help>
-		<capability type="write">False</capability>
-		<units>Amp</units>
-		<format>%.2f</format>
-	</keyword>
+
 	<keyword>
 		<name>LFC_PTAMP_ONOFF</name>
 		<type>boolean</type>
@@ -528,33 +480,9 @@
 			<help level="verbose">Filter cavity temperature</help>
 			<capability type="write">False</capability>
 			<format>%.3f</format>
-	</keyword>
-	<keyword>
-			<name>LFC_YJ_OR_HK</name>
-			<type>string</type>
-			<help level="brief">Select whether YJ or HK comb are selected</help>
-			<help level="verbose">Select whether YJ or HK comb are selected</help>
-			<capability type="write">True</capability>
-	</keyword>
-	<keyword>
-			<name>LFC_YJ_SHUTTER</name>
-			<type>string</type>
-			<help level="brief">YJ shutter status</help>
-			<help level="verbose">YJ shutter status</help>
-			<capability type="write">True</capability>
-	</keyword>
-	<keyword>
-			<name>LFC_PMP_ATT</name>
-			<type>double</type>
-			<help level="brief">Pump Attenuation (Intensity)</help>
-			<help level="verbose">Pump Attenuation (Intensity)</help>
-			<range>
-				<minimum>0.01</minimum>
-				<maximum>60</maximum>
-			</range>
-			<units>dB</units>
-			<format>%.2f</format>
-	</keyword>
+	</keyword>-->
+
+
 	<keyword>
 		<name>ICETEST</name>
 		<type>integer</type>
@@ -640,5 +568,85 @@
 				<value>on</value>
 			</entry>
 		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_TEMP_TEST1</name>
+		<type>double array</type>
+		<help level="brief">Temperature test 1</help>
+		<capability type="write">False</capability>
+		<elements>
+			<entry>
+				<index>0</index>
+				<label>Element_0</label>
+			</entry>
+			<entry>
+				<index>1</index>
+				<label>Element_1</label>
+			</entry>
+			<entry>
+				<index>2</index>
+				<label>Element_2</label>
+			</entry>
+			<entry>
+				<index>3</index>
+				<label>Element_3</label>
+			</entry>
+			<entry>
+				<index>4</index>
+				<label>Element_4</label>
+			</entry>
+			<entry>
+				<index>5</index>
+				<label>Element_5</label>
+			</entry>
+			<entry>
+				<index>6</index>
+				<label>Element_6</label>
+			</entry>
+			<entry>
+				<index>7</index>
+				<label>Element_7</label>
+			</entry>
+		</elements>
+	</keyword>
+	<keyword>
+		<name>LFC_TEMP_TEST2</name>
+		<type>double array</type>
+		<help level="brief">Temperature test 2</help>
+		<capability type="write">False</capability>
+		<elements>
+			<entry>
+				<index>0</index>
+				<label>Element_0</label>
+			</entry>
+			<entry>
+				<index>1</index>
+				<label>Element_1</label>
+			</entry>
+			<entry>
+				<index>2</index>
+				<label>Element_2</label>
+			</entry>
+			<entry>
+				<index>3</index>
+				<label>Element_3</label>
+			</entry>
+			<entry>
+				<index>4</index>
+				<label>Element_4</label>
+			</entry>
+			<entry>
+				<index>5</index>
+				<label>Element_5</label>
+			</entry>
+			<entry>
+				<index>6</index>
+				<label>Element_6</label>
+			</entry>
+			<entry>
+				<index>7</index>
+				<label>Element_7</label>
+			</entry>
+		</elements>
 	</keyword>
 </bundle>

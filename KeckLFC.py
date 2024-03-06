@@ -10,7 +10,7 @@ from Hardware import *
 import numpy as np
 import time
 
-icetest_mode = True
+icetest_mode = False
 
 class EquipmentManager(object):
 
@@ -140,9 +140,9 @@ class KeckLFC(object):
 
         ''' KTL keywords'''
         if icetest_mode: 
-            keyword_names, keyword_types = parse_xml(r"../testLFC.xml.sin")
+            keyword_names, keyword_types = parse_xml(r"testLFC.xml.sin")
         else:
-            keyword_names, keyword_types = parse_xml(r"../LFC.xml.sin")
+            keyword_names, keyword_types = parse_xml(r"LFC.xml.sin")
 
         self.keywords = {keyword: None for keyword in keyword_names}
         self.types = {keyword: keyword_type for keyword, keyword_type in zip(keyword_names, keyword_types)}
@@ -497,6 +497,17 @@ class KeckLFC(object):
             raise ValueError("LFC_T_RACK_BOT is read-only")
             return
 
+    def LFC_T_GLY_EOCB_IN(self, value=None): return
+    def LFC_T_GLY_EOCB_OUT(self, value=None): return
+    def LFC_T_GLY_FLB_IN(self, value=None): return
+    def LFC_T_GLY_FLB_OUT(self, value=None): return
+    def LFC_T_GLY_RFAMP1_IN(self, value=None): return
+    def LFC_T_GLY_RFAMP1_OUT(self, value=None): return    
+    def LFC_T_GLY_RFAMP2_IN(self, value=None): return
+    def LFC_T_GLY_RFAMP2_OUT(self, value=None): return
+    def LFC_YJ_OR_HK(self, value=None): return
+    def LFC_YJ_SHUTTER(self, value=None): return
+    def LFC_PMP_ATT(self, value=None): return
 
 
 
@@ -513,6 +524,7 @@ class KeckLFC(object):
             return ii
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             rio.writeTECsetpoint(value)
             # need set default
             ii=rio.readTECsetpoint()
@@ -543,6 +555,7 @@ class KeckLFC(object):
             return ii
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             rio.writeLaserdiodeCur_mA(value)
             # need set default
             ii=rio.readLaserdiodeCur_mA()
@@ -560,6 +573,7 @@ class KeckLFC(object):
             return edfa27p
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             amonic27._setChMode('acc')
             amonic27.accCh1Cur=value
 
@@ -582,6 +596,7 @@ class KeckLFC(object):
             return edfa27onoff
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             amonic27.accCh1Status=value
             edfa27onoff=amonic27.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
@@ -601,6 +616,7 @@ class KeckLFC(object):
             return edfa27p
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             amonic13._setChMode('acc')
             amonic13.accCh1Cur=value
 
@@ -622,6 +638,7 @@ class KeckLFC(object):
             return edfa27onoff
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             amonic13.accCh1Status=value
             edfa27onoff=amonic13.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
@@ -641,6 +658,7 @@ class KeckLFC(object):
             return edfa27p
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             amonic23._setChMode('acc')
             amonic23.accCh1Cur=value
 
@@ -662,6 +680,7 @@ class KeckLFC(object):
             return edfa27onoff
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             amonic23.accCh1Status=value
             edfa27onoff=amonic23.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
@@ -681,6 +700,7 @@ class KeckLFC(object):
             return rfampPS_i
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             rfampPS.Iout1=value
             rfampPS_i=rfampPS.Iout1
             print(f'LFC_RFAMP_I : +{rfampPS_i}A')
@@ -701,6 +721,7 @@ class KeckLFC(object):
             return rfampPS_i
             #rio.printStatus()
         else:
+            return 0 # not testing MODIFY for now
             rfampPS.Vout1=value
             rfampPS_i=rfampPS.Vout1
             print(f'LFC_RFAMP_V : +{rfampPS_i}V')
@@ -718,6 +739,7 @@ class KeckLFC(object):
             return rfoscPS_i
             
         else:
+            return 0 # not testing MODIFY for now
             rfoscPS.Iset2=value
             rfoscPS_i=rfoscPS.Iout2
             rfoscPS.disconnect()
@@ -735,6 +757,7 @@ class KeckLFC(object):
             return rfoscPS_i
             
         else:
+            return 0 # not testing MODIFY for now
             rfoscPS.Vset2=value
             rfoscPS_i=rfoscPS.Vout2
             rfoscPS.disconnect()
@@ -755,6 +778,7 @@ class KeckLFC(object):
             return IM_bias
 
         else:
+            return 0 # not testing MODIFY for now
             servo_IM.manual_output=value
 
             IM_bias=servo_IM.get_output_voltage()
@@ -774,6 +798,7 @@ class KeckLFC(object):
             return rfoscPS_i
             
         else:
+            return 0 # not testing MODIFY for now
             rfoscPS.Vset2=value
             rfoscPS_i=rfoscPS.Vout3
             rfoscPS.disconnect()
@@ -819,9 +844,14 @@ class KeckLFC(object):
             ptamp.disconnect()
             return pre_p
         else:
+            return 0 # not testing MODIFY for now
             pre_p=ptamp.preAmp
             ptamp.disconnect()
             return pre_p
+    
+    def LFC_PTAMP_PRE_I(self, value=None):
+        return
+    
 
     def LFC_PTAMP_OUT(self, value=None):
         if value != None:
@@ -834,6 +864,7 @@ class KeckLFC(object):
             ptamp.disconnect()
             return pre_out
         else:
+            return 0 # not testing MODIFY for now
             raise ValueError("LFC_PTAMP_OUT is read only")
             return
 
@@ -850,6 +881,7 @@ class KeckLFC(object):
             return 1
 
         else:
+            return 0 # not testing MODIFY for now
             ptamp=ptamp.pwrAmp
             ptamp.disconnect()
             return ptamp  # return
@@ -868,6 +900,7 @@ class KeckLFC(object):
             return ptact
 
         else:
+            return 0 # not testing MODIFY for now
             ptact=ptamp.activation
             ptamp.disconnect()
             return ptact  # return
@@ -899,6 +932,7 @@ class KeckLFC(object):
             return tppln
 
         else:
+            return 0 # not testing MODIFY for now
             tec_ppln.set_temp(value)
             tppln=tec_ppln.get_temp()
             tec_ppln.disconnect()
@@ -917,6 +951,7 @@ class KeckLFC(object):
             return twg
 
         else:
+            return 0 # not testing MODIFY for now
             tec_wg.set_temp(value)
             twg=tec_wg.get_temp()
             tec_wg.disconnect()

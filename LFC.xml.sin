@@ -1,4 +1,7 @@
-<!-- <?xml version="1.0" ?>
+<!-- 
+	This is no longer used
+	
+	<?xml version="1.0" ?>
 <bundle name="LFC" service="nslfc">
 	<dispatcher>
 		<name>+service+_dispatch_3</name>

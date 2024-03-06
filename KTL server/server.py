@@ -5,7 +5,7 @@ import Demo
 
 sys.path.append('../')
 
-icetest_mode = True
+icetest_mode = False
 use_mock = False
 
 #import random, threading
