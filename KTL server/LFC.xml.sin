@@ -106,6 +106,7 @@
 			<type>double</type>
 			<help level="brief">Pump Attenuation (Intensity)</help>
 			<help level="verbose">Pump Attenuation (Intensity)</help>
+			<capability type="write">False</capability>
 			<range>
 				<minimum>0.01</minimum>
 				<maximum>60</maximum>
