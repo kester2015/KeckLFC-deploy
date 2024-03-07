@@ -368,6 +368,7 @@ class KeckLFC(object):
     ########## KTL Keywords Implementation ############
 
     def LFC_TEMP_TEST1(self, value=None):
+        return
         # return
         if value == None:
             from Hardware.USB2408 import USB2408
@@ -381,6 +382,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_TEMP_TEST2(self, value=None):
+        return
         # return
         if value == None:
             from Hardware.USB2408 import USB2408
@@ -562,6 +564,7 @@ class KeckLFC(object):
             return ii
 
     def LFC_EDFA27_P(self, value=None):
+        return
         from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic27 = AmonicsEDFA(addr=f'ASRL{6}::INSTR', name='Amonics EDFA 27 dBm')
         amonic27.connect()
@@ -584,7 +587,7 @@ class KeckLFC(object):
 
 
     def LFC_EDFA27_ONOFF(self, value=None):
-
+        return
         from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic27 = AmonicsEDFA(addr=f'ASRL{6}::INSTR', name='Amonics EDFA 27 dBm')
         amonic27.connect()
@@ -604,6 +607,7 @@ class KeckLFC(object):
             return edfa27onoff
 
     def LFC_EDFA13_P(self, value=None):
+        return
         from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic13 = AmonicsEDFA(addr=f'ASRL{9}::INSTR', name='Amonics EDFA 13 dBm')
         amonic13.connect()
@@ -626,6 +630,7 @@ class KeckLFC(object):
             return edfa27p
 
     def LFC_EDFA13_ONOFF(self, value=None):
+        return
         from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic13 = AmonicsEDFA(addr=f'ASRL{9}::INSTR', name='Amonics EDFA 13 dBm')
         amonic13.connect()
@@ -646,6 +651,7 @@ class KeckLFC(object):
             return edfa27onoff
 
     def LFC_EDFA23_P(self, value=None):
+        return
         from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic23 = AmonicsEDFA(addr=f'ASRL{12}::INSTR', name='Amonics EDFA 23 dBm')
         amonic23.connect()
@@ -668,6 +674,7 @@ class KeckLFC(object):
             return edfa27p
 
     def LFC_EDFA23_ONOFF(self, value=None):
+        return
         from Hardware.AmonicsEDFA import AmonicsEDFA
         amonic23 = AmonicsEDFA(addr=f'ASRL{12}::INSTR', name='Amonics EDFA 23 dBm')
         amonic23.connect()
@@ -688,6 +695,7 @@ class KeckLFC(object):
             return edfa27onoff
 
     def LFC_RFAMP_I(self, value=None):
+        return
         from Hardware.InstekGppDCSupply import InstekGppDCSupply
         rfampPS = InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
         rfampPS.connect()
@@ -709,6 +717,7 @@ class KeckLFC(object):
             
 
     def LFC_RFAMP_V(self, value=None):
+        return
         from Hardware.InstekGppDCSupply import InstekGppDCSupply
         rfampPS = InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
         rfampPS.connect()
@@ -729,6 +738,7 @@ class KeckLFC(object):
             return rfampPS_i
 
     def LFC_RFOSCI_I(self, value=None):
+        return
         from Hardware.InstekGPD_4303S import InstekGPD_4303S
         rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
         rfoscPS.connect()
@@ -746,7 +756,7 @@ class KeckLFC(object):
             return rfoscPS_i
 
     def LFC_RFOSCI_V(self, value=None):
-
+        return
         from Hardware.InstekGPD_4303S import InstekGPD_4303S
         rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
         rfoscPS.connect()
@@ -764,7 +774,7 @@ class KeckLFC(object):
             return rfoscPS_i
 
     def LFC_IM_BIAS(self, value=None):
-
+        return
         from Hardware.SRS_SIM900 import SRS_SIM900, SRS_PIDcontrol_SIM960
         srs = SRS_SIM900(addr='GPIB0::2::INSTR')
         srs.connect()
@@ -787,7 +797,7 @@ class KeckLFC(object):
             return IM_bias
 
     def LFC_IM_RF_ATT(self, value=None):
-
+        return
         from Hardware.InstekGPD_4303S import InstekGPD_4303S
         rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
         rfoscPS.connect()
@@ -805,7 +815,7 @@ class KeckLFC(object):
             return rfoscPS_i
 
     def LFC_WSP_PHASE(self, value=None):
-
+        return
         if value != None:
             from Hardware.Waveshaper import Waveshaper
             ws = Waveshaper()
@@ -834,6 +844,7 @@ class KeckLFC(object):
             return 0  # return
 
     def LFC_PTAMP_PRE_P(self, value=None):
+        return
         from Hardware.PritelAmp import PritelAmp
         ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
         ptamp.connect()
@@ -854,6 +865,7 @@ class KeckLFC(object):
     
 
     def LFC_PTAMP_OUT(self, value=None):
+        return
         if value != None:
 
             from Hardware.PritelAmp import PritelAmp
@@ -869,6 +881,7 @@ class KeckLFC(object):
             return
 
     def LFC_PTAMP_I(self, value=None):
+        return
 
         from Hardware.PritelAmp import PritelAmp
         ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
@@ -887,6 +900,7 @@ class KeckLFC(object):
             return ptamp  # return
 
     def LFC_PTAMP_ONOFF(self, value=None):
+        return
 
         from Hardware.PritelAmp import PritelAmp
         ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
@@ -906,6 +920,7 @@ class KeckLFC(object):
             return ptact  # return
 
     def LFC_PTAMP_LATCH(self, value=None):
+        return
         if value == None:
             from Hardware.Arduino_relay import Arduino_relay
             arduino = Arduino_relay(addr=f"COM3")
@@ -920,7 +935,7 @@ class KeckLFC(object):
             return 0  # return
 
     def LFC_WGD_T(self, value=None):
-
+        return
         from Hardware.TEC_TC720 import TEC_TC720
 
         tec_ppln = TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
@@ -939,7 +954,7 @@ class KeckLFC(object):
             return tppln
 
     def LFC_PPLN_T(self, value=None):
-
+        return
         from Hardware.TEC_TC720 import TEC_TC720
         # tec_PPLN = TEC_TC720(addr='ASRL46::INSTR')
         tec_wg = TEC_TC720(addr='COM16', name='Octave Waveguide TEC (TC720)')

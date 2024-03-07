@@ -26,7 +26,7 @@
 		<units>mA</units>
 		<format>%.1f</format>
 	</keyword>
-	<!--<keyword>
+	<keyword>
 		<name>LFC_RFOSCI_I</name>
 		<type>double</type>
 		<help level="brief">RF Oscillator input current</help>
@@ -147,7 +147,7 @@
 		<capability type="write">False</capability>
 		<units>Amp</units>
 		<format>%.2f</format>
-	</keyword>-->
+	</keyword>
 
 	<!--end of the test cases-->
 	
