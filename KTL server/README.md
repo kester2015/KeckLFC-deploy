@@ -1,3 +1,24 @@
+## KTL keywords and linking to the KeckLFC class
+
+In `KeckLFC.py`, the KeckLFC class reads the xml file `LFC.xml.sin`, stores the keyword names and values as dictionaries in `self.keywords`.
+The functions are defined as the same name as the keyword.
+
+``` ruby
+    def KEYWORD(self, value=None):
+        if value == None: 
+            # This is called periodically (keyword read)
+            # Insert some function to execute when this keyword is being read and return the value
+            # If you don't want the KeckLFC class to modify this keyword (such as ICESTA, the keyword showing the status of the ICE connection), no need to return a value               
+            return 
+        
+        else:
+            # This is called when user modifies the keyword (keyword write)
+            # Insert some function to execute when user modifies this keyword
+            # If it's successful, return 0
+            return 0 # return 
+```
+
+
 ## How ICE connection works
 
 The `server.py` python script in this directory does following:
@@ -36,27 +57,3 @@ For a successful ICE connection with the KTL layer,
     ```modify -s nslfc KEYWORDNAME=value```
 
 
-## Generating KTL keywords and linking to the KeckLFC class
-
-### 1. KTL keywords csv file
-Fill in the csv file (keywords.csv) with KTL keywords to implement,
-run `python write_xml.py` to generate the xml file named LFC.xml.sin
-
-### 2. Implement functions in KeckLFC.py
-In `mockKeckLFC.py`, the mockKeckLFC class reads the xml file, stores the keyword names and values as dictionaries in `self.keywords`.
-The functions are defined as the same name as the keyword.
-
-``` ruby
-    def KEYWORD(self, value=None):
-        if value == None: 
-            # This is called periodically
-            # Insert some function to execute when this keyword is being read and return the value
-            # If you don't want the KeckLFC class to modify this keyword, no need to return a value               
-            return 
-        
-        else:
-            # This is called when user modifies the keyword
-            # Insert some function to execute when user modifies this keyword
-            # If it's successful, return 0
-            return 0 # return 
-```
