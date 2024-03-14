@@ -10,6 +10,7 @@
 		<help level="brief">RIO pump laser temperature</help>
 		<help level="verbose">RIO pump laser temperature</help>
 		<capability type="write">True</capability>
+		<period>30</period>
 		<range>
 			<minimum>-5</minimum>
 			<maximum>75</maximum>
@@ -23,6 +24,7 @@
 		<help level="brief">RIO pump laser current</help>
 		<help level="verbose">RIO pump laser current</help>
 		<capability type="write">True</capability>
+		<period>30</period>
 		<units>mA</units>
 		<format>%.1f</format>
 	</keyword>
@@ -490,6 +492,7 @@
 		<help level="brief">test integer</help>
 		<help level="verbose">test integer</help>
 		<capability type="write">True</capability>
+		<period>1</period>
 	</keyword>
 	<keyword>
 		<name>ICEARRAY</name>
@@ -514,6 +517,7 @@
 		<help level="brief">Ice connection status</help>
 		<help level="verbose">Ice connection status</help>
 		<capability type="write">True</capability>
+		<period>1</period>
 		<values>
 			<entry>
 				<key>1</key>
