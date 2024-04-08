@@ -1,11 +1,3 @@
-# from Hardware.AmonicsEDFA import AmonicsEDFA
-# from Hardware.PritelAmp import  PritelAmp
-# from Hardware.InstekGPD_4303S import InstekGPD_4303S
-# from Hardware.InstekGppDCSupply import InstekGppDCSupply
-# from Hardware.Waveshaper import Waveshaper
-
-# from Hardware.RbClock import RbClock
-# from Hardware.PendulumCNT90 import PendulumCNT90
 from Hardware import *
 import numpy as np
 import time
@@ -314,18 +306,6 @@ class KeckLFC(object):
             # need set default
             ii=rio.readTECsetpoint()
             return ii
-        # ==============================
-        # if value == None:
-        #     # This is called periodically
-        #     # Insert some function to execute when this keyword is being read and return the value
-        #     # If you don't want the KeckLFC class to modify this keyword, no need to return a value
-        #     return
-
-        # else:
-        #     # This is called when user modifies the keyword
-        #     # Insert some function to execute when user modifies this keyword
-        #     # If it's successful, return 0
-        #     return 0  # return
 
     def LFC_RIO_I(self, value=None):
         from Hardware.ORIONLaser import ORIONLaser
