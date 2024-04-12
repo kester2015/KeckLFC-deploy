@@ -229,3 +229,43 @@ class TDS2024C(Device):
                     e = sys.exc_info()[0]
                     self.info(f"Error:{e}")
         return
+    
+
+    def set_vol_pos(self,channle,pos):
+
+        self.write(f'CH{channle}:POS {pos}')
+        print(f'CH{channle} set to '+ self.query(f'CH{channle}:POS?'))
+        #return self.query(f'CH{channle}:POS?')
+
+    def set_vol_scale(self,channle,sca):
+
+        self.write(f'CH{channle}:SCA {sca}')
+        print(f'CH{channle} set to '+self.query(f'CH{channle}:SCA?'))
+        #return self.query(f'CH{channle}:SCA?')
+
+    def set_time_pos(self,pos):
+        self.write(f'HOR:POS {pos}')
+        print(f'time pos set to '+self.query(f'HOR:POS?'))
+
+    def set_time_scale(self,sca):
+
+        self.write(f'HOR:SCA {sca}')
+        print(f'time scale set to '+self.query(f'HOR:SCA?'))
+
+    def trace_disp(self,chan,state):
+
+        if (state == 1) or( state=='ON'):
+            self.write(f'SEL:CH{chan} ON')
+        if (state == 0) or(state== 'OFF'):
+            self.write(f'SEL:CH{chan} OFF')
+        print(f'display set to '+self.query('SEL?'))
+
+    def set_trigger_source(self,chan):
+
+        self.write(f'TRIG:MAI:EDGE:SOU {chan}')
+        print(f'trigger souce set to '+self.query(f'TRIG:MAI:EDGE:SOU?'))
+
+    def set_trigger_lev(self,lvl):
+        self.write(f'TRIG:MAI:LEV {lvl}')
+        print(f'trigger level set to '+self.query('TRIG:MAI:LEV?'))
+
