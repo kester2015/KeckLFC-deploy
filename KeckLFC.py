@@ -143,8 +143,7 @@ class KeckLFC(object):
     ########## KTL Keywords Implementation ############
 
     def LFC_TEMP_TEST1(self, value=None):
-        return
-        # return
+
         if value == None:
             from Hardware.USB2408 import USB2408
             daq1 = USB2408(addr=0)
@@ -157,8 +156,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_TEMP_TEST2(self, value=None):
-        return
-        # return
+
         if value == None:
             from Hardware.USB2408 import USB2408
             daq1 = USB2408(addr=1)
@@ -171,7 +169,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_T_GLY_RACK_IN(self, value=None):
-        return
+
         if value == None:
             addr = 0
             chan = 5
@@ -185,7 +183,7 @@ class KeckLFC(object):
             return 0
         
     def LFC_T_GLY_RACK_OUT(self, value=None):
-        return
+
         if value == None:
             addr = 0
             chan = 4
@@ -200,7 +198,7 @@ class KeckLFC(object):
             return
         
     def LFC_T_EOCB_IN(self, value=None):
-        return
+
         if value == None:
             addr = 1
             chan = 5
@@ -215,7 +213,7 @@ class KeckLFC(object):
             return
 
     def LFC_T_EOCB_OUT(self, value=None):
-        return
+
         if value == None:
             addr = 1
             chan = 4
@@ -230,7 +228,7 @@ class KeckLFC(object):
             return
         
     def LFC_T_RACK_TOP(self, value=None):
-        return
+
         if value == None:
             addr = 0
             chan = 3 # Use Pritel Amplifier TEC as the rack top temperature
@@ -245,7 +243,7 @@ class KeckLFC(object):
             return
         
     def LFC_T_RACK_MID(self, value=None):
-        return
+
         if value == None:
             addr = 0
             chan = 0 # Use Side buffle as the rack mid temperature
@@ -260,7 +258,7 @@ class KeckLFC(object):
             return
     
     def LFC_T_RACK_BOT(self, value=None):
-        return
+
         if value == None:
             addr = 0
             chan = 6 # Bottom rack temperature
