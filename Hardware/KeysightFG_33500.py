@@ -157,18 +157,27 @@ class KeysightFG_33500(Device):
     
     #get channel parameters
     def get_channel_parameters(self, channel):
-        print(f"Channel {channel} parameters:")
+        
+        list1=[('channel',f'{channel}'),
+               ('frequency',f'{self.get_channel_frequency(channel)}'),
+               ('Amplitude',f'{self.get_channel_amplitude(channel)}'),
+               ('offset',f'{self.get_channel_offset(channel)}'),
+               ('phase',f'{self.get_channel_phase(channel)}'),
+               ('state',f'{self.get_channel_state(channel)}'),
+               ('function',f'{self.get_channel_function(channel)}')]
+        dic1=dict(list1)
+        # print(f"Channel {channel} parameters:")
 
-        print(f"Frequency: {self.get_channel_frequency(channel)}")
-        print(f"Amplitude: {self.get_channel_amplitude(channel)}")
-        print(f"Offset: {self.get_channel_offset(channel)}")
-        print(f"Phase: {self.get_channel_phase(channel)}")
-        #print(f"Duty Cycle: {self.get_channel_duty_cycle(channel)}")
-        #print(f"Symmetry: {self.get_channel_symmetry(channel)}")
-        #print(f"Impedance: {self.get_channel_impedance(channel)}")
-        print(f"State: {self.get_channel_state(channel)}")
-        print(f"Function: {self.get_channel_function(channel)}")
-    
+        # print(f"Frequency: {self.get_channel_frequency(channel)}")
+        # print(f"Amplitude: {self.get_channel_amplitude(channel)}")
+        # print(f"Offset: {self.get_channel_offset(channel)}")
+        # print(f"Phase: {self.get_channel_phase(channel)}")
+        # #print(f"Duty Cycle: {self.get_channel_duty_cycle(channel)}")
+        # #print(f"Symmetry: {self.get_channel_symmetry(channel)}")
+        # #print(f"Impedance: {self.get_channel_impedance(channel)}")
+        # print(f"State: {self.get_channel_state(channel)}")
+        # print(f"Function: {self.get_channel_function(channel)}")
+        return dic1
 
     #apply wave function with parameters to output channel
     def set_channel_parameters(self, channel , freq, amp, offset, phase):
