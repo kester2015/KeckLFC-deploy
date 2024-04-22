@@ -141,12 +141,135 @@ class KeckLFC(object):
     # KTL keywords Implementation
 
     ########## KTL Keywords Implementation ############
+    ########## Below are the connection functions for device, interal use only. ##########
+
+    def __LFC_RIO_connect(self, value=None):
+        '''Connect to RIO laser'''
+        from Hardware.ORIONLaser import ORIONLaser
+        return ORIONLaser(addr=f'ASRL{14}::INSTR')
+        
+    def __LFC_EDFA27_connect(self, value=None):
+        '''Connect to Amonics EDFA 27 dBm'''
+        from Hardware.AmonicsEDFA import AmonicsEDFA
+        return AmonicsEDFA(addr=f'ASRL{6}::INSTR', name='Amonics EDFA 27 dBm')
+    
+    def __LFC_EDFA13_connect(self, value=None):
+        '''Connect to Amonics EDFA 13 dBm'''
+        from Hardware.AmonicsEDFA import AmonicsEDFA
+        return AmonicsEDFA(addr=f'ASRL{9}::INSTR', name='Amonics EDFA 13 dBm')
+    
+    def __LFC_EDFA23_connect(self, value=None):
+        '''Connect to Amonics EDFA 23 dBm'''
+        from Hardware.AmonicsEDFA import AmonicsEDFA
+        return AmonicsEDFA(addr=f'ASRL{12}::INSTR', name='Amonics EDFA 23 dBm')
+    
+    def __LFC_RFAMP_connect(self, value=None):
+        '''Connect to RF amplifier PS 30V 4A'''
+        from Hardware.InstekGppDCSupply import InstekGppDCSupply
+        return InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
+    
+    def __LFC_RFOSCI_connect(self, value=None):
+        '''Connect to RF oscillator PS, CH2 15V, CH3 1V'''
+        from Hardware.InstekGPD_4303S import InstekGPD_4303S
+        return InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
+    
+    def __LFC_servo_connect(self, value=None):
+        from Hardware.SRS_SIM900 import SRS_SIM900, SRS_PIDcontrol_SIM960
+        return SRS_SIM900(addr='GPIB0::2::INSTR')
+    
+    def __LFC_IM_LOCK_connect(self, srs):
+        '''Connect to Minicomb Intensity Lock Servo'''
+        from Hardware.SRS_SIM900 import SRS_SIM900, SRS_PIDcontrol_SIM960
+        srs.connect()
+        return SRS_PIDcontrol_SIM960(srs, 3, name='Minicomb Intensity Lock Servo')
+    
+    def __LFC_WSP_connect(self, value=None):
+        '''Connect to Waveshaper'''
+        from Hardware.Waveshaper import Waveshaper
+        return Waveshaper()
+    
+    def __LFC_PTAMP_connect(self, value=None):
+        '''Connect to Pritel Amp'''
+        from Hardware.PritelAmp import PritelAmp
+        return PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
+    
+    def __LFC_TEC_PPLN_connect(self, value=None):
+        '''Connect to PPLN Doubler TEC (TC720)'''
+        from Hardware.TEC_TC720 import TEC_TC720
+        return TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
+    
+    def __LFC_TEC_WG_connect(self, value=None):
+        '''Connect to Octave Waveguide TEC (TC720)'''
+        from Hardware.TEC_TC720 import TEC_TC720
+        return TEC_TC720(addr='COM16', name='Octave Waveguide TEC (TC720)')
+    
+    def __LFC_USB2408_0_connect(self, value=None):
+        '''Connect to USB2408'''
+        from Hardware.USB2408 import USB2408
+        return USB2408(addr=0)
+    
+    def __LFC_USB2408_1_connect(self, value=None):
+        '''Connect to USB2408'''
+        from Hardware.USB2408 import USB2408
+        return USB2408(addr=1)
+    
+    def __LFC_OSA_connect(self, value=None):
+        '''Connect to OSA'''
+        from Hardware.Agilent_86142B import Agilent_86142B
+        return Agilent_86142B()
+    
+    def __LFC_ARDUINO_connect(self, value=None):
+        '''Connect to Arduino relay'''
+        from Hardware.Arduino_relay import Arduino_relay
+        return Arduino_relay(addr=f"COM3")
+    
+    def __LFC_RB_LOCK_connect(self, srs):
+        from Hardware.SRS_SIM900 import SRS_SIM900, SRS_PIDcontrol_SIM960
+        srs.connect()
+        return SRS_PIDcontrol_SIM960(srs, 5, name='Rio Laser Fceo Rb spectroscopy Lock Servo')
+        
+    def __LFC_2BY2_SWITCH_connect(self, value=None):
+        from Hardware.Agiltron_2by2_switch import AgiltronSelfAlign22
+        return AgiltronSelfAlign22(addr=f'COM{20}')
+
+    def __LFC_OSC_connect(self, value=None):
+        from Hardware.TDS2024C import TDS2024C
+        return TDS2024C()
+    
+    def __LFC_KEYSIGHT_FG_connect(self, value=None):
+        from Hardware.KeysightFG_33500 import KeysightFG_33500
+        return KeysightFG_33500(addr='USB0::0x0957::0x2807::MY59003824::INSTR', name='Keysight FG 33500')
+  
+    def __LFC_HK_SHUTTER_connect(self, value=None):
+        from Hardware.hk_shutter import hk_shutter
+        return hk_shutter(addr='COM17')   #5,8,11,14,17
+
+    def __LFC_VOA1550_connect(self, value=None):
+        from Hardware.OZopticsVOA import OZopticsVOA
+        return OZopticsVOA(addr=f'ASRL{15}::INSTR', name='1.55um VOA')
+
+    def __VOA1310_connect(self, value=None):
+        from Hardware.OZopticsVOA import OZopticsVOA
+        return OZopticsVOA(addr=f'ASRL{19}::INSTR', name='1.31um VOA')
+    
+    def __VOA2000_connect(self, value=None):
+        from Hardware.OZopticsVOA import OZopticsVOA
+        return OZopticsVOA(addr=f'ASRL{18}::INSTR', name='2um VOA')
+    
+    def __sleep(self, value=0.5):
+        import time
+        time.sleep(value)
+        return value
+
+#--------------------------connection above----------------------------------------------
+#--------------------------functions below----------------------------------------------
+
+
 
     def LFC_TEMP_TEST1(self, value=None):
 
         if value == None:
-            from Hardware.USB2408 import USB2408
-            daq1 = USB2408(addr=0)
+            daq1 = self.__LFC_USB2408_0_connect()
             daq1.connect()    
             temp1 = daq1.get_temp_all()
             # print(temp1)
@@ -158,8 +281,7 @@ class KeckLFC(object):
     def LFC_TEMP_TEST2(self, value=None):
 
         if value == None:
-            from Hardware.USB2408 import USB2408
-            daq1 = USB2408(addr=1)
+            daq1 = self.__LFC_USB2408_1_connect()
             daq1.connect()
             temp1 = daq1.get_temp_all()
             # print(temp1)
@@ -173,8 +295,7 @@ class KeckLFC(object):
         if value == None:
             addr = 0
             chan = 5
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
+            daq = self.__LFC_USB2408_0_connect()
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -187,8 +308,7 @@ class KeckLFC(object):
         if value == None:
             addr = 0
             chan = 4
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
+            daq = self.__LFC_USB2408_0_connect()
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -202,8 +322,7 @@ class KeckLFC(object):
         if value == None:
             addr = 1
             chan = 5
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
+            daq = self.__LFC_USB2408_1_connect()
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -217,8 +336,7 @@ class KeckLFC(object):
         if value == None:
             addr = 1
             chan = 4
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
+            daq = self.__LFC_USB2408_1_connect()
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -232,8 +350,7 @@ class KeckLFC(object):
         if value == None:
             addr = 0
             chan = 3 # Use Pritel Amplifier TEC as the rack top temperature
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
+            daq = self.__LFC_USB2408_0_connect()
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -247,8 +364,7 @@ class KeckLFC(object):
         if value == None:
             addr = 0
             chan = 0 # Use Side buffle as the rack mid temperature
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
+            daq = self.__LFC_USB2408_0_connect()
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -262,8 +378,7 @@ class KeckLFC(object):
         if value == None:
             addr = 0
             chan = 6 # Bottom rack temperature
-            from Hardware.USB2408 import USB2408
-            daq = USB2408(addr=addr)
+            daq = self.__LFC_USB2408_0_connect()
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -287,8 +402,7 @@ class KeckLFC(object):
 
 
     def LFC_RIO_T(self, value=None):
-        from Hardware.ORIONLaser import ORIONLaser
-        rio = ORIONLaser(addr=f'ASRL{14}::INSTR')
+        rio = self.__LFC_RIO_connect()
         rio.connect()
 
         if value == None:
@@ -299,15 +413,15 @@ class KeckLFC(object):
             return ii
             #rio.printStatus()
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             rio.writeTECsetpoint(value)
+            self.__sleep(0.5)
             # need set default
             ii=rio.readTECsetpoint()
             return ii
 
     def LFC_RIO_I(self, value=None):
-        from Hardware.ORIONLaser import ORIONLaser
-        rio = ORIONLaser(addr=f'ASRL{14}::INSTR')
+        rio = self.__LFC_RIO_connect()
         rio.connect()
 
         if value == None:
@@ -318,17 +432,18 @@ class KeckLFC(object):
             return ii
             #rio.printStatus()
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             rio.writeLaserdiodeCur_mA(value)
             # need set default
+            self.__sleep(0.5)
             ii=rio.readLaserdiodeCur_mA()
             return ii
 
     def LFC_EDFA27_P(self, value=None):
-        return
-        from Hardware.AmonicsEDFA import AmonicsEDFA
-        amonic27 = AmonicsEDFA(addr=f'ASRL{6}::INSTR', name='Amonics EDFA 27 dBm')
+
+        amonic27 = self.__LFC_EDFA27_connect()
         amonic27.connect()
+        
         if value == None:
             
             edfa27p=amonic27.outputPowerCh1
@@ -336,21 +451,63 @@ class KeckLFC(object):
             amonic27.disconnect()
             return edfa27p
             #rio.printStatus()
-        else:
-            return 0 # not testing MODIFY for now
-            amonic27._setChMode('acc')
-            amonic27.accCh1Cur=value
 
+        elif value == 'auto':
+            amonic27._setChMode('apc')
+            self.__sleep(0.5)
+            amonic27.accCh1Cur='450mw'
+            self.__sleep(0.5)
+
+            edfa27autoset=amonic27.accCh1Cur
+            
+            amonic27.disconnect()
+            return edfa27autoset
+        else:
+            #return 0 # not testing MODIFY for now
+            amonic27._setChMode('apc')
+            amonic27.accCh1Cur=f'{value}mw'
+
+            self.__sleep(0.5)
             edfa27p=amonic27.outputPowerCh1
             print(f'EDFA27 : {edfa27p}mw')
             amonic27.disconnect()
             return edfa27p
+        
+    def LFC_EDFA27_AUTO_ON(self, value=None): #TBD
+        amonic27 = self.__LFC_EDFA27_connect()
+        amonic27.connect()
+
+        if value == 'apc' or value==None:
+            
+            amonic27._setChMode('apc')
+            self.__sleep(0.5)
+            amonic27.accCh1Cur='450mw'
+            self.__sleep(0.5)
+            amonic27.accCh1Status=1
+            amonic27.activation=1
+            self.__sleep(0.5)
+            edfa27autoset=amonic27.accCh1Cur
+            
+            amonic27.disconnect()
+            return edfa27autoset
+            #rio.printStatus()
+        elif value == 'acc':
+            amonic27._setChMode('acc')
+            self.__sleep(0.5)
+            amonic27.accCh1Cur='450mw' # TBD
+            self.__sleep(0.5)
+            amonic27.accCh1Status=1
+            amonic27.activation=1
+            self.__sleep(0.5)
+            edfa27autoset=amonic27.accCh1Cur
+            
+            amonic27.disconnect()
+            return edfa27autoset
 
 
     def LFC_EDFA27_ONOFF(self, value=None):
-        return
-        from Hardware.AmonicsEDFA import AmonicsEDFA
-        amonic27 = AmonicsEDFA(addr=f'ASRL{6}::INSTR', name='Amonics EDFA 27 dBm')
+        
+        amonic27 = self.__LFC_EDFA27_connect()
         amonic27.connect()
         if value == None:
             
@@ -360,40 +517,38 @@ class KeckLFC(object):
             return edfa27onoff
             #rio.printStatus()
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             amonic27.accCh1Status=value
+            amonic27.activation=value
+            self.__sleep(0.5)
             edfa27onoff=amonic27.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
             amonic27.disconnect()
             return edfa27onoff
 
     def LFC_EDFA13_P(self, value=None):
-        return
-        from Hardware.AmonicsEDFA import AmonicsEDFA
-        amonic13 = AmonicsEDFA(addr=f'ASRL{9}::INSTR', name='Amonics EDFA 13 dBm')
+        amonic13 = self.__LFC_EDFA13_connect()
         amonic13.connect()
 
         if value == None:
             
-            edfa27p=amonic13.outputPowerCh1
-            print(f'EDFA27 : {edfa27p}mw')
+            edfa13p=amonic13.outputPowerCh1
+            print(f'EDFA27 : {edfa13p}mw')
             amonic13.disconnect()
-            return edfa27p
+            return edfa13p
             #rio.printStatus()
         else:
-            return 0 # not testing MODIFY for now
-            amonic13._setChMode('acc')
+            #return 0 # not testing MODIFY for now
+            amonic13._setChMode('apc')
             amonic13.accCh1Cur=value
-
-            edfa27p=amonic13.outputPowerCh1
-            print(f'EDFA27 : {edfa27p}mw')
+            self.__sleep(0.5)
+            edfa13p=amonic13.outputPowerCh1
+            print(f'EDFA27 : {edfa13p}mw')
             amonic13.disconnect()
-            return edfa27p
+            return edfa13p
 
     def LFC_EDFA13_ONOFF(self, value=None):
-        return
-        from Hardware.AmonicsEDFA import AmonicsEDFA
-        amonic13 = AmonicsEDFA(addr=f'ASRL{9}::INSTR', name='Amonics EDFA 13 dBm')
+        amonic13 = self.__LFC_EDFA13_connect()
         amonic13.connect()
 
         if value == None:
@@ -404,17 +559,16 @@ class KeckLFC(object):
             return edfa27onoff
             #rio.printStatus()
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             amonic13.accCh1Status=value
+            self.__sleep(0.5)
             edfa27onoff=amonic13.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
             amonic13.disconnect()
             return edfa27onoff
 
     def LFC_EDFA23_P(self, value=None):
-        return
-        from Hardware.AmonicsEDFA import AmonicsEDFA
-        amonic23 = AmonicsEDFA(addr=f'ASRL{12}::INSTR', name='Amonics EDFA 23 dBm')
+        amonic23 = self.__LFC_EDFA23_connect()
         amonic23.connect()
 
         if value == None:
@@ -424,20 +578,26 @@ class KeckLFC(object):
             amonic23.disconnect()
             return edfa27p
             #rio.printStatus()
+
+        elif value == 'auto':
+            amonic23._setChMode('acc')
+            amonic23.accCh1Cur='80mA'
+            self.__sleep(0.5)
+            edfa27autoset=amonic23.accCh1Cur
+            amonic23.disconnect()
+            return edfa27autoset
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             amonic23._setChMode('acc')
             amonic23.accCh1Cur=value
-
+            self.__sleep(0.5)
             edfa27p=amonic23.outputPowerCh1
             print(f'EDFA27 : {edfa27p}mw')
             amonic23.disconnect()
             return edfa27p
 
     def LFC_EDFA23_ONOFF(self, value=None):
-        return
-        from Hardware.AmonicsEDFA import AmonicsEDFA
-        amonic23 = AmonicsEDFA(addr=f'ASRL{12}::INSTR', name='Amonics EDFA 23 dBm')
+        amonic23 = self.__LFC_EDFA23_connect()
         amonic23.connect()
 
         if value == None:
@@ -448,17 +608,37 @@ class KeckLFC(object):
             return edfa27onoff
             #rio.printStatus()
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             amonic23.accCh1Status=value
+            amonic23.activation=value
+            self.__sleep(0.5)
             edfa27onoff=amonic23.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
             amonic23.disconnect()
             return edfa27onoff
+        
+    def LFC_EDFA23_AUTO_ON(self, value=None):
+        amonic23 = self.__LFC_EDFA23_connect()
+        amonic23.connect()
+
+        if value == 'acc' or value==None:
+            
+            amonic23._setChMode('acc')
+            self.__sleep(0.5)
+            amonic23.accCh1Cur='80mA'
+            self.__sleep(0.5)
+            amonic23.accCh1Status=1
+            amonic23.activation=1
+            self.__sleep(0.5)
+            edfa27autoset=amonic23.accCh1Cur
+            
+            amonic23.disconnect()
+            return edfa27autoset
+            #rio.printStatus()
+
 
     def LFC_RFAMP_I(self, value=None):
-        return
-        from Hardware.InstekGppDCSupply import InstekGppDCSupply
-        rfampPS = InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
+        rfampPS = self.__LFC_RFAMP_connect()
         rfampPS.connect()
 
         if value == None:
@@ -468,9 +648,18 @@ class KeckLFC(object):
             rfampPS.disconnect()
             return rfampPS_i
             #rio.printStatus()
+
+        elif value == 'auto':
+            rfampPS.Iout1=5
+            self.__sleep(0.5)
+            rfampPS_i=rfampPS.Iout1
+            print(f'LFC_RFAMP_I : +{rfampPS_i}A')
+            rfampPS.disconnect()
+            return rfampPS_i
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             rfampPS.Iout1=value
+            self.__sleep(0.5)
             rfampPS_i=rfampPS.Iout1
             print(f'LFC_RFAMP_I : +{rfampPS_i}A')
             rfampPS.disconnect()
@@ -478,9 +667,7 @@ class KeckLFC(object):
             
 
     def LFC_RFAMP_V(self, value=None):
-        return
-        from Hardware.InstekGppDCSupply import InstekGppDCSupply
-        rfampPS = InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
+        rfampPS = self.__LFC_RFAMP_connect()
         rfampPS.connect()
 
         if value == None:
@@ -490,36 +677,67 @@ class KeckLFC(object):
             rfampPS.disconnect()
             return rfampPS_i
             #rio.printStatus()
+
+        elif value == 'auto':
+            rfampPS.Vout1=30
+            self.__sleep(0.5)
+            rfampPS_i=rfampPS.Vout1
+            #print(f'LFC_RFAMP_V : +{rfampPS_i}V')
+            rfampPS.disconnect()
+            return rfampPS_i
+
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             rfampPS.Vout1=value
+            self.__sleep(0.5)
             rfampPS_i=rfampPS.Vout1
             print(f'LFC_RFAMP_V : +{rfampPS_i}V')
             rfampPS.disconnect()
             return rfampPS_i
+        
+    def LFC_RFAMP_ONOFF(self, value=None):
+        rfampPS = self.__LFC_RFAMP_connect()
+        rfampPS.connect()
+        if value == None:
+            
+            rfampPS_i=rfampPS.activation1
+            rfampPS.disconnect()
+            return rfampPS_i
+            #rio.printStatus()
+
+        else:
+            #return 0 # not testing MODIFY for now
+            rfampPS.activation1=value
+            self.__sleep(0.5)
+            rfampPS_i=rfampPS.activation1
+            rfampPS.disconnect()
+            return rfampPS_i
 
     def LFC_RFOSCI_I(self, value=None):
-        return
-        from Hardware.InstekGPD_4303S import InstekGPD_4303S
-        rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
+        rfoscPS = self.__LFC_RFOSCI_connect()
         rfoscPS.connect()
         if value == None:
             
             rfoscPS_i=rfoscPS.Iout2
             rfoscPS.disconnect()
             return rfoscPS_i
-            
+        
+        elif value == 'auto':
+            rfoscPS.Iset2=3
+            self.__sleep(0.5)
+            rfoscPS_i=rfoscPS.Iout2
+            rfoscPS.disconnect()
+            return rfoscPS_i
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             rfoscPS.Iset2=value
+            self.__sleep(0.5)
             rfoscPS_i=rfoscPS.Iout2
             rfoscPS.disconnect()
             return rfoscPS_i
 
     def LFC_RFOSCI_V(self, value=None):
-        return
-        from Hardware.InstekGPD_4303S import InstekGPD_4303S
-        rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
+        rfoscPS = self.__LFC_RFOSCI_connect()
         rfoscPS.connect()
         if value == None:
             
@@ -527,40 +745,60 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
             
+        elif value == 'auto':
+            rfoscPS.Vset2=3
+            self.__sleep(0.5)
+            rfoscPS_v=rfoscPS.Vout2
+            rfoscPS.disconnect()
+            return rfoscPS_v
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             rfoscPS.Vset2=value
+            self.__sleep(0.5)
             rfoscPS_i=rfoscPS.Vout2
+            rfoscPS.disconnect()
+            return rfoscPS_i
+        
+    def LFC_RFOSCI_ONOFF(self, value=None):
+        rfoscPS = self.__LFC_RFOSCI_connect()
+        rfoscPS.connect()
+        if value == None:
+            
+            rfoscPS_i=rfoscPS.activation
+            rfoscPS.disconnect()
+            return rfoscPS_i
+            
+        else:
+            #return 0 # not testing MODIFY for now
+            rfoscPS.activation=value
+            self.__sleep(0.5)
+            rfoscPS_i=rfoscPS.activation
             rfoscPS.disconnect()
             return rfoscPS_i
 
     def LFC_IM_BIAS(self, value=None):
-        return
-        from Hardware.SRS_SIM900 import SRS_SIM900, SRS_PIDcontrol_SIM960
-        srs = SRS_SIM900(addr='GPIB0::2::INSTR')
-        srs.connect()
-        servo_IM = SRS_PIDcontrol_SIM960(srs, 3, name='Minicomb Intensity Lock Servo')
+        srs = self.__LFC_servo_connect()
+        servo_IM = self.__LFC_IM_LOCK_connect(srs)
+        servo_IM.connect()
         if value == None:
             
             
             IM_bias=servo_IM.get_output_voltage()
-
+            servo_IM.disconnect()
             srs.disconnect()
             return IM_bias
 
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             servo_IM.manual_output=value
-
+            self.__sleep(0.5)
             IM_bias=servo_IM.get_output_voltage()
-
+            servo_IM.disconnect()
             srs.disconnect()
             return IM_bias
 
     def LFC_IM_RF_ATT(self, value=None):
-        return
-        from Hardware.InstekGPD_4303S import InstekGPD_4303S
-        rfoscPS = InstekGPD_4303S(addr='ASRL13::INSTR', name='RF oscilator PS, CH2 15V, CH3 1V')
+        rfoscPS = self.__LFC_RFOSCI_connect()
         rfoscPS.connect()
         if value == None:
             
@@ -568,18 +806,25 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
             
+        elif value == 'auto':
+            rfoscPS.Vset3=0.72
+            self.__sleep(0.5)
+            rfoscPS_i=rfoscPS.Vout3
+            rfoscPS.disconnect()
+            return rfoscPS_i
         else:
-            return 0 # not testing MODIFY for now
-            rfoscPS.Vset2=value
+            #return 0 # not testing MODIFY for now
+            rfoscPS.Vset3=value
+            self.__sleep(0.5)
             rfoscPS_i=rfoscPS.Vout3
             rfoscPS.disconnect()
             return rfoscPS_i
 
-    def LFC_WSP_PHASE(self, value=None):
-        return
+    def LFC_WSP_PHASE(self, value=None):#TBD
+        #return
+        ws = self.__LFC_WSP_connect()
         if value != None:
-            from Hardware.Waveshaper import Waveshaper
-            ws = Waveshaper()
+            
             ws.connect()
 
             d2 = value
@@ -591,7 +836,7 @@ class KeckLFC(object):
             # ws need recheck
             return 0
 
-    def LFC_WSP_ATTEN(self, value=None):
+    def LFC_WSP_ATTEN(self, value=None): #TBD
         if value == None:
             # This is called periodically
             # Insert some function to execute when this keyword is being read and return the value
@@ -605,88 +850,100 @@ class KeckLFC(object):
             return 0  # return
 
     def LFC_PTAMP_PRE_P(self, value=None):
-        return
-        from Hardware.PritelAmp import PritelAmp
-        ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
+        #return
+        ptamp=self.__LFC_PTAMP_connect()
         ptamp.connect()
         if value != None:
 
             ptamp.preAmp = f'{value}'+'mA'
+            self.__sleep(0.5)
+            pre_p=ptamp.preAmp
+            ptamp.disconnect()
+            return pre_p
+        elif value == 'auto':
+            ptamp.preAmp = '600mA'
+            self.__sleep(0.5)
             pre_p=ptamp.preAmp
             ptamp.disconnect()
             return pre_p
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             pre_p=ptamp.preAmp
             ptamp.disconnect()
             return pre_p
     
-    def LFC_PTAMP_PRE_I(self, value=None):
+    def LFC_PTAMP_PRE_I(self, value=None):#no such function
         return
     
 
     def LFC_PTAMP_OUT(self, value=None):
-        return
+        #return
+        ptamp=self.__LFC_PTAMP_connect()
         if value != None:
 
-            from Hardware.PritelAmp import PritelAmp
-            ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
             ptamp.connect()
 
             pre_out=ptamp.outputPwr_mW
             ptamp.disconnect()
             return pre_out
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             raise ValueError("LFC_PTAMP_OUT is read only")
             return
 
     def LFC_PTAMP_I(self, value=None):
-        return
+        #return
 
-        from Hardware.PritelAmp import PritelAmp
-        ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
+        ptamp=self.__LFC_PTAMP_connect()
         ptamp.connect()
 
         if value != None:
 
             ptamp.pwrAmp = f'{value}'+'A'
+            self.__sleep(0.5)
+            ptamp1=ptamp.pwrAmp
             ptamp.disconnect()
-            return 1
+            return ptamp1
 
+        elif value == 'auto':
+            ptamp.pwrAmp = '3.8A'
+            self.__sleep(0.5)
+            ptamp1=ptamp.pwrAmp
+            ptamp.disconnect()
+            return ptamp1
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             ptamp=ptamp.pwrAmp
             ptamp.disconnect()
             return ptamp  # return
 
     def LFC_PTAMP_ONOFF(self, value=None):
-        return
-
-        from Hardware.PritelAmp import PritelAmp
-        ptamp = PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
+        ptamp=self.__LFC_PTAMP_connect()
         ptamp.connect()
 
         if value != None:
 
             ptamp.activation = value
+            self.__sleep(0.5)
             ptact = ptamp.activation
             ptamp.disconnect()
             return ptact
 
         else:
-            return 0 # not testing MODIFY for now
+            #return 0 # not testing MODIFY for now
             ptact=ptamp.activation
             ptamp.disconnect()
             return ptact  # return
 
-    def LFC_PTAMP_LATCH(self, value=None):
-        return
+    def LFC_PTAMP_LATCH(self, value=None):#TBD
+        #return
+        arduino = self.__LFC_ARDUINO_connect()
         if value == None:
-            from Hardware.Arduino_relay import Arduino_relay
-            arduino = Arduino_relay(addr=f"COM3")
+            
             # print(f'com={i}')
             arduino.connect()
+            arduino.reset_relay_latch()
+            arduino.disconnect()
             return
 
         else:
@@ -694,8 +951,168 @@ class KeckLFC(object):
             # Insert some function to execute when user modifies this keyword
             # If it's successful, return 0
             return 0  # return
+        
+    def LFC_YJ_SHUTTER(self, value=None):
+        #return
+        arduino = self.__LFC_ARDUINO_connect()
+        if value == 1:
+            
+            # print(f'com={i}')
+            arduino.connect()
+            arduino.pass_YJ()
+            arduino.disconnect()
+            return 1
 
-    def LFC_WGD_T(self, value=None):
+        elif value == 0:
+            arduino.connect()
+            arduino.shut_YJ()
+            arduino.disconnect()
+            return 0  # return
+        else:
+            return KTLarray('YJ shutter value =1 or 0')
+
+    def LFC_OSA(self,value=None): #TBD
+        osa = self.__LFC_OSA_connect()
+        if value == None:
+            osa.connect()
+            osa.get_wavelength()
+            osa.disconnect()
+            return
+        else:
+            return 0
+
+
+    def LFC_2BY2_SWITCH(self, value=None):
+        switch = self.__LFC_2BY2_SWITCH_connect()
+        if value == None:
+            switch.connect()
+            state=switch.check_status()
+            switch.disconnect()
+            return state
+        else:
+            if value == 'YJ' or value == 1:
+                value = 1
+            elif value == 'HK' or value == 2:
+                value = 2
+            switch.connect()
+            switch.set_status(value)
+            self.__sleep(0.5)
+            state=switch.check_status()
+            switch.disconnect()
+            return state
+        
+    def LFC_HK_SHUTTER(self, value=None):
+        #return
+        hks = self.__LFC_HK_SHUTTER_connect()
+        if value == None:
+            
+            # print(f'com={i}')
+            hks.connect()
+            state=hks.get_status()
+            hks.disconnect()
+            return state
+        else:
+            if value == 1 or value == 'open':
+                value = 1
+            elif value == 0 or value == 'close':
+                value = 0
+            hks.connect()
+            hks.set_status(value)
+            self.__sleep(0.5)
+            state=hks.get_status()
+            hks.disconnect()
+            return state
+          
+    def LFC_VOA1550_ATTEN(self, value=None):
+        voa = self.__LFC_VOA1550_connect()
+        if value == None:
+            voa.connect()
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
+        else:
+            voa.connect()
+            voa.atten_db=value
+            self.__sleep(0.5)
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
+        
+    def LFC_VOA1310_ATTEN(self, value=None):
+        voa = self.__VOA1310_connect()
+        if value == None:
+            voa.connect()
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
+        else:
+            voa.connect()
+            voa.atten_db=value
+            self.__sleep(0.5)
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
+        
+    def LFC_VOA2000_ATTEN(self, value=None):
+        voa = self.__VOA2000_connect()
+        if value == None:
+            voa.connect()
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
+        else:
+            voa.connect()
+            voa.atten_db=value
+            self.__sleep(0.5)
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
+
+    def LFC_IM_LOCK_MODE(self, value=None):
+        srs = self.__LFC_servo_connect()
+        servo_IM = self.__LFC_IM_LOCK_connect(srs)
+    
+        if value == None:
+            servo_IM.connect()
+            mode=servo_IM.output_mode
+
+            servo_IM.disconnect()
+            srs.disconnect()
+            return mode
+        else:
+            servo_IM.connect()
+            servo_IM.output_mode=value
+            mode=servo_IM.output_mode
+            servo_IM.disconnect()
+            srs.disconnect()
+            return mode
+        
+    def __LFC_IM_LOCK_PARAMETER_SET(self, p_gain,i_gain,offset,setpoint):#TBD
+        srs = self.__LFC_servo_connect()
+        servo_IM = self.__LFC_IM_LOCK_connect(srs)
+    
+        servo_IM.connect()
+        servo_IM.prop_gain=p_gain
+        servo_IM.intg_gain=i_gain
+        servo_IM.outoffset=offset
+        servo_IM.set_setpoint(setpoint)
+
+
+        servo_IM.disconnect()
+        srs.disconnect()
+        return 
+
+    def LFC_OSC_AUTO_SET(self, value=None):#TBD
+        return
+
+    def LFC_RB_AUTO_LOCK(self, value=None):#TBD
+        return
+    
+    def LFC_IM_AUTO_LOCK(self, value=None):#TBD
+        return
+
+   
+    def LFC_WGD_T(self, value=None):#TBD
         return
         from Hardware.TEC_TC720 import TEC_TC720
 
@@ -714,7 +1131,7 @@ class KeckLFC(object):
             tec_ppln.disconnect()
             return tppln
 
-    def LFC_PPLN_T(self, value=None):
+    def LFC_PPLN_T(self, value=None):#TBD
         return
         from Hardware.TEC_TC720 import TEC_TC720
         # tec_PPLN = TEC_TC720(addr='ASRL46::INSTR')
@@ -732,6 +1149,18 @@ class KeckLFC(object):
             twg=tec_wg.get_temp()
             tec_wg.disconnect()
             return twg
+
+
+
+
+
+
+
+
+
+
+
+
 
     ########## These are just test keywords and functions ############
 
