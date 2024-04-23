@@ -452,7 +452,7 @@ class KeckLFC(object):
             return edfa27p
             #rio.printStatus()
 
-        elif value == 'auto':
+        elif value == 'default':
             amonic27._setChMode('apc')
             self.__sleep(0.5)
             amonic27.accCh1Cur='450mw'
@@ -579,7 +579,7 @@ class KeckLFC(object):
             return edfa27p
             #rio.printStatus()
 
-        elif value == 'auto':
+        elif value == 'default':
             amonic23._setChMode('acc')
             amonic23.accCh1Cur='80mA'
             self.__sleep(0.5)
@@ -649,7 +649,7 @@ class KeckLFC(object):
             return rfampPS_i
             #rio.printStatus()
 
-        elif value == 'auto':
+        elif value == 'default':
             rfampPS.Iout1=5
             self.__sleep(0.5)
             rfampPS_i=rfampPS.Iout1
@@ -678,7 +678,7 @@ class KeckLFC(object):
             return rfampPS_i
             #rio.printStatus()
 
-        elif value == 'auto':
+        elif value == 'default':
             rfampPS.Vout1=30
             self.__sleep(0.5)
             rfampPS_i=rfampPS.Vout1
@@ -722,7 +722,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
         
-        elif value == 'auto':
+        elif value == 'default':
             rfoscPS.Iset2=3
             self.__sleep(0.5)
             rfoscPS_i=rfoscPS.Iout2
@@ -745,7 +745,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
             
-        elif value == 'auto':
+        elif value == 'default':
             rfoscPS.Vset2=3
             self.__sleep(0.5)
             rfoscPS_v=rfoscPS.Vout2
@@ -806,7 +806,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
             
-        elif value == 'auto':
+        elif value == 'default':
             rfoscPS.Vset3=0.72
             self.__sleep(0.5)
             rfoscPS_i=rfoscPS.Vout3
@@ -860,7 +860,7 @@ class KeckLFC(object):
             pre_p=ptamp.preAmp
             ptamp.disconnect()
             return pre_p
-        elif value == 'auto':
+        elif value == 'default':
             ptamp.preAmp = '600mA'
             self.__sleep(0.5)
             pre_p=ptamp.preAmp
@@ -905,7 +905,7 @@ class KeckLFC(object):
             ptamp.disconnect()
             return ptamp1
 
-        elif value == 'auto':
+        elif value == 'default':
             ptamp.pwrAmp = '3.8A'
             self.__sleep(0.5)
             ptamp1=ptamp.pwrAmp
@@ -970,6 +970,9 @@ class KeckLFC(object):
             return 0  # return
         else:
             return KTLarray('YJ shutter value =1 or 0')
+        
+    def LFC_YJ_ONOFF(self, value=None):
+        return self.LFC_YJ_SHUTTER(value)
 
     def LFC_OSA(self,value=None): #TBD
         osa = self.__LFC_OSA_connect()
@@ -1001,6 +1004,9 @@ class KeckLFC(object):
             switch.disconnect()
             return state
         
+    def LFC_YJ_HK(self, value=None):
+        return self.LFC_2BY2_SWITCH(value)
+        
     def LFC_HK_SHUTTER(self, value=None):
         #return
         hks = self.__LFC_HK_SHUTTER_connect()
@@ -1022,6 +1028,9 @@ class KeckLFC(object):
             state=hks.get_status()
             hks.disconnect()
             return state
+        
+    def LFC_HK_ONOFF(self, value=None):
+        return self.LFC_HK_SHUTTER(value)
           
     def LFC_VOA1550_ATTEN(self, value=None):
         voa = self.__LFC_VOA1550_connect()
@@ -1030,6 +1039,14 @@ class KeckLFC(object):
             atten=voa.atten_db
             voa.disconnect()
             return atten
+        
+        elif value == 'default':
+            voa.connect()
+            voa.atten_db=60
+            self.__sleep(0.5)
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
         else:
             voa.connect()
             voa.atten_db=value
@@ -1037,6 +1054,9 @@ class KeckLFC(object):
             atten=voa.atten_db
             voa.disconnect()
             return atten
+        
+    def LFC_PMP_ATT(self, value=None):
+        return self.LFC_VOA1550_ATTEN(value)
         
     def LFC_VOA1310_ATTEN(self, value=None):
         voa = self.__VOA1310_connect()
@@ -1045,6 +1065,14 @@ class KeckLFC(object):
             atten=voa.atten_db
             voa.disconnect()
             return atten
+
+        elif value == 'default':
+            voa.connect()
+            voa.atten_db=60
+            self.__sleep(0.5)
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
         else:
             voa.connect()
             voa.atten_db=value
@@ -1053,10 +1081,20 @@ class KeckLFC(object):
             voa.disconnect()
             return atten
         
+    def LFC_YJ_ATT(self, value=None):
+        return self.LFC_VOA1310_ATTEN(value)
+        
     def LFC_VOA2000_ATTEN(self, value=None):
         voa = self.__VOA2000_connect()
         if value == None:
             voa.connect()
+            atten=voa.atten_db
+            voa.disconnect()
+            return atten
+        elif value == 'default':
+            voa.connect()
+            voa.atten_db=60
+            self.__sleep(0.5)
             atten=voa.atten_db
             voa.disconnect()
             return atten
@@ -1067,6 +1105,9 @@ class KeckLFC(object):
             atten=voa.atten_db
             voa.disconnect()
             return atten
+        
+    def LFC_HK_ATT(self, value=None):
+        return self.LFC_VOA2000_ATTEN(value)
 
     def LFC_IM_LOCK_MODE(self, value=None):
         srs = self.__LFC_servo_connect()
@@ -1087,6 +1128,18 @@ class KeckLFC(object):
             srs.disconnect()
             return mode
         
+    def LFC_FUNCTION_GEN_STATE(self, value=None):
+        fg = self.__LFC_KEYSIGHT_FG_connect()
+        if value == None:
+            fg.connect()
+            state={}
+            for i in [1,2]:
+                state[i]=fg.get_channel_parameters(i)
+            fg.disconnect()
+            return KTLarray(state)
+        #TBD
+
+        
     def __LFC_IM_LOCK_PARAMETER_SET(self, p_gain,i_gain,offset,setpoint):#TBD
         srs = self.__LFC_servo_connect()
         servo_IM = self.__LFC_IM_LOCK_connect(srs)
@@ -1103,7 +1156,12 @@ class KeckLFC(object):
         return 
 
     def LFC_OSC_AUTO_SET(self, value=None):#TBD
-        return
+        osc = self.__LFC_OSC_connect()
+        if value == None:
+            osc.connect()
+            osc.disconnect()
+            return
+
 
     def LFC_RB_AUTO_LOCK(self, value=None):#TBD
         return
@@ -1111,6 +1169,8 @@ class KeckLFC(object):
     def LFC_IM_AUTO_LOCK(self, value=None):#TBD
         return
 
+    def LFC_WSP_OPTIMIZE(self, value=None):#TBD
+        return
    
     def LFC_WGD_T(self, value=None):#TBD
         return
