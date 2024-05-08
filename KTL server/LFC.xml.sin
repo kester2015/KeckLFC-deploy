@@ -148,7 +148,49 @@
 		<units>Amp</units>
 		<format>%.2f</format>
 	</keyword>
-
+	<keyword>
+		<name>LFC_2BY2_SWITCH</name>
+		<type>enumerated</type>
+		<help level="brief">Set 2 by 2 switch</help>
+		<help level="verbose">Set 2 by 2 switch</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>1</key>
+				<value>YJ</value>
+			</entry>
+			<entry>
+				<key>2</key>
+				<value>HK</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_VOA1550_ATTEN</name>
+		<type>double</type>
+		<help level="brief">set attenuation in db</help>
+		<help level="verbose">set attenuation in db</help>
+		<capability type="write">True</capability>
+		<units>dB</units>
+		<format>%.2f</format>
+		<range>
+			<minimum>0.0</minimum>
+			<maximum>60</maximum>
+		</range>
+	</keyword>
+	<keyword>
+		<name>LFC_VOA2000_ATTEN</name>
+		<type>double</type>
+		<help level="brief">set attenuation in db</help>
+		<help level="verbose">set attenuation in db</help>
+		<capability type="write">True</capability>
+		<units>dB</units>
+		<format>%.2f</format>
+		<range>
+			<minimum>0.0</minimum>
+			<maximum>60</maximum>
+		</range>
+	</keyword>
 	
 	
 	
