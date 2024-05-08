@@ -95,6 +95,7 @@ class KeckLFC(object):
         '''Read keywords. 
         Calls the associated function, stores the returned value. 
         This is called periodically.'''
+        # print('__getitem__ called for', key)
         val = self.funcs[key](value=None)
 
         if val != None: 
@@ -106,13 +107,19 @@ class KeckLFC(object):
     def __setitem__(self, key, val):
         '''Write keywords.
         When keyword values are changed by KTL user, stores the value.'''
-        # print('set item', key, val)
+        # print('__setitem__ called for', key, val)
         if val != None: val = self.convert_type(self.types[key], val)
         
         status = self.funcs[key](value = val)
+        if status == 0: 
+            # device_value = self.funcs[key](value=None)
+            # print('Device value for',key,device_value)
+            # self.keywords[key] = device_value
+            self.keywords[key] = val
+
 
         # if successful, store the keyword value
-        if status == 0: self.keywords[key] = val
+        # if status == 0: self.keywords[key] = val
         elif status == -1: 
             # actually this is never called because writing a keyword value 
             # to a non-writable keyword is already blocked by KTL
@@ -414,6 +421,7 @@ class KeckLFC(object):
 
     def LFC_RIO_T(self, value=None):
         # KEYWORD READ tested
+        # if test_mode: return
         rio = self.__LFC_RIO_connect()
         
 
@@ -1217,6 +1225,7 @@ class KeckLFC(object):
                 self.__sleep(0.5)
                 state=switch.check_status()
                 switch.disconnect()   
+                print("Device value:",state)
                 return 0 # Return 0 means it's successful.
             return        
 
@@ -1286,6 +1295,7 @@ class KeckLFC(object):
             voa.atten_db=value
             self.__sleep(0.5)
             atten=voa.atten_db
+            print("Device value:",atten)
             voa.disconnect()
             return 0 # YooJung's comment: return 0 if successful
             # return atten
@@ -1323,7 +1333,8 @@ class KeckLFC(object):
         return self.LFC_VOA1310_ATTEN(value)
         
     def LFC_VOA2000_ATTEN(self, value=None):
-        # if test_mode: return
+        # Successfully tested!
+        if test_mode: return
         voa = self.__VOA2000_connect()
         if value == None:
             voa.connect()
@@ -1343,6 +1354,7 @@ class KeckLFC(object):
             self.__sleep(0.5)
             atten=voa.atten_db
             voa.disconnect()
+            print("Device value:",atten)
             return 0 # YooJung's comment: return 0 if successful
             # return atten
         

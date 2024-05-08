@@ -583,7 +583,8 @@
 		<type>string</type>
 		<help level="brief">current time returned by ICE</help>
 		<help level="verbose">current time returned by ICE</help>
-		<capability type="write">False</capability>
+		<capability type="write">True</capability>
+		<period>15</period>
 	</keyword>
 	<keyword>
 		<name>ICECLK_ONOFF</name>

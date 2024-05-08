@@ -246,8 +246,8 @@
 		<type>string</type>
 		<help level="brief">current time returned by ICE</help>
 		<help level="verbose">current time returned by ICE</help>
-		<capability type="write">False</capability>
-	</keyword>
+		<capability type="write">True</capability>
+		</keyword>
 	<keyword>
 		<name>ICECLK_ONOFF</name>
 		<type>boolean</type>
