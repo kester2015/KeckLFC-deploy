@@ -421,7 +421,7 @@ class KeckLFC(object):
 
     def LFC_RIO_T(self, value=None):
         # KEYWORD READ tested
-        # if test_mode: return
+        if test_mode: return
         rio = self.__LFC_RIO_connect()
         
 
@@ -1203,13 +1203,16 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None):
+        if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
         if value == None:
+            print("2BY2 switch read block called")
             switch.connect()
             state=switch.check_status()
             switch.disconnect()
+            print("2BY2 switch state", state)
             return state
         else:
 
@@ -1220,12 +1223,14 @@ class KeckLFC(object):
             ## Please see the modified codes below.
 
             if value in [1, 2]: 
+                print("2BY2 switch write block called")
+
                 switch.connect()
                 switch.set_status(value)
-                self.__sleep(0.5)
-                state=switch.check_status()
-                switch.disconnect()   
-                print("Device value:",state)
+                # self.__sleep(0.5)
+                # state=switch.check_status()
+                # switch.disconnect()   
+                # print("Device value:",state)
                 return 0 # Return 0 means it's successful.
             return        
 
@@ -1274,12 +1279,14 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None):
         # Successfully tested!
-        # if test_mode: return
+        if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
+            print("VOA1550_ATTEN read block called")
             voa.connect()
             atten=voa.atten_db
             voa.disconnect()
+            print('VOA1550_ATTEN value:', atten)
             return atten
         
         elif value == 'default':
@@ -1291,12 +1298,14 @@ class KeckLFC(object):
             voa.disconnect()
             return atten
         else:
+            print("VOA1550_ATTEN write block called")
+
             voa.connect()
             voa.atten_db=value
-            self.__sleep(0.5)
-            atten=voa.atten_db
-            print("Device value:",atten)
-            voa.disconnect()
+            # self.__sleep(0.5)
+            # atten=voa.atten_db
+            # print("Device value:",atten)
+            # voa.disconnect()
             return 0 # YooJung's comment: return 0 if successful
             # return atten
         
