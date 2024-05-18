@@ -1203,7 +1203,7 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None):
-        if test_mode: return
+        # if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
@@ -1223,11 +1223,11 @@ class KeckLFC(object):
             ## Please see the modified codes below.
 
             if value in [1, 2]: 
-                print("2BY2 switch write block called")
+                print("2BY2 switch write block called, setting value to ", value)
 
                 switch.connect()
                 switch.set_status(value)
-                # self.__sleep(0.5)
+                self.__sleep(0.5)
                 # state=switch.check_status()
                 # switch.disconnect()   
                 # print("Device value:",state)
@@ -1279,7 +1279,7 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None):
         # Successfully tested!
-        if test_mode: return
+        # if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
             print("VOA1550_ATTEN read block called")
@@ -1298,7 +1298,7 @@ class KeckLFC(object):
             voa.disconnect()
             return atten
         else:
-            print("VOA1550_ATTEN write block called")
+            print("VOA1550_ATTEN write block called, writing value", value)
 
             voa.connect()
             voa.atten_db=value
@@ -1343,7 +1343,7 @@ class KeckLFC(object):
         
     def LFC_VOA2000_ATTEN(self, value=None):
         # Successfully tested!
-        if test_mode: return
+        # if test_mode: return
         voa = self.__VOA2000_connect()
         if value == None:
             voa.connect()
@@ -1361,9 +1361,9 @@ class KeckLFC(object):
             voa.connect()
             voa.atten_db=value
             self.__sleep(0.5)
-            atten=voa.atten_db
-            voa.disconnect()
-            print("Device value:",atten)
+            # atten=voa.atten_db
+            # voa.disconnect()
+            # print("Device value:",atten)
             return 0 # YooJung's comment: return 0 if successful
             # return atten
         
