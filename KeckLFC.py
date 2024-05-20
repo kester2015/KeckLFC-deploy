@@ -411,25 +411,27 @@ class KeckLFC(object):
         
     def LFC_TEMP_MONITOR(self,value=None):#TBD
 
+        return
         temp_1=self.LFC_TEMP_TEST1
         temp_2=self.LFC_TEMP_TEST2
     
 
-        threshold=30
+        threshold=40
         if temp_1[1]>threshold:
-            self.LFC_CLOSE_ALL()
+            self.LFC_CLOSE_ALL(1)
         if temp_2[1]>threshold:
-            self.LFC_CLOSE_ALL()
+            self.LFC_CLOSE_ALL(1)
 
 
     def LFC_CLOSE_ALL(self, value=None):
-
-        self.LFC_PTAMP_ONOFF(0)
-        self.LFC_EDFA23_ONOFF(0)
-        self.LFC_EDFA27_ONOFF(0)
-        self.LFC_RFAMP_ONOFF(0)
-        self.LFC_RFOSCI_ONOFF(0)
-        self.LFC_CLARITY_ONOFF(0)
+        return
+        if value==1:
+            self.LFC_PTAMP_ONOFF(0)
+            self.LFC_EDFA23_ONOFF(0)
+            self.LFC_EDFA27_ONOFF(0)
+            self.LFC_RFAMP_ONOFF(0)
+            self.LFC_RFOSCI_ONOFF(0)
+            self.LFC_CLARITY_ONOFF(0)
 
         
 
