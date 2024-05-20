@@ -266,6 +266,10 @@ class KeckLFC(object):
         from Hardware.OZopticsVOA import OZopticsVOA
         return OZopticsVOA(addr=f'ASRL{18}::INSTR', name='2um VOA')
     
+    def __LFC_CLARITY_connect(self, value=None):
+        from Hardware.Clarity import Clarity
+        return Clarity(addr=f'ASRL{23}::INSTR')
+    
     def __sleep(self, value=0.5):
         import time
         time.sleep(value)
@@ -405,7 +409,7 @@ class KeckLFC(object):
             raise ValueError("LFC_T_RACK_BOT is read-only")
             return
         
-    def LFC_TEMP_MONITOR(self,value):#TBD
+    def LFC_TEMP_MONITOR(self,value=None):#TBD
 
         temp_1=self.LFC_TEMP_TEST1
         temp_2=self.LFC_TEMP_TEST2
@@ -417,7 +421,30 @@ class KeckLFC(object):
         if temp_2[1]>threshold:
             self.LFC_CLOSE_ALL()
 
-    
+
+    def LFC_CLOSE_ALL(self, value=None):
+
+        self.LFC_PTAMP_ONOFF(0)
+        self.LFC_EDFA23_ONOFF(0)
+        self.LFC_EDFA27_ONOFF(0)
+        self.LFC_RFAMP_ONOFF(0)
+        self.LFC_RFOSCI_ONOFF(0)
+        self.LFC_CLARITY_ONOFF(0)
+
+        
+
+
+    def LFC_CLARITY_ONOFF(self, value=None):
+        if test_mode: return
+
+        if value == None:
+            clarity = self.__LFC_CLARITY_connect()
+            status = clarity.get_status()
+            return status
+        else:
+            clarity = self.__LFC_CLARITY_connect()
+            status=clarity.set_onoff(value)
+            return status
 
 
 
@@ -904,7 +931,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
         
-    def LFC_RFOSCI_DEfAULT(self, value=None):
+    def LFC_RFOSCI_DEFAULT(self, value=None):
         if test_mode: return
         
         if value == None:
