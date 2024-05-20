@@ -404,6 +404,22 @@ class KeckLFC(object):
         else:
             raise ValueError("LFC_T_RACK_BOT is read-only")
             return
+        
+    def LFC_TEMP_MONITOR(self,value):#TBD
+
+        temp_1=self.LFC_TEMP_TEST1
+        temp_2=self.LFC_TEMP_TEST2
+    
+
+        threshold=30
+        if temp_1[1]>threshold:
+            self.LFC_CLOSE_ALL()
+        if temp_2[1]>threshold:
+            self.LFC_CLOSE_ALL()
+
+    
+
+
 
     def LFC_T_GLY_EOCB_IN(self, value=None): return
     def LFC_T_GLY_EOCB_OUT(self, value=None): return
@@ -1229,7 +1245,7 @@ class KeckLFC(object):
                 switch.set_status(value)
                 self.__sleep(0.5)
                 # state=switch.check_status()
-                # switch.disconnect()   
+                switch.disconnect()   
                 # print("Device value:",state)
                 return 0 # Return 0 means it's successful.
             return        
@@ -1305,7 +1321,7 @@ class KeckLFC(object):
             # self.__sleep(0.5)
             # atten=voa.atten_db
             # print("Device value:",atten)
-            # voa.disconnect()
+            voa.disconnect()
             return 0 # YooJung's comment: return 0 if successful
             # return atten
         
@@ -1362,7 +1378,7 @@ class KeckLFC(object):
             voa.atten_db=value
             self.__sleep(0.5)
             # atten=voa.atten_db
-            # voa.disconnect()
+            voa.disconnect()
             # print("Device value:",atten)
             return 0 # YooJung's comment: return 0 if successful
             # return atten
