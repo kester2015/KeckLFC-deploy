@@ -1430,6 +1430,12 @@ class KeckLFC(object):
             srs.disconnect()
             return mode
         else:
+            ## Yoojung's note
+            ## this could be implemented as "enumerated" keyword
+            ## as in LFC_2BY2_SWITCH, such as
+            ## value = 1 if user sets to "PID"
+            ## value = 2 if user sets to "MAN"
+            ## for now leaving it as string keyword
             srs = self.__LFC_servo_connect()
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
             servo_IM.connect()
