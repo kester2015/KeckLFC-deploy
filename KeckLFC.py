@@ -581,7 +581,7 @@ class KeckLFC(object):
             #print(f'EDFA27 : {edfa27p}mw')
             amonic27.disconnect()
             return edfa27p
-        else:
+        elif value == 1:
             amonic27.connect()
             amonic27._setChMode('apc')
             self.__sleep(0.5)
@@ -594,6 +594,8 @@ class KeckLFC(object):
             
             amonic27.disconnect()
             return edfa27autoset
+        else:
+            return 
 
  
 
@@ -754,7 +756,7 @@ class KeckLFC(object):
             #print(f'EDFA27 : {edfa27p}mw')
             amonic23.disconnect()
             return edfa27p
-        else:
+        elif value == 1:
             amonic23.connect()
             amonic23._setChMode('acc')
             self.__sleep(0.5)
@@ -767,6 +769,8 @@ class KeckLFC(object):
             
             amonic23.disconnect()
             return edfa27autoset
+        else:
+            return
 
 
     def LFC_RFAMP_I(self, value=None):
@@ -1330,6 +1334,7 @@ class KeckLFC(object):
             print("VOA1550_ATTEN read block called")
             voa.connect()
             atten=voa.atten_db
+            atten='%.2f'%atten
             voa.disconnect()
             print('VOA1550_ATTEN value:', atten)
             return atten
@@ -1340,6 +1345,7 @@ class KeckLFC(object):
             voa.atten_db=60
             self.__sleep(0.5)
             atten=voa.atten_db
+            atten='%.2f'%atten
             voa.disconnect()
             return atten
         else:
@@ -1364,6 +1370,7 @@ class KeckLFC(object):
         if value == None:
             voa.connect()
             atten=voa.atten_db
+            atten='%.2f'%atten
             voa.disconnect()
             return atten
 
@@ -1372,6 +1379,7 @@ class KeckLFC(object):
             voa.atten_db=60
             self.__sleep(0.5)
             atten=voa.atten_db
+            atten='%.2f'%atten
             voa.disconnect()
             return atten
         else:
@@ -1379,6 +1387,7 @@ class KeckLFC(object):
             voa.atten_db=value
             self.__sleep(0.5)
             atten=voa.atten_db
+            atten='%.2f'%atten
             voa.disconnect()
             return atten
         
@@ -1393,6 +1402,7 @@ class KeckLFC(object):
         if value == None:
             voa.connect()
             atten=voa.atten_db
+            atten='%.2f'%atten
             voa.disconnect()
             return atten
         elif value == 'default':
@@ -1400,6 +1410,7 @@ class KeckLFC(object):
             voa.atten_db=60
             self.__sleep(0.5)
             atten=voa.atten_db
+            atten='%.2f'%atten
             voa.disconnect()
             return atten
         else:
@@ -1425,6 +1436,10 @@ class KeckLFC(object):
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
             servo_IM.connect()
             mode=servo_IM.output_mode
+            if mode == 'PID' or 'pid':
+                mode = 1
+            if mode == 'MAN' or 'man':
+                mode = 0
 
             servo_IM.disconnect()
             srs.disconnect()
@@ -1434,16 +1449,21 @@ class KeckLFC(object):
             ## this could be implemented as "enumerated" keyword
             ## as in LFC_2BY2_SWITCH, such as
             ## value = 1 if user sets to "PID"
-            ## value = 2 if user sets to "MAN"
+            ## value = 0 if user sets to "MAN"
             ## for now leaving it as string keyword
             srs = self.__LFC_servo_connect()
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
             servo_IM.connect()
+            if value == 1:
+                value = 'pid'
+            if value == 0:
+                value=='man'
+
             servo_IM.output_mode=value
-            mode=servo_IM.output_mode
+            #mode=servo_IM.output_mode
             servo_IM.disconnect()
             srs.disconnect()
-            return mode
+            return 0
         
     def LFC_FUNCTION_GEN_STATE(self, value=None):
         if test_mode: return
