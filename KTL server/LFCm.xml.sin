@@ -157,11 +157,55 @@
 	</keyword>
 	<keyword>
 		<name>LFC_IM_LOCK_MODE</name>
-		<type>string</type>
+		<type>boolean</type>
 		<help level="brief">set lock mode</help>
 		<help level="verbose">set lock mode</help>
 		<capability type="write">True</capability>
 		<period>120</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>manual mode</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>pid mode</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_TEMP_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">auto temp monitor</help>
+		<capability type="write">False</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</key>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>Normal</key>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_CLOSE_ALL</name>
+		<type>boolean</type>
+		<help level="brief">shut up all power device</help>
+		<capability type="write">True</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>running</key>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>shut up all output</key>
+			</entry>
+		</values>
 	</keyword>
 	<keyword>
 		<name>LFC_TEMP_TEST1</name>
@@ -630,6 +674,11 @@
 		<period>20</period>
 		<format>%.1f</format>
 	</keyword>
+
+
+	<!--end of the test cases-->
+	
+	<!--
 	<keyword>
 		<name>LFC_PMP_ATT</name>
 		<type>double</type>
@@ -644,14 +693,6 @@
 		<units>dB</units>
 		<format>%.2f</format>
 	</keyword>
-
-
-
-
-	<!--end of the test cases-->
-	
-	<!--
-
 	<keyword>
 			<name>LFC_YJ_OR_HK</name>
 			<type>string</type>
