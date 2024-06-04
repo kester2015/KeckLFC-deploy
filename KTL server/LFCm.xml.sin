@@ -182,11 +182,11 @@
 		<values>
 			<entry>
 				<key>0</key>
-				<value>Fault</key>
+				<value>Fault</value>
 			</entry>
 			<entry>
 				<key>1</key>
-				<value>Normal</key>
+				<value>Normal</value>
 			</entry>
 		</values>
 	</keyword>
@@ -199,11 +199,11 @@
 		<values>
 			<entry>
 				<key>0</key>
-				<value>running</key>
+				<value>running</value>
 			</entry>
 			<entry>
 				<key>1</key>
-				<value>shut up all output</key>
+				<value>shut up all output</value>
 			</entry>
 		</values>
 	</keyword>
