@@ -3,6 +3,335 @@
 		<name>+service+_dispatch_3</name>
 	</dispatcher>
 	
+
+	<keyword>
+		<name>LFC_RFOSCI_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">set on or off rfosc powersup</help>
+		<help level="verbose">set on or off rfosc powersup</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_RFAMP_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">set on or off rfamp powersup</help>
+		<help level="verbose">set on or off rfamp powersup</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_PTAMP_LATCH</name>
+		<type>boolean</type>
+		<help level="brief">RESET preamp and pwramp latching circuits</help>
+		<help level="verbose">RESET preamp and pwramp latching circuits</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_YJ_SHUTTER</name>
+		<type>boolean</type>
+		<help level="brief">YJ shutter status</help>
+		<help level="verbose">YJ shutter status</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>shut light</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>pass light</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_2BY2_SWITCH</name>
+		<type>enumerated</type>
+		<help level="brief">Set 2 by 2 switch</help>
+		<help level="verbose">Set 2 by 2 switch</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>1</key>
+				<value>YJ</value>
+			</entry>
+			<entry>
+				<key>2</key>
+				<value>HK</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_HK_SHUTTER</name>
+		<type>boolean</type>
+		<help level="brief">HK shutter status</help>
+		<help level="verbose">HK shutter status</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>shut light</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>pass light</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_VOA1550_ATTEN</name>
+		<type>double</type>
+		<help level="brief">set attenuation in db</help>
+		<help level="verbose">set attenuation in db</help>
+		<capability type="write">True</capability>
+		<units>dB</units>
+		<format>%.2f</format>
+		<range>
+			<minimum>0.0</minimum>
+			<maximum>60</maximum>
+		</range>
+	</keyword>
+	<keyword>
+		<name>LFC_VOA1310_ATTEN</name>
+		<type>double</type>
+		<help level="brief">set attenuation in db</help>
+		<help level="verbose">set attenuation in db</help>
+		<capability type="write">True</capability>
+		<units>dB</units>
+		<format>%.2f</format>
+		<range>
+			<minimum>0.0</minimum>
+			<maximum>60</maximum>
+		</range>
+	</keyword>
+	<keyword>
+		<name>LFC_VOA2000_ATTEN</name>
+		<type>double</type>
+		<help level="brief">set attenuation in db</help>
+		<help level="verbose">set attenuation in db</help>
+		<capability type="write">True</capability>
+		<units>dB</units>
+		<format>%.2f</format>
+		<range>
+			<minimum>0.0</minimum>
+			<maximum>60</maximum>
+		</range>
+	</keyword>
+	<keyword>
+		<name>LFC_IM_LOCK_MODE</name>
+		<type>boolean</type>
+		<help level="brief">set lock mode</help>
+		<help level="verbose">set lock mode</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>manual mode</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>pid mode</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_TEMP_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">auto temp monitor</help>
+		<capability type="write">False</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>Normal</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_CLOSE_ALL</name>
+		<type>boolean</type>
+		<help level="brief">shut up all power device</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>running</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>shut up all output</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_TEMP_TEST1</name>
+		<type>double array</type>
+		<help level="brief">Temperature test 1</help>
+		<capability type="write">False</capability>
+		<elements>
+			<entry>
+				<index>0</index>
+				<label>Element_0</label>
+			</entry>
+			<entry>
+				<index>1</index>
+				<label>Element_1</label>
+			</entry>
+			<entry>
+				<index>2</index>
+				<label>Element_2</label>
+			</entry>
+			<entry>
+				<index>3</index>
+				<label>Element_3</label>
+			</entry>
+			<entry>
+				<index>4</index>
+				<label>Element_4</label>
+			</entry>
+			<entry>
+				<index>5</index>
+				<label>Element_5</label>
+			</entry>
+			<entry>
+				<index>6</index>
+				<label>Element_6</label>
+			</entry>
+			<entry>
+				<index>7</index>
+				<label>Element_7</label>
+			</entry>
+		</elements>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_TEMP_TEST2</name>
+		<type>double array</type>
+		<help level="brief">Temperature test 2</help>
+		<capability type="write">False</capability>
+		<elements>
+			<entry>
+				<index>0</index>
+				<label>Element_0</label>
+			</entry>
+			<entry>
+				<index>1</index>
+				<label>Element_1</label>
+			</entry>
+			<entry>
+				<index>2</index>
+				<label>Element_2</label>
+			</entry>
+			<entry>
+				<index>3</index>
+				<label>Element_3</label>
+			</entry>
+			<entry>
+				<index>4</index>
+				<label>Element_4</label>
+			</entry>
+			<entry>
+				<index>5</index>
+				<label>Element_5</label>
+			</entry>
+			<entry>
+				<index>6</index>
+				<label>Element_6</label>
+			</entry>
+			<entry>
+				<index>7</index>
+				<label>Element_7</label>
+			</entry>
+		</elements>
+		<format>%.2f</format>
+	</keyword>
+    <keyword>
+		<name>LFC_T_GLY_RACK_IN</name>
+		<type>double</type>
+		<help level="brief">Glycol inlet temp to instrument rack</help>
+		<help level="verbose">Glycol inlet temp to instrument rack</help>
+		<capability type="write">False</capability>
+		<format>%.2f</format> 
+	</keyword>
+	<keyword>
+		<name>LFC_T_GLY_RACK_OUT</name>
+		<type>double</type>
+		<help level="brief">Glycol outlet temp from instrument rack</help>
+		<help level="verbose">Glycol outlet temp from instrument rack</help>
+		<capability type="write">False</capability>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_T_EOCB_IN</name>
+		<type>double</type>
+		<help level="brief">Glycol inlet temp to EO comb board</help>
+		<help level="verbose">Glycol inlet temp to EO comb board</help>
+		<capability type="write">False</capability>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_T_EOCB_OUT</name>
+		<type>double</type>
+		<help level="brief">Glycol outlet temp from EO comb board</help>
+		<help level="verbose">Glycol outlet temp from EO comb board</help>
+		<capability type="write">False</capability>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_T_RACK_TOP</name>
+		<type>double</type>
+		<help level="brief">Instrument rack top temp</help>
+		<help level="verbose">Instrument rack top temp</help>
+		<capability type="write">False</capability>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_T_RACK_MID</name>
+		<type>double</type>
+		<help level="brief">Instrument rack middle temp</help>
+		<help level="verbose">Instrument rack middle temp</help>
+		<capability type="write">False</capability>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_T_RACK_BOT</name>
+		<type>double</type>
+		<help level="brief">Instrument rack bottom temp</help>
+		<help level="verbose">Instrument rack bottom temp</help>
+		<capability type="write">False</capability>
+		<format>%.2f</format>
+	</keyword>
 	<keyword>
 		<name>LFC_RIO_T</name>
 		<type>double</type>
@@ -26,37 +355,101 @@
 		<format>%.1f</format>
 	</keyword>
 	<keyword>
-		<name>LFC_RFOSCI_I</name>
+		<name>LFC_EDFA27_P</name>
 		<type>double</type>
-		<help level="brief">RF Oscillator input current</help>
-		<help level="verbose">RF Oscillator input current</help>
-		<capability type="write">False</capability>
-		<range>
-			<minimum>0.35</minimum>
-			<maximum>0.7</maximum>
-		</range>
-		<units>mA</units>
-		<format>%.2f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_RFOSCI_V</name>
-		<type>double</type>
-		<help level="brief">RF Oscillator input voltage</help>
-		<help level="verbose">RF Oscillator input voltage</help>
+		<help level="brief">Small  EDFA (500 mW) 1 output power</help>
+		<help level="verbose">Small  EDFA (500 mW) 1 output power</help>
 		<capability type="write">True</capability>
 		<range>
-			<minimum>14.95</minimum>
-			<maximum>15.05</maximum>
+			<minimum>0</minimum>
+			<maximum>630</maximum>
 		</range>
-		<units>V</units>
-		<format>%.2f</format>
+		<units>mW</units>
+		<format>%.1f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA27_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">Small EDFA (500 mW) 1 emission on/off</help>
+		<help level="verbose">Small EDFA (500 mW) 1 emission on/off</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA13_P</name>
+		<type>double</type>
+		<help level="brief">Small EDFA (20 mW) 2 output power</help>
+		<help level="verbose">Small EDFA (20 mW) 2 output power</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>0</minimum>
+			<maximum>20</maximum>
+		</range>
+		<units>mW</units>
+		<format>%.1f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA13_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">Small EDFA (20 mW) 2 emission on/off</help>
+		<help level="verbose">Small EDFA (20 mW) 2 emission on/off</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA23_P</name>
+		<type>double</type>
+		<help level="brief">Small EDFA (200 mW) 3 output power</help>
+		<help level="verbose">Small EDFA (200 mW) 3 output power</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>0</minimum>
+			<maximum>20</maximum>
+		</range>
+		<units>mW</units>
+		<format>%.1f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA23_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">Small EDFA (200 mW) 3 emission on/off</help>
+		<help level="verbose">Small EDFA (200 mW) 3 emission on/off</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
 	</keyword>
 	<keyword>
 		<name>LFC_RFAMP_I</name>
 		<type>double</type>
 		<help level="brief">RF Amp current</help>
 		<help level="verbose">RF Amp current</help>
-		<capability type="write">False</capability>
+		<capability type="write">True</capability>
 		<units>Amp</units>
 		<format>%.1f</format>
 	</keyword>
@@ -74,6 +467,32 @@
 		<format>%.1f</format>
 	</keyword>
 	<keyword>
+		<name>LFC_RFOSCI_I</name>
+		<type>double</type>
+		<help level="brief">RF Oscillator input current</help>
+		<help level="verbose">RF Oscillator input current</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>0.35</minimum>
+			<maximum>0.7</maximum>
+		</range>
+		<units>mA</units>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_RFOSCI_V</name>
+		<type>double</type>
+		<help level="brief">RF Oscillator input voltage</help>
+		<help level="verbose">RF Oscillator input voltage</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>15</minimum>
+			<maximum>15</maximum>
+		</range>
+		<units>V</units>
+		<format>%.2f</format>
+	</keyword>
+	<keyword>
 		<name>LFC_IM_BIAS</name>
 		<type>double</type>
 		<help level="brief">Mini-comb amplitude lock offset bias</help>
@@ -84,34 +503,30 @@
 			<maximum>3</maximum>
 		</range>
 		<units>V</units>
+		<format>%.3f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_IM_RF_ATT</name>
+		<type>double</type>
+		<help level="brief">Mini-comb RF voltage controlled variable attenuation setting</help>
+		<help level="verbose">Mini-comb RF voltage controlled variable attenuation setting</help>
+		<capability type="write">True</capability>
+		<range>
+			<minimum>0</minimum>
+			<maximum>10</maximum>
+		</range>
+		<units>V</units>
+		<format>%.2f</format>
+	</keyword>
+	
+	<keyword>
+		<name>LFC_PTAMP_PRE_P</name>
+		<type>double</type>
+		<help level="brief">High-power EDFA pre-amp output power</help>
+		<help level="verbose">High-power EDFA pre-amp output power</help>
+		<capability type="write">True</capability>
+		<units>ma</units>
 		<format>%.1f</format>
-	</keyword>
-	<keyword>
-			<name>LFC_YJ_OR_HK</name>
-			<type>string</type>
-			<help level="brief">Select whether YJ or HK comb are selected</help>
-			<help level="verbose">Select whether YJ or HK comb are selected</help>
-			<capability type="write">True</capability>
-	</keyword>
-	<keyword>
-			<name>LFC_YJ_SHUTTER</name>
-			<type>string</type>
-			<help level="brief">YJ shutter status</help>
-			<help level="verbose">YJ shutter status</help>
-			<capability type="write">True</capability>
-	</keyword>
-	<keyword>
-			<name>LFC_PMP_ATT</name>
-			<type>double</type>
-			<help level="brief">Pump Attenuation (Intensity)</help>
-			<help level="verbose">Pump Attenuation (Intensity)</help>
-			<capability type="write">False</capability>
-			<range>
-				<minimum>0.01</minimum>
-				<maximum>60</maximum>
-			</range>
-			<units>dB</units>
-			<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_PTAMP_OUT</name>
@@ -140,57 +555,45 @@
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
-		<name>LFC_PTAMP_PRE_I</name>
-		<type>double</type>
-		<help level="brief">Pritel PreAmp current</help>
-		<help level="verbose">Pritel PreAmp current</help>
-		<capability type="write">False</capability>
-		<units>Amp</units>
-		<format>%.2f</format>
-	</keyword>
-	<keyword>
-		<name>LFC_2BY2_SWITCH</name>
-		<type>enumerated</type>
-		<help level="brief">Set 2 by 2 switch</help>
-		<help level="verbose">Set 2 by 2 switch</help>
+		<name>LFC_PTAMP_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">High-power EDFA emission on/standby</help>
+		<help level="verbose">High-power EDFA emission on/standby</help>
 		<capability type="write">True</capability>
 		<values>
 			<entry>
-				<key>1</key>
-				<value>YJ</value>
+				<key>0</key>
+				<value>standby</value>
 			</entry>
 			<entry>
-				<key>2</key>
-				<value>HK</value>
+				<key>1</key>
+				<value>on</value>
 			</entry>
 		</values>
 	</keyword>
 	<keyword>
-		<name>LFC_VOA1550_ATTEN</name>
+		<name>LFC_WGD_T</name>
 		<type>double</type>
-		<help level="brief">set attenuation in db</help>
-		<help level="verbose">set attenuation in db</help>
+		<help level="brief">Waveguide TEC control</help>
+		<help level="verbose">Waveguide TEC control</help>
 		<capability type="write">True</capability>
-		<units>dB</units>
-		<format>%.2f</format>
+		<format>%.1f</format>
 		<range>
-			<minimum>0.0</minimum>
-			<maximum>60</maximum>
+			<minimum>22.5</minimum>
+			<maximum>23.5</maximum>
 		</range>
+		<units>C</units>
 	</keyword>
 	<keyword>
-		<name>LFC_VOA2000_ATTEN</name>
+		<name>LFC_PPLN_T</name>
 		<type>double</type>
-		<help level="brief">set attenuation in db</help>
-		<help level="verbose">set attenuation in db</help>
+		<help level="brief">PPLN TEC control</help>
+		<help level="verbose">PPLN TEC control</help>
 		<capability type="write">True</capability>
-		<units>dB</units>
-		<format>%.2f</format>
-		<range>
-			<minimum>0.0</minimum>
-			<maximum>60</maximum>
-		</range>
+		<format>%.1f</format>
 	</keyword>
+
+
 	
 	
 	
@@ -281,85 +684,5 @@
 				<value>on</value>
 			</entry>
 		</values>
-	</keyword>
-	<keyword>
-		<name>LFC_TEMP_TEST1</name>
-		<type>double array</type>
-		<help level="brief">Temperature test 1</help>
-		<capability type="write">False</capability>
-		<elements>
-			<entry>
-				<index>0</index>
-				<label>Element_0</label>
-			</entry>
-			<entry>
-				<index>1</index>
-				<label>Element_1</label>
-			</entry>
-			<entry>
-				<index>2</index>
-				<label>Element_2</label>
-			</entry>
-			<entry>
-				<index>3</index>
-				<label>Element_3</label>
-			</entry>
-			<entry>
-				<index>4</index>
-				<label>Element_4</label>
-			</entry>
-			<entry>
-				<index>5</index>
-				<label>Element_5</label>
-			</entry>
-			<entry>
-				<index>6</index>
-				<label>Element_6</label>
-			</entry>
-			<entry>
-				<index>7</index>
-				<label>Element_7</label>
-			</entry>
-		</elements>
-	</keyword>
-	<keyword>
-		<name>LFC_TEMP_TEST2</name>
-		<type>double array</type>
-		<help level="brief">Temperature test 2</help>
-		<capability type="write">False</capability>
-		<elements>
-			<entry>
-				<index>0</index>
-				<label>Element_0</label>
-			</entry>
-			<entry>
-				<index>1</index>
-				<label>Element_1</label>
-			</entry>
-			<entry>
-				<index>2</index>
-				<label>Element_2</label>
-			</entry>
-			<entry>
-				<index>3</index>
-				<label>Element_3</label>
-			</entry>
-			<entry>
-				<index>4</index>
-				<label>Element_4</label>
-			</entry>
-			<entry>
-				<index>5</index>
-				<label>Element_5</label>
-			</entry>
-			<entry>
-				<index>6</index>
-				<label>Element_6</label>
-			</entry>
-			<entry>
-				<index>7</index>
-				<label>Element_7</label>
-			</entry>
-		</elements>
 	</keyword>
 </bundle>

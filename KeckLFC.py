@@ -346,7 +346,7 @@ class KeckLFC(object):
 
 
     def LFC_TEMP_TEST1(self, value=None):
-        if test_mode: return
+        # if test_mode: return
         if value == None:
             daq1 = self.__LFC_USB2408_0_connect()
             daq1.connect()    
@@ -358,7 +358,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_TEMP_TEST2(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             daq1 = self.__LFC_USB2408_1_connect()
@@ -371,7 +371,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_T_GLY_RACK_IN(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             addr = 0
@@ -385,7 +385,7 @@ class KeckLFC(object):
             return 0
         
     def LFC_T_GLY_RACK_OUT(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             addr = 0
@@ -396,11 +396,12 @@ class KeckLFC(object):
             daq.disconnect()
             return temp
         else:
-            raise ValueError("LFC_T_GLY_RACK_OUT is read-only")
-            return
+            return 0
+            # raise ValueError("LFC_T_GLY_RACK_OUT is read-only")
+            # return
         
     def LFC_T_EOCB_IN(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             addr = 1
@@ -411,11 +412,12 @@ class KeckLFC(object):
             daq.disconnect()
             return temp
         else:
-            raise ValueError("LFC_T_EOCB_IN is read-only")
-            return
+            return 0
+            # raise ValueError("LFC_T_EOCB_IN is read-only")
+            # return
 
     def LFC_T_EOCB_OUT(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             addr = 1
@@ -426,11 +428,12 @@ class KeckLFC(object):
             daq.disconnect()
             return temp
         else:
-            raise ValueError("LFC_T_EOCB_OUT is read-only")
-            return
+            return 0
+            # raise ValueError("LFC_T_EOCB_OUT is read-only")
+            # return
         
     def LFC_T_RACK_TOP(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             addr = 0
@@ -441,11 +444,12 @@ class KeckLFC(object):
             daq.disconnect()
             return temp
         else:
-            raise ValueError("LFC_T_RACK_TOP is read-only")
-            return
+            return 0
+            # raise ValueError("LFC_T_RACK_TOP is read-only")
+            # return
         
     def LFC_T_RACK_MID(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             addr = 0
@@ -456,11 +460,12 @@ class KeckLFC(object):
             daq.disconnect()
             return temp
         else:
-            raise ValueError("LFC_T_RACK_MID is read-only")
-            return
+            return 0
+            # raise ValueError("LFC_T_RACK_MID is read-only")
+            # return
     
     def LFC_T_RACK_BOT(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             addr = 0
@@ -471,8 +476,9 @@ class KeckLFC(object):
             daq.disconnect()
             return temp
         else:
-            raise ValueError("LFC_T_RACK_BOT is read-only")
-            return
+            return 0
+            # raise ValueError("LFC_T_RACK_BOT is read-only")
+            # return
         
     def LFC_TEMP_MONITOR(self,value=None):#TBD
 
@@ -546,14 +552,15 @@ class KeckLFC(object):
             return ii
             #rio.printStatus()
         else:
-            if test_mode: return
+            # if test_mode: return
             #return 0 # not testing MODIFY for now
             rio.connect()
             rio.writeTECsetpoint(value)
-            self.__sleep(0.5)
-            # need set default
-            ii=rio.readTECsetpoint()
-            return ii
+            return 0
+            # self.__sleep(0.5)
+            # # need set default
+            # ii=rio.readTECsetpoint()
+            # return ii
 
     def LFC_RIO_I(self, value=None):
         if test_mode: return
@@ -586,7 +593,7 @@ class KeckLFC(object):
         if value == None:
             amonic27.connect()
             edfa27p=amonic27.outputPowerCh1
-            #print(f'EDFA27 : {edfa27p}mw')
+            print(f'EDFA27 : {edfa27p}mw')
             amonic27.disconnect()
             return edfa27p
             #rio.printStatus()
@@ -603,6 +610,7 @@ class KeckLFC(object):
             amonic27.disconnect()
             return edfa27autoset
         else:
+            if test_mode: return
             #return 0 # not testing MODIFY for now
             amonic27.connect()
             amonic27._setChMode('apc')
@@ -681,6 +689,7 @@ class KeckLFC(object):
             return edfa27onoff
             #rio.printStatus()
         else:
+            if test_mode: return
             amonic27.connect()
             #return 0 # not testing MODIFY for now
             amonic27.accCh1Status=value
@@ -1691,7 +1700,7 @@ class KeckLFC(object):
    
     def LFC_WGD_T(self, value=None):#TBD
         if test_mode: return
-        return
+
         from Hardware.TEC_TC720 import TEC_TC720
 
         tec_ppln = TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
