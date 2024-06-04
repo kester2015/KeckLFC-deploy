@@ -309,6 +309,7 @@
 		<period>20</period>
 		<format>%.2f</format>
 	</keyword>
+	<keyword>
 		<name>LFC_T_EOCB_IN</name>
 		<type>double</type>
 		<help level="brief">Glycol inlet temp to EO comb board</help>
