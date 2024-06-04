@@ -247,6 +247,7 @@
 				<label>Element_7</label>
 			</entry>
 		</elements>
+		<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_TEMP_TEST2</name>
@@ -288,6 +289,7 @@
 				<label>Element_7</label>
 			</entry>
 		</elements>
+		<format>%.2f</format>
 	</keyword>
     <keyword>
 		<name>LFC_T_GLY_RACK_IN</name>
@@ -296,7 +298,7 @@
 		<help level="verbose">Glycol inlet temp to instrument rack</help>
 		<capability type="write">False</capability>
 		<period>20</period>
-		<format>%.3f</format> 
+		<format>%.2f</format> 
 	</keyword>
 	<keyword>
 		<name>LFC_T_GLY_RACK_OUT</name>
@@ -305,7 +307,7 @@
 		<help level="verbose">Glycol outlet temp from instrument rack</help>
 		<capability type="write">False</capability>
 		<period>20</period>
-		<format>%.3f</format>
+		<format>%.2f</format>
 	</keyword>
 		<name>LFC_T_EOCB_IN</name>
 		<type>double</type>
@@ -313,7 +315,7 @@
 		<help level="verbose">Glycol inlet temp to EO comb board</help>
 		<capability type="write">False</capability>
 		<period>20</period>
-		<format>%.3f</format>
+		<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_T_EOCB_OUT</name>
@@ -322,7 +324,7 @@
 		<help level="verbose">Glycol outlet temp from EO comb board</help>
 		<capability type="write">False</capability>
 		<period>20</period>
-		<format>%.3f</format>
+		<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_T_RACK_TOP</name>
@@ -331,7 +333,7 @@
 		<help level="verbose">Instrument rack top temp</help>
 		<capability type="write">False</capability>
 		<period>20</period>
-		<format>%.3f</format>
+		<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_T_RACK_MID</name>
@@ -340,7 +342,7 @@
 		<help level="verbose">Instrument rack middle temp</help>
 		<capability type="write">False</capability>
 		<period>20</period>
-		<format>%.3f</format>
+		<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_T_RACK_BOT</name>
@@ -349,7 +351,7 @@
 		<help level="verbose">Instrument rack bottom temp</help>
 		<capability type="write">False</capability>
 		<period>20</period>
-		<format>%.3f</format>
+		<format>%.2f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_RIO_T</name>
@@ -495,7 +497,6 @@
 		<units>V</units>
 		<format>%.1f</format>
 	</keyword>
-	
 	<keyword>
 		<name>LFC_RFOSCI_I</name>
 		<type>double</type>
@@ -518,8 +519,8 @@
 		<capability type="write">True</capability>
 		<period>120</period>
 		<range>
-			<minimum>14.95</minimum>
-			<maximum>15.05</maximum>
+			<minimum>15</minimum>
+			<maximum>15</maximum>
 		</range>
 		<units>V</units>
 		<format>%.2f</format>
@@ -536,7 +537,7 @@
 			<maximum>3</maximum>
 		</range>
 		<units>V</units>
-		<format>%.1f</format>
+		<format>%.3f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_IM_RF_ATT</name>
@@ -550,7 +551,7 @@
 			<maximum>10</maximum>
 		</range>
 		<units>V</units>
-		<format>%.1f</format>
+		<format>%.2f</format>
 	</keyword>
 	<!-- <keyword>
 		<name>LFC_WSP_PHASE</name>
@@ -601,13 +602,13 @@
 		<type>double</type>
 		<help level="brief">High-power EDFA pre-amp output power</help>
 		<help level="verbose">High-power EDFA pre-amp output power</help>
-		<capability type="write">False</capability>
+		<capability type="write">True</capability>
 		<period>120</period>
-		<range>
+		<!-- <range>
 			<minimum>50</minimum>
 			<maximum>140</maximum>
-		</range>
-		<units>mW</units>
+		</range> -->
+		<units>ma</units>
 		<format>%.1f</format>
 	</keyword>
 	<keyword>
@@ -664,6 +665,11 @@
 		<capability type="write">True</capability>
 		<period>20</period>
 		<format>%.1f</format>
+		<range>
+			<minimum>22.5</minimum>
+			<maximum>23.5</maximum>
+		</range>
+		<units>C</units>
 	</keyword>
 	<keyword>
 		<name>LFC_PPLN_T</name>
