@@ -1,7 +1,11 @@
 from Hardware import *
 import numpy as np
 import time
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import sys
+import os
 icetest_mode = False
 test_mode = True
 
@@ -270,10 +274,71 @@ class KeckLFC(object):
         from Hardware.Clarity import Clarity
         return Clarity(addr=f'ASRL{23}::INSTR')
     
+    def __LFC_PENDULEM_connect(self, value=None):
+        from Hardware.PendulumCNT90 import PendulumCNT90
+        return PendulumCNT90()
+    
     def __sleep(self, value=0.5):
         import time
         time.sleep(value)
         return value
+    
+    def __sendemail(self,
+                    mail_content,
+                    subject='KECKLFC WARNING MESSAGE',
+                    recv_address=['mgao@caltech.edu','jge2@caltech.edu','stephanie.leifer@aero.org'],
+                    files=['test.log',],
+                    path=r'C:\Users\KeckLFC\Desktop\Keck\Logs'):
+
+
+        # email_content = f'auto email test, message:{i}'
+        # email_subject = 'KECKLFC WARNING MESSAGE'
+        # email_list=['mgao@caltech.edu','jge2@caltech.edu']
+        # path=r'C:\Users\KeckLFC\Desktop\Keck\Logs'
+        # files=['test.log',]
+
+        # param mail_content emial content
+        # param recv_address receiver email address
+
+        
+        sender_address = 'kecklfc@gmail.com'
+        sender_pass = 'onnp dhxb fhaz bmmm'
+
+        toaddrs  = recv_address
+
+        to_string =''
+        for item in toaddrs:
+            to_string += item +','
+        # 
+        message = MIMEMultipart() #message structure initialization
+        message['From'] = sender_address #your email
+        message['To'] = to_string #receiver email
+        message['Subject'] = subject
+
+        for file in files:
+            if os.path.isfile(path + '/' + file):
+                # create attachment
+                att = MIMEText(open(path + '/' + file, 'rb').read(), 'base64', 'utf-8')
+                att["Content-Type"] = 'application/octet-stream'
+                att.add_header("Content-Disposition", "attachment", filename=("gbk", "", file))
+                message.attach(att)
+            # mail_content, can be self define,'plain' is the type of content
+        message.attach(MIMEText(mail_content,'plain'))
+        # smtp server, cen be seen in the gmail email setting
+        session = smtplib.SMTP('smtp.gmail.com',587)
+        # connect to tls
+        session.starttls()
+        # login email
+        session.login(sender_address,sender_pass)
+        # message text convey to structure
+        text = message.as_string()
+        # main function to send email
+        session.sendmail(sender_address,recv_address,text)
+        # print
+        print("send {} successfully".format(recv_address))
+        # close session
+        session.quit()
+
 
 #--------------------------connection above----------------------------------------------
 #--------------------------functions below----------------------------------------------
@@ -419,8 +484,10 @@ class KeckLFC(object):
         threshold=40
         if temp_1[1]>threshold:
             self.LFC_CLOSE_ALL(1)
+            self.__sendemail('Temperature is too high, all devices are closed')
         if temp_2[1]>threshold:
             self.LFC_CLOSE_ALL(1)
+            self.__sendemail('Temperature is too high, all devices are closed')
 
 
     def LFC_CLOSE_ALL(self, value=None):
@@ -432,6 +499,7 @@ class KeckLFC(object):
             self.LFC_RFAMP_ONOFF(0)
             self.LFC_RFOSCI_ONOFF(0)
             self.LFC_CLARITY_ONOFF(0)
+            self.__sendemail('All devices are closed')
 
         
 
@@ -1197,10 +1265,20 @@ class KeckLFC(object):
         arduino = self.__LFC_ARDUINO_connect()
         if value == None:
             arduino.connect()
-            voltage=arduino.get_current_voltage()
+            message=arduino.get_relay_status()
             self.__sleep(0.5)
+            if message =="relay sending OK_to_Amplify signal to amplifier":
+                message=1
+            elif message =="relay is STOPPING amplifier, but will be OK_to_Amplify after reset_relay_latch.":
+                message=0
+            elif message =="relay is STOPPING amplifier, because input power is too low":
+                message=2
+            elif message =="relay is STOPPING amplifier, because input power is too high":
+                message=3
+            else:
+                message=4
             arduino.disconnect()
-            return voltage
+            return message
         
         elif value == 1:
             # print(f'com={i}')
@@ -1477,6 +1555,17 @@ class KeckLFC(object):
             return KTLarray(state)
         #TBD
 
+    def LFC_PENDULEM_FREQ(self, value=None):
+        if test_mode: return
+        pen = self.__LFC_PENDULEM_connect()
+        if value == None:
+            pen.connect()
+            self.__sleep(0.5)
+            pen.run()
+            freq=pen.measFreq(1)
+            return freq
+        #TBD
+
         
     def __LFC_IM_LOCK_PARAMETER_SET(self, p_gain,i_gain,offset,setpoint):#TBD
         srs = self.__LFC_servo_connect()
@@ -1513,6 +1602,92 @@ class KeckLFC(object):
     def LFC_WSP_OPTIMIZE(self, value=None):#TBD
         if test_mode: return
         return
+    
+    def LFC_EDFA27_INPUT_POWER(self, value=None):
+        if test_mode: return
+        amonic27 = self.__LFC_EDFA27_connect()
+        if value == None:
+            amonic27.connect()
+            input_power=amonic27.inputPowerCh1
+            amonic27.disconnect()
+            return input_power
+        else:
+            return 0
+        
+    def LFC_EDFA23_INPUT_POWER(self, value=None):
+        if test_mode: return
+        amonic23 = self.__LFC_EDFA23_connect()
+        if value == None:
+            amonic23.connect()
+            input_power=amonic23.inputPowerCh1
+            amonic23.disconnect()
+            return input_power
+        else:
+            return 0
+        
+    def LFC_ARDUINO_GET_INPUT(self, value=None):  
+        if test_mode: return
+        arduino = self.__LFC_ARDUINO_connect()
+        if value == None:
+            arduino.connect()
+            input=arduino.get_current_voltage()
+            arduino.disconnect()
+            return input
+        else:
+            return 0
+        
+    def LFC_MINICOMB_AUTO_SETUP(self, value=None):#TBD
+        if test_mode: return
+
+        if value == 1:
+            self.LFC_RFOSCI_DEFAULT(1)
+            self.LFC_RFOSCI_ONOFF(1)
+
+            self.LFC_RFAMP_DEfAULT(1)
+            self.LFC_RFAMP_ONOFF(1)
+
+            freq=self.LFC_PENDULEM_FREQ(1)
+
+            if freq>15e8:
+
+                self.LFC_CLARITY_ONOFF(1)
+                #self.LFC_EDFA27_P_DEFAULT(1)
+                edfa27input=self.LFC_EDFA27_INPUT_POWER()
+
+                if (edfa27input<5) & (edfa27input>1):
+                    self.LFC_EDFA27_AUTO_ON(1)
+                    self.LFC_WSP_PHASE(1) #TBD
+
+                    edfa23input=self.LFC_EDFA23_INPUT_POWER()
+                    if (edfa23input<10) & (edfa23input>1):
+                        self.LFC_EDFA23_AUTO_ON(1)
+                        
+                        self.LFC_IM_AUTO_LOCK(1)
+
+                        ptamp_input_status=self.LFC_PTAMP_LATCH()
+
+                        if ptamp_input_status==1:
+                            return 11
+                        if ptamp_input_status==0:
+                            return 10
+                        else:
+                            self.__sendemail('PTAMP input value is not correct')
+                    else:
+                        self.__sendemail('EDFA23 input power is not correct')
+                else:
+                    self.__sendemail('EDFA27 input power is not correct')
+            else:
+                self.__sendemail('Pendulum frequency is not correct')
+
+        return 0
+
+
+
+
+
+
+
+
    
     def LFC_WGD_T(self, value=None):#TBD
         if test_mode: return
