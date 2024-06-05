@@ -278,6 +278,15 @@ class KeckLFC(object):
         from Hardware.PendulumCNT90 import PendulumCNT90
         return PendulumCNT90()
     
+    def __LFC_TEC_PPLN_connect(self,value==None):
+        from Hardware.TEC_TC720 import TEC_TC720
+        return TEC_TC720(addr=f'COM{16}', name='PPLN Doubler TEC (TC720)')
+    
+    def __LFC_TEC_WVG_connect(self,value==None):
+        from Hardware.TEC_TC720 import TEC_TC720
+        return TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
+
+    
     def __sleep(self, value=0.5):
         import time
         time.sleep(value)
@@ -363,6 +372,10 @@ class KeckLFC(object):
         if value == None:
             daq1 = self.__LFC_USB2408_1_connect()
             daq1.connect()
+            daq1_list=["RF Oscillator", "RF amplifier", 
+                "Main Phase Modulators", "Filter Cavity",
+                 "Board Glycol out", "Board Glycol in",
+                "Compression Stage","Rubidium (Rb) Cell D2-210"]
             temp1 = daq1.get_temp_all()
             # print(temp1)
             daq1.disconnect()
@@ -377,6 +390,10 @@ class KeckLFC(object):
             addr = 0
             chan = 5
             daq = self.__LFC_USB2408_0_connect()
+            daq0_list=["Rack side buffle (middle side rack)", "Waveshaper (upper rack)",
+                                           "Rb clock (middle rack)", "Pritel (middle upper rack)",
+                                           "Rack Glycol out", "Rack Glycol in",
+                                           "Power Supply Shelf (bottom rack)", "Unconnected"]
             daq.connect()
             temp = daq.get_temp(chan)
             daq.disconnect()
@@ -1701,42 +1718,76 @@ class KeckLFC(object):
     def LFC_WGD_T(self, value=None):#TBD
         if test_mode: return
 
-        from Hardware.TEC_TC720 import TEC_TC720
-
-        tec_ppln = TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
-        tec_ppln.connect()
+        tec_wvg=self.__LFC_TEC_WVG_connect()
+        
 
         if value == None:
-            tppln=tec_ppln.get_temp()
-            tec_ppln.disconnect()
-            return tppln
+            tec_wvg.connect()
+            twvg=tec_wvg.get_temp()
+            tec_wvg.disconnect()
+            return twvg
 
         else:
-            return 0 # not testing MODIFY for now
-            tec_ppln.set_temp(value)
-            tppln=tec_ppln.get_temp()
-            tec_ppln.disconnect()
-            return tppln
+            tec_wvg.connect()
+            now_temp=tec_wvg.get_temp()
+            set_temp=value
+
+            temp_gap=round(set_temp-now_temp,2)
+
+            int_p=int(temp_gap//0.5 )
+            mod=temp_gap % 0.5
+            if (int_p>0) or (int_p==0):
+                int_p=int_p
+            else:
+                int_p=np.abs(int_p)-1
+
+            for i in range(1,int_p+1):
+                tec_wvg.set_temp(now_temp+i*0.5)
+                time.sleep(4)
+                print(tec_wvg.get_temp())
+
+            tec_wvg.set_temp(set_temp)
+            time.sleep(8)
+            now_temp=tec_wvg.get_temp()
+            tec_wvg.disconnect()
+            return now_temp
 
     def LFC_PPLN_T(self, value=None):#TBD
         if test_mode: return
-        return
-        from Hardware.TEC_TC720 import TEC_TC720
-        # tec_PPLN = TEC_TC720(addr='ASRL46::INSTR')
-        tec_wg = TEC_TC720(addr='COM16', name='Octave Waveguide TEC (TC720)')
-        tec_wg.connect()
+
+        tec_ppln=self.__LFC_TEC_PPLN_connect()
+        
 
         if value == None:
-            twg=tec_wg.get_temp()
-            tec_wg.disconnect()
-            return twg
+            tec_ppln.connect()
+            tppln=tec_ppln.get_temp()
+            tec_ppln.disconnect()
+            return tppln
 
         else:
-            return 0 # not testing MODIFY for now
-            tec_wg.set_temp(value)
-            twg=tec_wg.get_temp()
-            tec_wg.disconnect()
-            return twg
+            tec_ppln.connect()
+            now_temp=tec_ppln.get_temp()
+            set_temp=value
+
+            temp_gap=round(set_temp-now_temp,2)
+
+            int_p=int(temp_gap//0.5 )
+            mod=temp_gap % 0.5
+            if (int_p>0) or (int_p==0):
+                int_p=int_p
+            else:
+                int_p=np.abs(int_p)-1
+
+            for i in range(1,int_p+1):
+                tec_ppln.set_temp(now_temp+i*0.5)
+                time.sleep(4)
+                print(tec_ppln.get_temp())
+
+            tec_ppln.set_temp(set_temp)
+            time.sleep(8)
+            now_temp=tec_ppln.get_temp()
+            tec_ppln.disconnect()
+            return now_temp
 
 
 
