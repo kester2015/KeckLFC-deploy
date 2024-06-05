@@ -207,15 +207,15 @@ class KeckLFC(object):
         from Hardware.PritelAmp import PritelAmp
         return PritelAmp(addr=f'ASRL{7}::INSTR', name='Pritel Amp')
     
-    def __LFC_TEC_PPLN_connect(self, value=None):
-        '''Connect to PPLN Doubler TEC (TC720)'''
-        from Hardware.TEC_TC720 import TEC_TC720
-        return TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
+    # def __LFC_TEC_PPLN_connect(self, value=None):
+    #     '''Connect to PPLN Doubler TEC (TC720)'''
+    #     from Hardware.TEC_TC720 import TEC_TC720
+    #     return TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
     
-    def __LFC_TEC_WG_connect(self, value=None):
-        '''Connect to Octave Waveguide TEC (TC720)'''
-        from Hardware.TEC_TC720 import TEC_TC720
-        return TEC_TC720(addr='COM16', name='Octave Waveguide TEC (TC720)')
+    # def __LFC_TEC_WG_connect(self, value=None):
+    #     '''Connect to Octave Waveguide TEC (TC720)'''
+    #     from Hardware.TEC_TC720 import TEC_TC720
+    #     return TEC_TC720(addr='COM16', name='Octave Waveguide TEC (TC720)')
     
     def __LFC_USB2408_0_connect(self, value=None):
         '''Connect to USB2408'''
@@ -278,13 +278,13 @@ class KeckLFC(object):
         from Hardware.PendulumCNT90 import PendulumCNT90
         return PendulumCNT90()
     
-    def __LFC_TEC_PPLN_connect(self,value==None):
+    def __LFC_TEC_PPLN_connect(self, value==None):
         from Hardware.TEC_TC720 import TEC_TC720
         return TEC_TC720(addr=f'COM{16}', name='PPLN Doubler TEC (TC720)')
-    
-    def __LFC_TEC_WVG_connect(self,value==None):
+        
+    def __LFC_TEC_WVG_connect(self, value==None):
         from Hardware.TEC_TC720 import TEC_TC720
-        return TEC_TC720(addr=f'COM{22}', name='PPLN Doubler TEC (TC720)')
+        return TEC_TC720(addr=f'COM{22}', name='WVG Doubler TEC (TC720)')
 
     
     def __sleep(self, value=0.5):
