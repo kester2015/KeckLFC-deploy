@@ -278,11 +278,11 @@ class KeckLFC(object):
         from Hardware.PendulumCNT90 import PendulumCNT90
         return PendulumCNT90()
     
-    def __LFC_TEC_PPLN_connect(self, value==None):
+    def __LFC_TEC_PPLN_connect(self, value=None):
         from Hardware.TEC_TC720 import TEC_TC720
         return TEC_TC720(addr=f'COM{16}', name='PPLN Doubler TEC (TC720)')
         
-    def __LFC_TEC_WVG_connect(self, value==None):
+    def __LFC_TEC_WVG_connect(self, value=None):
         from Hardware.TEC_TC720 import TEC_TC720
         return TEC_TC720(addr=f'COM{22}', name='WVG Doubler TEC (TC720)')
 
@@ -1438,7 +1438,7 @@ class KeckLFC(object):
             print("VOA1550_ATTEN read block called")
             voa.connect()
             atten=voa.atten_db
-            atten='%.2f'%atten
+            atten=round(atten,2)
             voa.disconnect()
             print('VOA1550_ATTEN value:', atten)
             return atten
@@ -1449,7 +1449,7 @@ class KeckLFC(object):
             voa.atten_db=60
             self.__sleep(0.5)
             atten=voa.atten_db
-            atten='%.2f'%atten
+            atten=round(atten,2)
             voa.disconnect()
             return atten
         else:
@@ -1474,7 +1474,7 @@ class KeckLFC(object):
         if value == None:
             voa.connect()
             atten=voa.atten_db
-            atten='%.2f'%atten
+            atten=round(atten,2)
             voa.disconnect()
             return atten
 
@@ -1483,7 +1483,7 @@ class KeckLFC(object):
             voa.atten_db=60
             self.__sleep(0.5)
             atten=voa.atten_db
-            atten='%.2f'%atten
+            atten=round(atten,2)
             voa.disconnect()
             return atten
         else:
@@ -1491,7 +1491,7 @@ class KeckLFC(object):
             voa.atten_db=value
             self.__sleep(0.5)
             atten=voa.atten_db
-            atten='%.2f'%atten
+            atten=round(atten,2)
             voa.disconnect()
             return atten
         
@@ -1506,7 +1506,7 @@ class KeckLFC(object):
         if value == None:
             voa.connect()
             atten=voa.atten_db
-            atten='%.2f'%atten
+            atten=round(atten,2)
             voa.disconnect()
             return atten
         elif value == 'default':
@@ -1514,7 +1514,7 @@ class KeckLFC(object):
             voa.atten_db=60
             self.__sleep(0.5)
             atten=voa.atten_db
-            atten='%.2f'%atten
+            atten=round(atten,2)
             voa.disconnect()
             return atten
         else:
