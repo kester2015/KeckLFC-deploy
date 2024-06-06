@@ -306,7 +306,7 @@ class KeckLFC(object):
     def __sendemail(self,
                     mail_content,
                     subject='KECKLFC WARNING MESSAGE',
-                    recv_address=['mgao@caltech.edu','jge2@caltech.edu','stephanie.leifer@aero.org'],
+                    recv_address=['mgao@caltech.edu','jge2@caltech.edu','stephanie.leifer@aero.org', 'yjkim@astro.ucla.edu'],
                     files=['test.log',],
                     path=r'C:\Users\KeckLFC\Desktop\Keck\Logs'):
 
@@ -366,13 +366,19 @@ class KeckLFC(object):
 
 
     def LFC_TEMP_TEST1(self, value=None):
-        if test_mode: return
+        # if test_mode: return
         if value == None:
             daq1 = self.__LFC_USB2408_0_connect()
             daq1.connect()    
             temp1 = daq1.get_temp_all()
+            daq0_list=["Rack side buffle (middle side rack)", "Waveshaper (upper rack)",
+                                           "Rb clock (middle rack)", "Pritel (middle upper rack)",
+                                           "Rack Glycol out", "Rack Glycol in",
+                                           "Power Supply Shelf (bottom rack)", "Unconnected"]
+    
             # print(temp1)
             daq1.disconnect()
+            print(self.keywords['LFC_TEMP_TEST1'], type(self.keywords['LFC_TEMP_TEST1']))
             return KTLarray(temp1)
         else:
             return 0
@@ -398,17 +404,16 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            addr = 0
-            chan = 5
-            daq = self.__LFC_USB2408_0_connect()
-            daq0_list=["Rack side buffle (middle side rack)", "Waveshaper (upper rack)",
-                                           "Rb clock (middle rack)", "Pritel (middle upper rack)",
-                                           "Rack Glycol out", "Rack Glycol in",
-                                           "Power Supply Shelf (bottom rack)", "Unconnected"]
-            daq.connect()
-            temp = daq.get_temp(chan)
-            daq.disconnect()
-            return temp
+            all_temperatures = self.keywords['LFC_TEMP_TEST1'].split(' ')
+            return float(all_temperatures[5])
+
+            # addr = 0
+            # chan = 5
+            # daq = self.__LFC_USB2408_0_connect()
+            # daq.connect()
+            # temp = daq.get_temp(chan)
+            # daq.disconnect()
+            return 0 #temp
         else:
             return 0
         
@@ -509,19 +514,23 @@ class KeckLFC(object):
             # return
         
     def LFC_TEMP_MONITOR(self,value=None):#TBD
+        if test_mode: return 
+        # return
+        if value == None:
+            temp_1=self.keywords['LFC_TEMP_TEST1'].split(' ')
+            #temp_2=self.keywords['LFC_TEMP_TEST2']
+        
 
-        return
-        temp_1=self.LFC_TEMP_TEST1
-        temp_2=self.LFC_TEMP_TEST2
-    
-
-        threshold=40
-        if temp_1[1]>threshold:
-            self.LFC_CLOSE_ALL(1)
-            self.__sendemail('Temperature is too high, all devices are closed')
-        if temp_2[1]>threshold:
-            self.LFC_CLOSE_ALL(1)
-            self.__sendemail('Temperature is too high, all devices are closed')
+            threshold=0
+            if float(temp_1[1])>threshold:
+                #self.LFC_CLOSE_ALL(1)
+                self.__sendemail('Temperature is too high, all devices are closed,test only')
+                return 0
+            else:
+                return 1
+            # if temp_2[1]>threshold:
+            #     self.LFC_CLOSE_ALL(1)
+            #     self.__sendemail('Temperature is too high, all devices are closed')
 
 
     def LFC_CLOSE_ALL(self, value=None):
@@ -538,7 +547,8 @@ class KeckLFC(object):
         
 
 
-    def LFC_CLARITY_ONOFF(self, value=None):
+    def LFC_CLARITY_ONOFF(self, value=None):#test read
+        # boolean to enumerated
         if test_mode: return
 
         if value == None:
@@ -548,7 +558,7 @@ class KeckLFC(object):
         else:
             clarity = self.__LFC_CLARITY_connect()
             status=clarity.set_onoff(value)
-            return status
+            return 0 #status
 
 
 
@@ -561,7 +571,7 @@ class KeckLFC(object):
     def LFC_T_GLY_RFAMP2_IN(self, value=None): return
     def LFC_T_GLY_RFAMP2_OUT(self, value=None): return
     def LFC_YJ_OR_HK(self, value=None): return
-    def LFC_YJ_SHUTTER(self, value=None): return
+    # def LFC_YJ_SHUTTER(self, value=None): return
     def LFC_PMP_ATT(self, value=None): return
 
 
@@ -612,7 +622,7 @@ class KeckLFC(object):
             ii=rio.readLaserdiodeCur_mA()
             return ii
 
-    def LFC_EDFA27_P(self, value=None):
+    def LFC_EDFA27_P(self, value=None): #test read- complete
         if test_mode: return
 
         amonic27 = self.__LFC_EDFA27_connect()
@@ -650,14 +660,14 @@ class KeckLFC(object):
             amonic27.disconnect()
             return edfa27p
         
-    def LFC_EDFA27_P_DEFAULT(self, value=None):
+    def LFC_EDFA27_P_DEFAULT(self, value=None): #test r w # not implemented
         if test_mode: return
         amonic27 = self.__LFC_EDFA27_connect()
         
         if value == None:
             amonic27.connect()
             edfa27p=amonic27.outputPowerCh1
-            #print(f'EDFA27 : {edfa27p}mw')
+            print(f'EDFA27 : {edfa27p}mw')
             amonic27.disconnect()
             return edfa27p
         else:
@@ -670,11 +680,11 @@ class KeckLFC(object):
             edfa27autoset=amonic27.accCh1Cur
             
             amonic27.disconnect()
-            return edfa27autoset
+            return 0 #edfa27autoset
 
             
         
-    def LFC_EDFA27_AUTO_ON(self, value=None): #TBD
+    def LFC_EDFA27_AUTO_ON(self, value=None): #test r
         if test_mode: return
         amonic27 = self.__LFC_EDFA27_connect()
         
@@ -704,7 +714,7 @@ class KeckLFC(object):
  
 
 
-    def LFC_EDFA27_ONOFF(self, value=None):
+    def LFC_EDFA27_ONOFF(self, value=None):# test r
         if test_mode: return
         
         amonic27 = self.__LFC_EDFA27_connect()
@@ -773,7 +783,7 @@ class KeckLFC(object):
             amonic13.disconnect()
             return edfa27onoff
 
-    def LFC_EDFA23_P(self, value=None):
+    def LFC_EDFA23_P(self, value=None): # test r
         if test_mode: return
         amonic23 = self.__LFC_EDFA23_connect()
         
@@ -781,7 +791,7 @@ class KeckLFC(object):
         if value == None:
             amonic23.connect()
             edfa27p=amonic23.outputPowerCh1
-            print(f'EDFA27 : {edfa27p}mw')
+            print(f'EDFA23 : {edfa27p}mw')
             amonic23.disconnect()
             return edfa27p
             #rio.printStatus()
@@ -805,7 +815,7 @@ class KeckLFC(object):
             amonic23.disconnect()
             return edfa27p
 
-    def LFC_EDFA23_ONOFF(self, value=None):
+    def LFC_EDFA23_ONOFF(self, value=None): #test r
         if test_mode: return
         amonic23 = self.__LFC_EDFA23_connect()
         
@@ -828,7 +838,7 @@ class KeckLFC(object):
             amonic23.disconnect()
             return edfa27onoff
         
-    def LFC_EDFA23_P_DEFAULT(self, value=None):
+    def LFC_EDFA23_P_DEFAULT(self, value=None): #test r w
         if test_mode: return
         amonic23 = self.__LFC_EDFA23_connect()
         
@@ -850,7 +860,7 @@ class KeckLFC(object):
             amonic23.disconnect()
             return edfa27autoset
         
-    def LFC_EDFA23_AUTO_ON(self, value=None):
+    def LFC_EDFA23_AUTO_ON(self, value=None): #test r
         if test_mode: return
         amonic23 = self.__LFC_EDFA23_connect()
         
@@ -878,7 +888,7 @@ class KeckLFC(object):
             return
 
 
-    def LFC_RFAMP_I(self, value=None):
+    def LFC_RFAMP_I(self, value=None): #test r
         if test_mode: return
         rfampPS = self.__LFC_RFAMP_connect()
         
@@ -910,7 +920,7 @@ class KeckLFC(object):
             return rfampPS_i
             
 
-    def LFC_RFAMP_V(self, value=None):
+    def LFC_RFAMP_V(self, value=None): #test r, don't test w
         if test_mode: return
         rfampPS = self.__LFC_RFAMP_connect()
         
@@ -942,7 +952,7 @@ class KeckLFC(object):
             rfampPS.disconnect()
             return rfampPS_i
         
-    def LFC_RFAMP_DEfAULT(self, value=None):
+    def LFC_RFAMP_DEfAULT(self, value=None): #test r
         if test_mode: return
         rfampPS = self.__LFC_RFAMP_connect()
         
@@ -970,7 +980,7 @@ class KeckLFC(object):
             rfampPS.disconnect()
             return rfampPS_v, rfampPS_i
         
-    def LFC_RFAMP_ONOFF(self, value=None):
+    def LFC_RFAMP_ONOFF(self, value=None):# test r
         if test_mode: return
         rfampPS = self.__LFC_RFAMP_connect()
         
@@ -990,7 +1000,7 @@ class KeckLFC(object):
             rfampPS.disconnect()
             return rfampPS_i
 
-    def LFC_RFOSCI_I(self, value=None):
+    def LFC_RFOSCI_I(self, value=None): #test r
         if test_mode: return
         rfoscPS = self.__LFC_RFOSCI_connect()
         
@@ -1016,7 +1026,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
 
-    def LFC_RFOSCI_V(self, value=None):
+    def LFC_RFOSCI_V(self, value=None): #test r
         if test_mode: return
         rfoscPS = self.__LFC_RFOSCI_connect()
         
@@ -1042,7 +1052,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
         
-    def LFC_RFOSCI_DEFAULT(self, value=None):
+    def LFC_RFOSCI_DEFAULT(self, value=None): #test r
         if test_mode: return
         
         if value == None:
@@ -1065,7 +1075,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_v, rfoscPS_i
         
-    def LFC_RFOSCI_ONOFF(self, value=None):
+    def LFC_RFOSCI_ONOFF(self, value=None): #test r
         if test_mode: return
         rfoscPS = self.__LFC_RFOSCI_connect()
         
@@ -1084,7 +1094,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
 
-    def LFC_IM_BIAS(self, value=None):
+    def LFC_IM_BIAS(self, value=None): #test r
         if test_mode: return
         
         if value == None:
@@ -1109,7 +1119,7 @@ class KeckLFC(object):
             srs.disconnect()
             return IM_bias
 
-    def LFC_IM_RF_ATT(self, value=None):
+    def LFC_IM_RF_ATT(self, value=None): #test r
         if test_mode: return
         rfoscPS = self.__LFC_RFOSCI_connect()
         
@@ -1166,7 +1176,7 @@ class KeckLFC(object):
             # If it's successful, return 0
             return 0  # return
 
-    def LFC_PTAMP_PRE_P(self, value=None):
+    def LFC_PTAMP_PRE_P(self, value=None): #test r
         if test_mode: return
         #return
         ptamp=self.__LFC_PTAMP_connect()
@@ -1192,7 +1202,7 @@ class KeckLFC(object):
             ptamp.disconnect()
             return pre_p
         
-    def LFC_PTAMP_PRE_P_DEFAULT(self, value=None):
+    def LFC_PTAMP_PRE_P_DEFAULT(self, value=None): #test r
         if test_mode: return
         ptamp=self.__LFC_PTAMP_connect()
         
@@ -1214,7 +1224,7 @@ class KeckLFC(object):
         return
     
 
-    def LFC_PTAMP_OUT(self, value=None):
+    def LFC_PTAMP_OUT(self, value=None): #test r
         if test_mode: return
         #return
         ptamp=self.__LFC_PTAMP_connect()
@@ -1230,7 +1240,7 @@ class KeckLFC(object):
             raise ValueError("LFC_PTAMP_OUT is read only")
             return
 
-    def LFC_PTAMP_I(self, value=None):
+    def LFC_PTAMP_I(self, value=None): #test r
         if test_mode: return
         #return
 
@@ -1259,7 +1269,7 @@ class KeckLFC(object):
             ptamp.disconnect()
             return ptamp  # return
         
-    def LFC_PTAMP_I_DEFAULT(self, value=None):
+    def LFC_PTAMP_I_DEFAULT(self, value=None): #test r
         if test_mode: return
         ptamp=self.__LFC_PTAMP_connect()
        
@@ -1276,7 +1286,7 @@ class KeckLFC(object):
             ptamp.disconnect()
             return ptamp1
 
-    def LFC_PTAMP_ONOFF(self, value=None):
+    def LFC_PTAMP_ONOFF(self, value=None):# test r
         if test_mode: return
         ptamp=self.__LFC_PTAMP_connect()
         
@@ -1296,7 +1306,7 @@ class KeckLFC(object):
             ptamp.disconnect()
             return ptact  # return
 
-    def LFC_PTAMP_LATCH(self, value=None):#TBD
+    def LFC_PTAMP_LATCH(self, value=None):#test r 
         if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
@@ -1330,17 +1340,22 @@ class KeckLFC(object):
             # If it's successful, return 0
             return 0  # return
         
-    def LFC_YJ_SHUTTER(self, value=None):
-        if test_mode: return
+    def LFC_YJ_SHUTTER(self, value=None): #tets r w
+        # if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
+
+        if value == None:
+            # fill in read functions
+            return 0
+        
         if value == 1:
             
             # print(f'com={i}')
             arduino.connect()
             arduino.pass_YJ()
             arduino.disconnect()
-            return 1
+            return 0 # 1
 
         elif value == 0:
             arduino.connect()
@@ -1350,7 +1365,7 @@ class KeckLFC(object):
         else:
             return #KTLarray('YJ shutter value =1 or 0')
         
-    def LFC_YJ_ONOFF(self, value=None):
+    def LFC_YJ_ONOFF(self, value=None): #test r w
         if test_mode: return
         return self.LFC_YJ_SHUTTER(value)
 
@@ -1366,7 +1381,7 @@ class KeckLFC(object):
             return 0
 
 
-    def LFC_2BY2_SWITCH(self, value=None):
+    def LFC_2BY2_SWITCH(self, value=None): #test r w
         if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
@@ -1409,11 +1424,11 @@ class KeckLFC(object):
             switch.disconnect()
             return state
         
-    def LFC_YJ_HK(self, value=None):
+    def LFC_YJ_HK(self, value=None): #no 
         if test_mode: return
         return self.LFC_2BY2_SWITCH(value)
         
-    def LFC_HK_SHUTTER(self, value=None):
+    def LFC_HK_SHUTTER(self, value=None): #read r w
         if test_mode: return
         #return
         hks = self.__LFC_HK_SHUTTER_connect()
@@ -1431,16 +1446,16 @@ class KeckLFC(object):
                 value = 0
             hks.connect()
             hks.set_status(value)
-            self.__sleep(0.5)
-            state=hks.get_status()
+            # self.__sleep(0.5)
+            # state=hks.get_status()
             hks.disconnect()
-            return state
+            return 0 #state
         
-    def LFC_HK_ONOFF(self, value=None):
+    def LFC_HK_ONOFF(self, value=None):#no
         if test_mode: return
         return self.LFC_HK_SHUTTER(value)
           
-    def LFC_VOA1550_ATTEN(self, value=None):
+    def LFC_VOA1550_ATTEN(self, value=None): #r w
         # Successfully tested!
         if test_mode: return
         voa = self.__LFC_VOA1550_connect()
@@ -1474,11 +1489,11 @@ class KeckLFC(object):
             return 0 # YooJung's comment: return 0 if successful
             # return atten
         
-    def LFC_PMP_ATT(self, value=None):
+    def LFC_PMP_ATT(self, value=None):#no
         if test_mode: return
         return self.LFC_VOA1550_ATTEN(value)
         
-    def LFC_VOA1310_ATTEN(self, value=None):
+    def LFC_VOA1310_ATTEN(self, value=None):#r w
         if test_mode: return
         voa = self.__VOA1310_connect()
         if value == None:
@@ -1499,17 +1514,17 @@ class KeckLFC(object):
         else:
             voa.connect()
             voa.atten_db=value
-            self.__sleep(0.5)
-            atten=voa.atten_db
-            atten=round(atten,2)
+            # self.__sleep(0.5)
+            # atten=voa.atten_db
+            # atten=round(atten,2)
             voa.disconnect()
-            return atten
+            return 0 #atten
         
-    def LFC_YJ_ATT(self, value=None):
+    def LFC_YJ_ATT(self, value=None):# no
         if test_mode: return
         return self.LFC_VOA1310_ATTEN(value)
         
-    def LFC_VOA2000_ATTEN(self, value=None):
+    def LFC_VOA2000_ATTEN(self, value=None):# rw
         # Successfully tested!
         if test_mode: return
         voa = self.__VOA2000_connect()
@@ -1537,25 +1552,28 @@ class KeckLFC(object):
             return 0 # YooJung's comment: return 0 if successful
             # return atten
         
-    def LFC_HK_ATT(self, value=None):
+    def LFC_HK_ATT(self, value=None):#no
         if test_mode: return
         return self.LFC_VOA2000_ATTEN(value)
 
-    def LFC_IM_LOCK_MODE(self, value=None):
+    def LFC_IM_LOCK_MODE(self, value=None):#r
         if test_mode: return
         
     
         if value == None:
             srs = self.__LFC_servo_connect()
+            srs.connect()
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
-            servo_IM.connect()
+            #servo_IM.connect()
             mode=servo_IM.output_mode
-            if mode == 'PID' or 'pid':
+            
+            if mode in ['PID' ,'pid']:
                 mode = 1
-            if mode == 'MAN' or 'man':
+            if mode in ['MAN', 'man'] :
                 mode = 0
+            
 
-            servo_IM.disconnect()
+            #servo_IM.disconnect()
             srs.disconnect()
             return mode
         else:
@@ -1566,16 +1584,17 @@ class KeckLFC(object):
             ## value = 0 if user sets to "MAN"
             ## for now leaving it as string keyword
             srs = self.__LFC_servo_connect()
+            srs.connect()
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
-            servo_IM.connect()
+            #servo_IM.connect()
             if value == 1:
                 value = 'pid'
             if value == 0:
-                value=='man'
+                value='man'
 
             servo_IM.output_mode=value
             #mode=servo_IM.output_mode
-            servo_IM.disconnect()
+            #servo_IM.disconnect()
             srs.disconnect()
             return 0
         
@@ -1639,7 +1658,7 @@ class KeckLFC(object):
         if test_mode: return
         return
     
-    def LFC_EDFA27_INPUT_POWER(self, value=None):
+    def LFC_EDFA27_INPUT_POWER(self, value=None): #r
         if test_mode: return
         amonic27 = self.__LFC_EDFA27_connect()
         if value == None:
@@ -1650,7 +1669,7 @@ class KeckLFC(object):
         else:
             return 0
         
-    def LFC_EDFA23_INPUT_POWER(self, value=None):
+    def LFC_EDFA23_INPUT_POWER(self, value=None):#r
         if test_mode: return
         amonic23 = self.__LFC_EDFA23_connect()
         if value == None:
@@ -1725,7 +1744,7 @@ class KeckLFC(object):
 
 
    
-    def LFC_WGD_T(self, value=None):#TBD
+    def LFC_WGD_T(self, value=None):#r w
         if test_mode: return
 
         tec_wvg=self.__LFC_TEC_WVG_connect()
@@ -1757,12 +1776,14 @@ class KeckLFC(object):
                 print(tec_wvg.get_temp())
 
             tec_wvg.set_temp(set_temp)
+            tec_wvg.disconnect()
+            return 0
             time.sleep(8)
             now_temp=tec_wvg.get_temp()
             tec_wvg.disconnect()
             return now_temp
 
-    def LFC_PPLN_T(self, value=None):#TBD
+    def LFC_PPLN_T(self, value=None):#r w
         if test_mode: return
 
         tec_ppln=self.__LFC_TEC_PPLN_connect()
@@ -1794,10 +1815,10 @@ class KeckLFC(object):
                 print(tec_ppln.get_temp())
 
             tec_ppln.set_temp(set_temp)
-            time.sleep(8)
-            now_temp=tec_ppln.get_temp()
+            # time.sleep(8)
+            # now_temp=tec_ppln.get_temp()
             tec_ppln.disconnect()
-            return now_temp
+            return 0 #now_temp
 
 
 
@@ -1835,11 +1856,11 @@ class KeckLFC(object):
         ''' shows current time returned by ice'''
 
         if value == None:
-            print('ICECLK read block called. ', self.keywords['ICECLK'])
+            # print('ICECLK read block called. ', self.keywords['ICECLK'])
             return self.keywords['ICECLK']
 
         else:
-            print('ICECLK write block called. Writing', value)
+            # print('ICECLK write block called. Writing', value)
 
             return 0
 
@@ -1888,7 +1909,7 @@ class KeckLFC(object):
             # show
             import random
             value_to_return = random.randint(1, 10)
-            print('ICETEST read block called. ', value_to_return)
+            # print('ICETEST read block called. ', value_to_return)
             return value_to_return  #self.keywords['ICETEST']
 
         else:
