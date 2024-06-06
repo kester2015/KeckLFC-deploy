@@ -148,8 +148,7 @@ def iceconnect(self):
     ''' Function that connects keyword to ICE '''
     keyword = ktl.cache('nslfc', self.name) 
     keyword.monitor()
-    if self.name == 'ICESTA':
-        keyword.callback(self.iceclient.callbackfunc)
+    keyword.callback(self.iceclient.callbackfunc)
                             
 
 def read(self):
@@ -165,22 +164,13 @@ def read(self):
 
 def write(self, value):
     ''' Just a print function for debugging '''
-    print('keyword write function called in write() method. writing the value ', value)
-    # value = str(keyword['binary'])
-    #print('callbackfunc value',value) 
-    # Communicate with the server that the keyword value changed.
-    if self.name != 'ICESTA':
-        self.iceclient.twoway.modifiedkeyword(self.name, value)
-    
+    print('keyword write function called. writing the value ', value)
 
 def postwrite(self, value):
     print('in postwrite, input value', value) 
-    # self.set(value)
+    self.set(value)
     time.sleep(1)#0.5)#3) 
-    if self.name != 'ICESTA': self.update()
-    if self.name == 'ICESTA':
-        print('ICESTA value', value)
-        self.set(value)
+    self.update()
     #device_value = self.read()
     #print('in postwrite, device value', device_value) 
     #try:
@@ -360,10 +350,7 @@ class IceClient:
                     time.sleep(3)
                     
                 except (KeyboardInterrupt, SystemExit):
-                    print("some interruption??")
                     break
-            print("ICESTA not connected ??")
-            
             
         except:
             print('ICE status is set to disconnected (message from communicator.run)')

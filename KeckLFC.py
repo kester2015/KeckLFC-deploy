@@ -35,7 +35,17 @@ def parse_xml(xmlfile):
 
 def KTLarray(values):
     ''' converts list to an array that KTL can recognize'''
-    return " ".join(map(str, values)) 
+    # currently, error occurs when "writing" values to array
+    # but would ever array keyword used for "write"?
+    # works fine with read-only
+
+    # print(values,"entered to KTLarray")
+    # print(type(values))
+    if values == None:
+        return ""
+    else:
+        return " ".join(map(str, values)) 
+    
 
 def test_clock(stop, mkl):
     while True:
@@ -146,7 +156,8 @@ class KeckLFC(object):
             if val in ['True', '1', 1, True] : return True
             else: return False
         elif typ =='double array': 
-            values = val.strip("()").split(",")
+            values = val.split(" ")
+            # values = val.strip("()").split(",")
             return [float(value) for value in values]
         else:
             print('Unrecognized type')
@@ -355,7 +366,7 @@ class KeckLFC(object):
 
 
     def LFC_TEMP_TEST1(self, value=None):
-        # if test_mode: return
+        if test_mode: return
         if value == None:
             daq1 = self.__LFC_USB2408_0_connect()
             daq1.connect()    
@@ -367,7 +378,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_TEMP_TEST2(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             daq1 = self.__LFC_USB2408_1_connect()
@@ -384,7 +395,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_T_GLY_RACK_IN(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             addr = 0
@@ -402,7 +413,7 @@ class KeckLFC(object):
             return 0
         
     def LFC_T_GLY_RACK_OUT(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             addr = 0
@@ -418,7 +429,7 @@ class KeckLFC(object):
             # return
         
     def LFC_T_EOCB_IN(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             addr = 1
@@ -434,7 +445,7 @@ class KeckLFC(object):
             # return
 
     def LFC_T_EOCB_OUT(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             addr = 1
@@ -450,7 +461,7 @@ class KeckLFC(object):
             # return
         
     def LFC_T_RACK_TOP(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             addr = 0
@@ -466,7 +477,7 @@ class KeckLFC(object):
             # return
         
     def LFC_T_RACK_MID(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             addr = 0
@@ -482,7 +493,7 @@ class KeckLFC(object):
             # return
     
     def LFC_T_RACK_BOT(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             addr = 0
@@ -1356,16 +1367,15 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None):
-        # if test_mode: return
+        if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
         if value == None:
-            print("2BY2 switch read block called")
             switch.connect()
             state=switch.check_status()
             switch.disconnect()
-            print("2BY2 switch state", state)
+            print('LFC_2BY2_SWITCH read block called. ', state)
             return state
         else:
 
@@ -1376,7 +1386,7 @@ class KeckLFC(object):
             ## Please see the modified codes below.
 
             if value in [1, 2]: 
-                print("2BY2 switch write block called, setting value to ", value)
+                print('LFC_2BY2_SWITCH write block called. Writing', value)
 
                 switch.connect()
                 switch.set_status(value)
@@ -1432,7 +1442,7 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None):
         # Successfully tested!
-        # if test_mode: return
+        if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
             print("VOA1550_ATTEN read block called")
@@ -1501,7 +1511,7 @@ class KeckLFC(object):
         
     def LFC_VOA2000_ATTEN(self, value=None):
         # Successfully tested!
-        # if test_mode: return
+        if test_mode: return
         voa = self.__VOA2000_connect()
         if value == None:
             voa.connect()
@@ -1807,11 +1817,11 @@ class KeckLFC(object):
         '''Turn on / off the clock '''
 
         if value == None:
+            # print('ICECLK_ONOFF read block called. ', self.keywords['ICECLK_ONOFF'])
             return self.keywords['ICECLK_ONOFF']
 
         else:
-            print('ICECLK value: ', value)
-            print('Writing value', value, 'to ICECLK_ONOFF')
+            print('ICECLK_ONOFF write block called. Writing', value)
             if value == True:
                 self.start_clock()
             elif value == False:
@@ -1825,20 +1835,25 @@ class KeckLFC(object):
         ''' shows current time returned by ice'''
 
         if value == None:
+            print('ICECLK read block called. ', self.keywords['ICECLK'])
             return self.keywords['ICECLK']
 
         else:
-            print('Writing value', value, 'to ICECLK')
+            print('ICECLK write block called. Writing', value)
+
             return 0
 
     def ICESTA(self, value=None):
         ''' shows status of the ICE connection'''
 
         if value == None:
-            return  #self.keywords['ICESTA']
+            # print('ICESTA read block called. doing nothing ...')
+
+            return #self.keywords['ICESTA']
         else:
-            print('Writing value', value, 'to icesta')
-            if value == 2:
+            # print('ICESTA write block called. Writing', value)
+
+            if value == 2: # disconnect command
                 print('ICE - KTL disconnected!')
             return 0
 
@@ -1856,9 +1871,11 @@ class KeckLFC(object):
     def SHOW_ALL_VAL(self, value=None):
 
         if value == None:
+            # print('SHOW_ALL_VAL read block called. doing nothing ...')
+
             return
         else:
-
+            print('SHOW_ALL_VAL write block called. Writing', value)
             if value == True:
                 print(self.keywords)
                 print(value, type(value))
@@ -1871,9 +1888,11 @@ class KeckLFC(object):
             # show
             import random
             value_to_return = random.randint(1, 10)
+            print('ICETEST read block called. ', value_to_return)
             return value_to_return  #self.keywords['ICETEST']
 
         else:
+            print('ICETEST write block called. Writing', value)
             # modify
             #print('modify icetest called')
             return 0
@@ -1882,7 +1901,9 @@ class KeckLFC(object):
         '''When called, randomly returns an integer value between 1 to 10'''
         # print('ICEARRAY input value', value)
         if value == None:
-            return
+            # print('ICEARRAY read block called. doing nothing ...')
+            # print(self.keywords['ICEARRAY'])
+            return KTLarray(self.keywords['ICEARRAY'])
             # show
             # value_to_return = []
             # import random
@@ -1892,6 +1913,8 @@ class KeckLFC(object):
             # return KTLarray(value_to_return)  #self.keywords['ICETEST']
 
         else:
+            print('ICEARRAY write block called. Writing', value)
+
             # modify
             #print('modify ICEARRAY called')
             return 0
