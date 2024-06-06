@@ -681,6 +681,24 @@
 		<period>10</period>
 		<format>%.1f</format>
 	</keyword>
+	<keyword>
+		<name>LFC_CLARITY_ONOFF</name>
+		<type>boolean</type>
+		<help level="brief">clarity onoff</help>
+		<help level="verbose">clarity onoff</help>
+		<capability type="write">True</capability>
+		<period>10</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
 
 
 	<!--end of the test cases-->
