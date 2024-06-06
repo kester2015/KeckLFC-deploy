@@ -216,35 +216,35 @@
 		<elements>
 			<entry>
 				<index>0</index>
-				<label>Element_0</label>
+				<label>Rack side buffle (middle side rack)</label>
 			</entry>
 			<entry>
 				<index>1</index>
-				<label>Element_1</label>
+				<label>Waveshaper (upper rack)</label>
 			</entry>
 			<entry>
 				<index>2</index>
-				<label>Element_2</label>
+				<label>Rb clock (middle rack)</label>
 			</entry>
 			<entry>
 				<index>3</index>
-				<label>Element_3</label>
+				<label>Pritel (middle upper rack)</label>
 			</entry>
 			<entry>
 				<index>4</index>
-				<label>Element_4</label>
+				<label>Rack Glycol out</label>
 			</entry>
 			<entry>
 				<index>5</index>
-				<label>Element_5</label>
+				<label>Rack Glycol in</label>
 			</entry>
 			<entry>
 				<index>6</index>
-				<label>Element_6</label>
+				<label>Power Supply Shelf (bottom rack)</label>
 			</entry>
 			<entry>
 				<index>7</index>
-				<label>Element_7</label>
+				<label>Unconnected</label>
 			</entry>
 		</elements>
 		<format>%.2f</format>
@@ -258,35 +258,35 @@
 		<elements>
 			<entry>
 				<index>0</index>
-				<label>Element_0</label>
+				<label>RF Oscillator</label>
 			</entry>
 			<entry>
 				<index>1</index>
-				<label>Element_1</label>
+				<label>RF amplifier</label>
 			</entry>
 			<entry>
 				<index>2</index>
-				<label>Element_2</label>
+				<label>Main Phase Modulators</label>
 			</entry>
 			<entry>
 				<index>3</index>
-				<label>Element_3</label>
+				<label>Filter Cavity</label>
 			</entry>
 			<entry>
 				<index>4</index>
-				<label>Element_4</label>
+				<label>Board Glycol out</label>
 			</entry>
 			<entry>
 				<index>5</index>
-				<label>Element_5</label>
+				<label>Board Glycol in</label>
 			</entry>
 			<entry>
 				<index>6</index>
-				<label>Element_6</label>
+				<label>Compression Stage</label>
 			</entry>
 			<entry>
 				<index>7</index>
-				<label>Element_7</label>
+				<label>Rubidium (Rb) Cell D2-210</label>
 			</entry>
 		</elements>
 		<format>%.2f</format>
