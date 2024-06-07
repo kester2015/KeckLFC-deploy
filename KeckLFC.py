@@ -124,29 +124,36 @@ class KeckLFC(object):
         # print('__setitem__ called for', key, val)
         if val != None: val = self.convert_type(self.types[key], val)
         
-        status = self.funcs[key](value = val)
-        if status == 0: 
-            # device_value = self.funcs[key](value=None)
-            # print('Device value for',key,device_value)
-            # self.keywords[key] = device_value
-            self.keywords[key] = val
+        try:
+            status = self.funcs[key](value = val)
+            if status == 0: 
+                # device_value = self.funcs[key](value=None)
+                # print('Device value for',key,device_value)
+                # self.keywords[key] = device_value
+                self.keywords[key] = val
 
 
-        # if successful, store the keyword value
-        # if status == 0: self.keywords[key] = val
-        elif status == -1: 
-            # actually this is never called because writing a keyword value 
-            # to a non-writable keyword is already blocked by KTL
-            print('This is non-writable keyword')
+            # if successful, store the keyword value
+            # if status == 0: self.keywords[key] = val
+            # elif status == -1: 
+            #     # actually this is never called because writing a keyword value 
+            #     # to a non-writable keyword is already blocked by KTL
+            #     print('This is non-writable keyword')
 
-        elif status == None:
-            print('None returned for keyword ', key)
-        else: 
-            print('Error detected in writing ', val, 'to ', key)
-            print('status:', status, type(status))
+            elif status == None:
+                print('None returned for keyword ', key)
+            # else: 
+            #     print('Error detected in writing ', val, 'to ', key)
+            #     print('status:', status, type(status))
+        except Exception as e:
+            print("Error in writing ", val, " to ", key)
+            print(e)
     
     @staticmethod
     def convert_type(typ, val):
+        '''
+        Converts type of KTL keyword (string) to desired types.
+        '''
         
         if typ == 'integer': return int(val)
         elif typ == 'double': return float(val)
@@ -157,7 +164,6 @@ class KeckLFC(object):
             else: return False
         elif typ =='double array': 
             values = val.split(" ")
-            # values = val.strip("()").split(",")
             return [float(value) for value in values]
         else:
             print('Unrecognized type')
@@ -404,8 +410,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            all_temperatures = self.keywords['LFC_TEMP_TEST1'].split(' ')
-            return float(all_temperatures[5])
+            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return all_temperatures[5]
 
             # addr = 0
             # chan = 5
@@ -421,6 +427,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
+            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return all_temperatures[4]
             addr = 0
             chan = 4
             daq = self.__LFC_USB2408_0_connect()
@@ -437,6 +445,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
+            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST2'])#.split(' ')
+            return all_temperatures[5]
             addr = 1
             chan = 5
             daq = self.__LFC_USB2408_1_connect()
@@ -453,6 +463,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
+            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST2'])#.split(' ')
+            return all_temperatures[4]
             addr = 1
             chan = 4
             daq = self.__LFC_USB2408_1_connect()
@@ -469,6 +481,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
+            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return all_temperatures[3]
             addr = 0
             chan = 3 # Use Pritel Amplifier TEC as the rack top temperature
             daq = self.__LFC_USB2408_0_connect()
@@ -485,6 +499,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
+            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return all_temperatures[0]
             addr = 0
             chan = 0 # Use Side buffle as the rack mid temperature
             daq = self.__LFC_USB2408_0_connect()
@@ -501,6 +517,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
+            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return all_temperatures[6]
             addr = 0
             chan = 6 # Bottom rack temperature
             daq = self.__LFC_USB2408_0_connect()
@@ -517,12 +535,12 @@ class KeckLFC(object):
         if test_mode: return 
         # return
         if value == None:
-            temp_1=self.keywords['LFC_TEMP_TEST1'].split(' ')
+            temp_1= self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
             #temp_2=self.keywords['LFC_TEMP_TEST2']
         
 
             threshold=0
-            if float(temp_1[1])>threshold:
+            if (temp_1[1])>threshold:
                 #self.LFC_CLOSE_ALL(1)
                 self.__sendemail('Temperature is too high, all devices are closed,test only')
                 return 0
