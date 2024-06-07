@@ -140,7 +140,7 @@ def shutdown (*ignored):
 
 # Each keyword needs a new function: a function to connect to ICE
 # and needs to communicate with the LFC laptop when keyword read is invoked.
-# When running setupKeywords, the three functions below are defined as
+# When running setupKeywords, the functions below are defined as
 # methods of the keywords.
 
 
@@ -148,6 +148,8 @@ def iceconnect(self):
     ''' Function that connects keyword to ICE '''
     keyword = ktl.cache('nslfc', self.name) 
     keyword.monitor()
+
+    # Exceptionally, ICESTA uses the specific callback function.
     if self.name == 'ICESTA':
         keyword.callback(self.iceclient.callbackfunc)
                             
@@ -169,24 +171,54 @@ def write(self, value):
     # value = str(keyword['binary'])
     #print('callbackfunc value',value) 
     # Communicate with the server that the keyword value changed.
+
+    # Exceptionally, ICESTA is related to ICE connection but does not receive keyword values
+    # from the Windows machine.
     if self.name != 'ICESTA':
         self.iceclient.twoway.modifiedkeyword(self.name, value)
+        self.speedUp() # after keyword read, increase the polling rate.
     
 
 def postwrite(self, value):
     print('in postwrite, input value', value) 
-    # self.set(value)
-    time.sleep(1)#0.5)#3) 
-    if self.name != 'ICESTA': self.update()
+
+    # time.sleep(1) # no longer need time delay
+    if self.name != 'ICESTA': 
+        self.update() # keyword read after write
+
     if self.name == 'ICESTA':
         print('ICESTA value', value)
         self.set(value)
-    #device_value = self.read()
-    #print('in postwrite, device value', device_value) 
-    #try:
-    #    self.set(device_value)
-    #except:
-    #    print("Error in immediate read") 
+
+
+def speedUp(self, checks=3):
+    print('speeding up ...')
+    self.rapid_checks = checks
+    self.period(self.fast_period)
+
+def slowDown(self):
+    print('slowing down ...')
+    self.rapid_checks = 0
+    self.period(self.slow_period)
+
+def update(self, *args, **kwargs):
+
+
+    slow_down = False
+    if self.rapid_checks == 1:
+        slow_down = True
+    elif self.rapid_checks > 1:
+        self.rapid_checks -= 1
+
+    self.preread()
+    value = self.read()
+
+    if value is not None:
+        self.postread(value)
+
+    if slow_down:
+        self.slowDown()
+
 # A function that parses an xml file and returns keyword names and types.
 # we may need a better way to do this
 
@@ -253,6 +285,10 @@ def setupKeywords (service):
         base_class.read = read
         base_class.postwrite= postwrite 
         base_class.write = write
+        base_class.update = update
+        base_class.slowDown = slowDown
+        base_class.speedUp = speedUp
+
         class_name = base_class.__name__+'Ice'
         subclass = type(class_name, (base_class,), {})
         subclasses[class_name] = subclass
@@ -271,6 +307,11 @@ def setupKeywords (service):
         subclass(key, service, period=freq)
         # define iceclient
         subclass.iceclient = client
+
+        # define poll rates
+        subclass.slow_period = freq
+        subclass.fast_period = 3
+        subclass.rapid_checks = 3
     
 
 #

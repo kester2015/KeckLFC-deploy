@@ -22,3 +22,4 @@ for keyword in keywords:
 tree.write('LFC.xml.sin')
 subprocess.run(["scp", "LFC.xml.sin", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/ktlxml/"])
 subprocess.run(["scp", "LFCm.xml.sin", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/ktlxml/"])
+subprocess.run(["scp", "nslfcd", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/dispatcher/nslfcd"])
