@@ -554,6 +554,56 @@ class KeckLFC(object):
             #     self.LFC_CLOSE_ALL(1)
             #     self.__sendemail('Temperature is too high, all devices are closed')
 
+    
+    
+    def LFC_RFOSCI_MONITOR(self,value=None): #TBD
+        if test_mode: return
+        # return
+        rfosci_threshold_v=15
+        rfosci_threshold_i=0.4
+        if value == None:
+            if self.keywords['LFC_RFOSCI_ONOFF'] == 1:
+                voltage=self.LFC_RFOSCI_V()
+                current=self.LFC_RFOSCI_I()
+                if np.abs(voltage-rfosci_threshold_v)>1 or np.abs(current-rfosci_threshold_i)>0.1:
+                    self.LFC_CLOSE_ALL(1)
+                    self.__sendemail('RF oscillator is off due to over voltage or over current')
+                    return 1
+
+        else:
+            return 0
+        
+    def LFC_RFAMP_MONITOR(self,value=None): #TBD
+        if test_mode: return
+        # return
+        rfamp_threshold_v=30
+        rfamp_threshold_i=4.5
+        if value == None:
+            if self.keywords['LFC_RFAMP_ONOFF'] == 1:
+                voltage=self.LFC_RFAMP_V()
+                current=self.LFC_RFAMP_I()
+                if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-rfamp_threshold_i)>0.1:
+                    self.LFC_CLOSE_ALL(1)
+                    self.__sendemail('RF amplifier is off due to over voltage or over current')
+                    return 1
+                
+        else:
+            return 0
+        
+    def LFC_RF_FREQ_MONITOR(self,value=None): #TBD
+        if test_mode: return
+        # return
+        rf_freq_threshold=16e9
+        if value == None:
+            if (self.keywords['LFC_RFAMP_ONOFF'] == 1) and (self.keywords['LFC_RFOSCI_ONOFF'] == 1):
+
+                freq=self.LFC_PENDULEM_FREQ()
+                if np.abs(freq-rf_freq_threshold)>10:
+                    self.LFC_CLOSE_ALL(1)
+                    self.__sendemail('RF frequency is not 16 GHz, all devices are closed')
+                    return 1
+        else:
+            return 0
 
     def LFC_CLOSE_ALL(self, value=None):
         return
@@ -1729,12 +1779,16 @@ class KeckLFC(object):
             self.LFC_RFOSCI_DEFAULT(1)
             self.LFC_RFOSCI_ONOFF(1)
 
+            self.LFC_RFOSCI_MONITOR()
+
             self.LFC_RFAMP_DEfAULT(1)
             self.LFC_RFAMP_ONOFF(1)
 
+            self.LFC_RFAMP_MONITOR()
+
             freq=self.LFC_PENDULEM_FREQ(1)
 
-            if freq>15e8:
+            if np.abs(freq-16e9)<10:
 
                 self.LFC_CLARITY_ONOFF(1)
                 #self.LFC_EDFA27_P_DEFAULT(1)
