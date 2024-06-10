@@ -11,7 +11,7 @@
 		<help level="brief">set on or off rfosc powersup</help>
 		<help level="verbose">set on or off rfosc powersup</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -29,7 +29,7 @@
 		<help level="brief">set on or off rfamp powersup</help>
 		<help level="verbose">set on or off rfamp powersup</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -47,7 +47,7 @@
 		<help level="brief">RESET preamp and pwramp latching circuits</help>
 		<help level="verbose">RESET preamp and pwramp latching circuits</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -65,7 +65,7 @@
 		<help level="brief">YJ shutter status</help>
 		<help level="verbose">YJ shutter status</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -83,7 +83,7 @@
 		<help level="brief">Set 2 by 2 switch</help>
 		<help level="verbose">Set 2 by 2 switch</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>1</key>
@@ -101,7 +101,7 @@
 		<help level="brief">HK shutter status</help>
 		<help level="verbose">HK shutter status</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -119,7 +119,8 @@
 		<help level="brief">set attenuation in db</help>
 		<help level="verbose">set attenuation in db</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
+		<fastperiod>3</fastperiod>
 		<units>dB</units>
 		<format>%.2f</format>
 		<range>
@@ -133,7 +134,8 @@
 		<help level="brief">set attenuation in db</help>
 		<help level="verbose">set attenuation in db</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
+		<fastperiod>3</fastperiod>
 		<units>dB</units>
 		<format>%.2f</format>
 		<range>
@@ -147,7 +149,8 @@
 		<help level="brief">set attenuation in db</help>
 		<help level="verbose">set attenuation in db</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
+		<fastperiod>3</fastperiod>
 		<units>dB</units>
 		<format>%.2f</format>
 		<range>
@@ -161,7 +164,7 @@
 		<help level="brief">set lock mode</help>
 		<help level="verbose">set lock mode</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -178,7 +181,7 @@
 		<type>boolean</type>
 		<help level="brief">auto temp monitor</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -195,7 +198,7 @@
 		<type>boolean</type>
 		<help level="brief">shut up all power device</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>20</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -212,7 +215,7 @@
 		<type>double array</type>
 		<help level="brief">Temperature test 1</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<elements>
 			<entry>
 				<index>0</index>
@@ -254,7 +257,7 @@
 		<type>double array</type>
 		<help level="brief">Temperature test 2</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<elements>
 			<entry>
 				<index>0</index>
@@ -297,7 +300,7 @@
 		<help level="brief">Glycol inlet temp to instrument rack</help>
 		<help level="verbose">Glycol inlet temp to instrument rack</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.2f</format> 
 	</keyword>
 	<keyword>
@@ -306,7 +309,7 @@
 		<help level="brief">Glycol outlet temp from instrument rack</help>
 		<help level="verbose">Glycol outlet temp from instrument rack</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
@@ -315,7 +318,7 @@
 		<help level="brief">Glycol inlet temp to EO comb board</help>
 		<help level="verbose">Glycol inlet temp to EO comb board</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
@@ -324,7 +327,7 @@
 		<help level="brief">Glycol outlet temp from EO comb board</help>
 		<help level="verbose">Glycol outlet temp from EO comb board</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
@@ -333,7 +336,7 @@
 		<help level="brief">Instrument rack top temp</help>
 		<help level="verbose">Instrument rack top temp</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
@@ -342,7 +345,7 @@
 		<help level="brief">Instrument rack middle temp</help>
 		<help level="verbose">Instrument rack middle temp</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
@@ -351,7 +354,7 @@
 		<help level="brief">Instrument rack bottom temp</help>
 		<help level="verbose">Instrument rack bottom temp</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
@@ -360,7 +363,7 @@
 		<help level="brief">RIO pump laser temperature</help>
 		<help level="verbose">RIO pump laser temperature</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>20</period>
 		<range>
 			<minimum>-5</minimum>
 			<maximum>75</maximum>
@@ -374,7 +377,7 @@
 		<help level="brief">RIO pump laser current</help>
 		<help level="verbose">RIO pump laser current</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<units>mA</units>
 		<format>%.1f</format>
 	</keyword>
@@ -384,7 +387,7 @@
 		<help level="brief">Small  EDFA (500 mW) 1 output power</help>
 		<help level="verbose">Small  EDFA (500 mW) 1 output power</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0</minimum>
 			<maximum>630</maximum>
@@ -398,7 +401,7 @@
 		<help level="brief">Small EDFA (500 mW) 1 emission on/off</help>
 		<help level="verbose">Small EDFA (500 mW) 1 emission on/off</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -416,7 +419,7 @@
 		<help level="brief">Small EDFA (20 mW) 2 output power</help>
 		<help level="verbose">Small EDFA (20 mW) 2 output power</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0</minimum>
 			<maximum>20</maximum>
@@ -430,7 +433,7 @@
 		<help level="brief">Small EDFA (20 mW) 2 emission on/off</help>
 		<help level="verbose">Small EDFA (20 mW) 2 emission on/off</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -448,7 +451,7 @@
 		<help level="brief">Small EDFA (200 mW) 3 output power</help>
 		<help level="verbose">Small EDFA (200 mW) 3 output power</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0</minimum>
 			<maximum>20</maximum>
@@ -462,7 +465,7 @@
 		<help level="brief">Small EDFA (200 mW) 3 emission on/off</help>
 		<help level="verbose">Small EDFA (200 mW) 3 emission on/off</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -480,7 +483,7 @@
 		<help level="brief">RF Amp current</help>
 		<help level="verbose">RF Amp current</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<units>Amp</units>
 		<format>%.1f</format>
 	</keyword>
@@ -489,7 +492,7 @@
 		<type>double</type>
 		<help level="brief">RF Amp voltage</help>
 		<help level="verbose">RF Amp voltage</help>
-		<period>10</period>
+		<period>120</period>
 		<capability type="write">True</capability>
 		<range>
 			<minimum>30</minimum>
@@ -504,7 +507,7 @@
 		<help level="brief">RF Oscillator input current</help>
 		<help level="verbose">RF Oscillator input current</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0.35</minimum>
 			<maximum>0.7</maximum>
@@ -518,7 +521,7 @@
 		<help level="brief">RF Oscillator input voltage</help>
 		<help level="verbose">RF Oscillator input voltage</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>15</minimum>
 			<maximum>15</maximum>
@@ -532,7 +535,7 @@
 		<help level="brief">Mini-comb amplitude lock offset bias</help>
 		<help level="verbose">Mini-comb amplitude lock offset bias</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>-3</minimum>
 			<maximum>3</maximum>
@@ -546,7 +549,7 @@
 		<help level="brief">Mini-comb RF voltage controlled variable attenuation setting</help>
 		<help level="verbose">Mini-comb RF voltage controlled variable attenuation setting</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0</minimum>
 			<maximum>10</maximum>
@@ -560,7 +563,7 @@
 		<help level="brief">Waveshaper Dispersion Compensation</help>
 		<help level="verbose">Waveshaper Dispersion Compensation</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<elements>
 			<entry>
 				<index>0</index>
@@ -582,7 +585,7 @@
 		<help level="brief">TBD</help>
 		<help level="verbose">TBD</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<elements>
 			<entry>
 				<index>0</index>
@@ -604,7 +607,7 @@
 		<help level="brief">High-power EDFA pre-amp output power</help>
 		<help level="verbose">High-power EDFA pre-amp output power</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<!-- <range>
 			<minimum>50</minimum>
 			<maximum>140</maximum>
@@ -618,7 +621,7 @@
 		<help level="brief">High-power EDFA output power</help>
 		<help level="verbose">High-power EDFA output power</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0</minimum>
 			<maximum>4</maximum>
@@ -632,7 +635,7 @@
 		<help level="brief">High-power EDFA pump current</help>
 		<help level="verbose">High-power EDFA pump current</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0</minimum>
 			<maximum>4.2</maximum>
@@ -646,7 +649,7 @@
 		<help level="brief">High-power EDFA emission on/standby</help>
 		<help level="verbose">High-power EDFA emission on/standby</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -664,7 +667,7 @@
 		<help level="brief">Waveguide TEC control</help>
 		<help level="verbose">Waveguide TEC control</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.1f</format>
 		<range>
 			<minimum>22.5</minimum>
@@ -678,7 +681,7 @@
 		<help level="brief">PPLN TEC control</help>
 		<help level="verbose">PPLN TEC control</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>20</period>
 		<format>%.1f</format>
 	</keyword>
 	<keyword>
@@ -687,7 +690,7 @@
 		<help level="brief">clarity onoff</help>
 		<help level="verbose">clarity onoff</help>
 		<capability type="write">True</capability>
-		<period>10</period>
+		<period>120</period>
 		<values>
 			<entry>
 				<key>0</key>
@@ -700,7 +703,6 @@
 		</values>
 	</keyword>
 
-
 	<!--end of the test cases-->
 	
 	<!--
@@ -710,7 +712,7 @@
 		<help level="brief">Pump Attenuation (Intensity)</help>
 		<help level="verbose">Pump Attenuation (Intensity)</help>
 		<capability type="write">False</capability>
-		<period>10</period>
+		<period>120</period>
 		<range>
 			<minimum>0.01</minimum>
 			<maximum>60</maximum>
