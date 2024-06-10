@@ -1368,8 +1368,17 @@ class KeckLFC(object):
         arduino = self.__LFC_ARDUINO_connect()
 
         if value == None:
+
+            arduino.connect()
+            self.__sleep(0.1)
+            message=arduino.get_YJ_info()
+            
+            if message in ['YJState\r\r\nYJ shutter is UP, YJ is shutted.']:
+                message = 0
+            if message in ['YJState\r\r\nYJ shutter is DOWN, YJ is passing.']:
+                message = 1
             # fill in read functions
-            return 0
+            return message
         
         if value == 1:
             
