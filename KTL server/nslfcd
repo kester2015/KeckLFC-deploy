@@ -230,21 +230,31 @@ def parse_xml(xmlfile):
 
     keyword_names = []
     keyword_types = []
-    keyword_readfreqs = []
+    keyword_readperiods = []
+    keyword_fastreadperiods = []
 
     for keyword in root.findall('keyword'):
         name = keyword.find('name').text
         keyword_type = keyword.find('type').text
+
+        # keyword-specific periods
         try:
-            keyword_readfreq = float(keyword.find('period').text)
+            keyword_readperiod = float(keyword.find('period').text)
         except:
-            keyword_readfreq = 10
-        print('Parsed keyword: name=%s\ttype=%s\tperiod=%.1f' % (name, keyword_type, keyword_readfreq))
+            keyword_readperiod = 10
+
+        # keyword-specific fast periods
+        try:
+            keyword_fastreadperiod = float(keyword.find('fastperiod').text)
+        except:
+            keyword_fastreadperiod = 3
+        print('Parsed keyword: name=%s\ttype=%s\tperiod=%.1f\tfast-period=%.1f' % (name, keyword_type, keyword_readperiod, keyword_fastreadperiod))
         keyword_names.append(name)
         keyword_types.append(keyword_type)
-        keyword_readfreqs.append(keyword_readfreq)
+        keyword_readperiods.append(keyword_readperiod)
+        keyword_fastreadperiods.append(keyword_fastreadperiod)
 
-    return keyword_names, keyword_types, keyword_readfreqs
+    return keyword_names, keyword_types, keyword_readperiods, keyword_fastreadperiods
 
 
 # setupKeywords
@@ -266,7 +276,7 @@ def setupKeywords (service):
     main.client = client
     
     # For now, using the xml file for convenience. 
-    keyword_names, keyword_types, keyword_readfreqs = parse_xml('/kroot/src/kss/astrocomb/ktlxml/LFCm.xml.sin')
+    keyword_names, keyword_types, keyword_readperiods, keyword_fastreadperiods = parse_xml('/kroot/src/kss/astrocomb/ktlxml/LFCm.xml.sin')
 
     base_classes = [DFW.Keyword.Integer, 
                     DFW.Keyword.Enumerated, 
@@ -293,7 +303,7 @@ def setupKeywords (service):
         subclass = type(class_name, (base_class,), {})
         subclasses[class_name] = subclass
 
-    for (key, typ, freq) in zip(keyword_names, keyword_types, keyword_readfreqs):
+    for (key, typ, p, fp) in zip(keyword_names, keyword_types, keyword_readperiods, keyword_fastreadperiods):
         if typ == 'integer': subclass = subclasses['IntegerIce']
         elif typ == 'double': subclass = subclasses['DoubleIce']
         elif typ == 'enumerated': subclass = subclasses['EnumeratedIce']
@@ -304,14 +314,14 @@ def setupKeywords (service):
             print('Unrecognized type')
         
         # setup keyword. The period is set to 1 sec for every keyword for now.
-        subclass(key, service, period=freq)
+        subclass(key, service, period=p)
         # define iceclient
         subclass.iceclient = client
 
         # define poll rates
-        subclass.slow_period = freq
-        subclass.fast_period = 3
-        subclass.rapid_checks = 3
+        subclass.slow_period = p
+        subclass.fast_period = fp
+        subclass.rapid_checks = 3 # number of rapid checks after write
     
 
 #
@@ -348,12 +358,8 @@ class IceClient:
         try:
 
             value = str(keyword['binary'])
-            #print('callbackfunc value',value) 
-            # Communicate with the server that the keyword value changed.
             self.twoway.modifiedkeyword(keyword['name'], value)
-            #print('modifiedkeyword called')
-            # it would have been nice if we could simply insert keyword.update()
-            #time.sleep(3)
+
         except:
             print('Error in callbackfunc')
             return
@@ -401,9 +407,9 @@ class IceClient:
                     time.sleep(3)
                     
                 except (KeyboardInterrupt, SystemExit):
-                    print("some interruption??")
+                    # print("some interruption??")
                     break
-            print("ICESTA not connected ??")
+            # print("ICESTA not connected ??")
             
             
         except:

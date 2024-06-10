@@ -11,11 +11,14 @@
 * How to prepare read/write tests:
 
 0. Implement keywords in `LFCm.xml.sin` and related functions in `KeckLFC.py`.
-1. Transfer most up-to-date dispatcher and xml files, by running `copy_xml.py`. 
+> All the keywords that are listed in `LFCm.xml.sin` should have the corresponding method defined in `KeckLFC.py`.
+> KTLXML documentation: https://spg.ucolick.org/KTLXML/
+1. Transfer most up-to-date dispatcher and xml files to irastrocombbuild, by running `copy_xml.py`. 
 2. Open two terminals in irastrocombbuild. (`ssh combbld@irastrocombbuild` in the PowerShell)
 3. In one of the terminals, go to `/kroot/src/kss/astrocomb/`, and compile the dispatcher by `make install`.
 
-Now you are ready to test!
+
+Now you are ready to test! If you haven't made changes in `LFCm.xml.sin` or `nslfcd`, these steps 0-3 can be skipped.
 
 * How to test read/write:
 
@@ -23,9 +26,9 @@ Now you are ready to test!
 2. When you see the message, ICE server starts ..., it's ready to start the dispatcher. In irastrocombbuild, run
 `/kroot/rel/default/sbin/nslfcd  -c /kroot/rel/default/data/nslfc/nslfc_3.conf`
 If the ICE connection is successful, you'll see the messages "Keyword KEYWORDNAME is connected to ICE". 
-3. To test keyword read, run
+3. To test keyword read, in another irastrocombbuild terminal, run
 `show -s nslfc KEYWORDNAME`
-Note that it make take up to the keyword read period to store the device value to the dispatcher.
+Note that it may take up to the keyword read period to store the device value to the dispatcher.
 4. To test keyword write, run
 `modify -s nslfc KEYWORDNAME=newvalue`
 
