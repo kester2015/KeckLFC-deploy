@@ -18,6 +18,11 @@ for keyword in keywords:
     if period is not None:
         keyword.remove(period)
 
+for keyword in keywords:
+    period = keyword.find('fastperiod')
+    if period is not None:
+        keyword.remove(period)
+
 # Write the modified XML to a new file
 tree.write('LFC.xml.sin')
 subprocess.run(["scp", "LFC.xml.sin", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/ktlxml/"])

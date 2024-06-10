@@ -192,12 +192,12 @@ def postwrite(self, value):
 
 
 def speedUp(self, checks=3):
-    print('speeding up ...')
+    print(self.name, 'speeding up ...')
     self.rapid_checks = checks
     self.period(self.fast_period)
 
 def slowDown(self):
-    print('slowing down ...')
+    print(self.name, 'slowing down ...')
     self.rapid_checks = 0
     self.period(self.slow_period)
 
@@ -321,7 +321,7 @@ def setupKeywords (service):
         # define poll rates
         subclass.slow_period = p
         subclass.fast_period = fp
-        subclass.rapid_checks = 3 # number of rapid checks after write
+        subclass.rapid_checks = 0 # number of rapid checks after write
     
 
 #
@@ -391,6 +391,7 @@ class IceClient:
         
 
         try:
+            
             for k in keylist: 
                 try:
                     main.Service[k].iceconnect()
@@ -407,9 +408,9 @@ class IceClient:
                     time.sleep(3)
                     
                 except (KeyboardInterrupt, SystemExit):
-                    # print("some interruption??")
+                    print("some interruption??")
                     break
-            # print("ICESTA not connected ??")
+            print("ICESTA not connected ??")
             
             
         except:
