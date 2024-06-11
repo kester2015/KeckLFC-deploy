@@ -367,7 +367,7 @@ class KeckLFC(object):
 
 
     def LFC_TEMP_TEST1(self, value=None):
-        if test_mode: return
+        # if test_mode: return
         if value == None:
             daq1 = self.__LFC_USB2408_0_connect()
             daq1.connect()    
@@ -1458,7 +1458,7 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None): #test r w
-        if test_mode: return
+        # if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
@@ -1533,7 +1533,7 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None): #r w
         # Successfully tested!
-        if test_mode: return
+        # if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
             print("VOA1550_ATTEN read block called")

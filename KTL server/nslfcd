@@ -156,12 +156,12 @@ def iceconnect(self):
 
 def read(self):
     ''' When reading the keyword value, communicate with the LFC laptop to get tha value '''
-    try:
-        value = self.iceclient.getvalue(self.name)
+    # try:
+    value = self.iceclient.getvalue(self.name)
 
-    except Exception as e:
-        print("Error detected in read()", self.name, e)
-        value = None
+    # except Exception as e:
+    #     print("Error detected in read()", self.name, e)
+        
 
     return str(value)
 
@@ -176,10 +176,9 @@ def write(self, value):
     # Exceptionally, ICESTA is related to ICE connection but does not receive keyword values
     # from the Windows machine.
     if self.name != 'ICESTA':
-        try:
-            self.iceclient.twoway.modifiedkeyword(self.name, value)
-        except Exception as e:
-            print("Error detected in write(),", self.name, e)
+        
+        self.iceclient.twoway.modifiedkeyword(self.name, value)
+        
         self.speedUp() # after keyword read, increase the polling rate.
     
 
@@ -207,7 +206,7 @@ def slowDown(self):
 
 def update(self, *args, **kwargs):
 
-    print("update() called for",self.name,"rapid_checks=%d" % self.rapid_checks)
+    # print("update() called for",self.name,"rapid_checks=%d" % self.rapid_checks)
     
     slow_down = False
     if self.rapid_checks == 1:
