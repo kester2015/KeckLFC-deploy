@@ -39,8 +39,6 @@ def KTLarray(values):
     # but would ever array keyword used for "write"?
     # works fine with read-only
 
-    # print(values,"entered to KTLarray")
-    # print(type(values))
     if values == None:
         return ""
     else:
@@ -111,6 +109,7 @@ class KeckLFC(object):
         This is called periodically.'''
         # print('__getitem__ called for', key)
 
+        ## Execute read block
         val = self.funcs[key](value=None)
 
         if val != None: 
@@ -123,26 +122,21 @@ class KeckLFC(object):
         '''Write keywords.
         When keyword values are changed by KTL user, stores the value.'''
         # print('__setitem__ called for', key, val)
+
+        # The keyword value returned from KTL is always string
+        # Type conversion is needed
+        # convert_type() method handles this
         if val != None: val = self.convert_type(self.types[key], val)
         
         try:
+            ## Execute write block
             status = self.funcs[key](value = val)
+            # If successful, store the keyword value
             if status == 0: 
-                # device_value = self.funcs[key](value=None)
-                # print('Device value for',key,device_value)
-                # self.keywords[key] = device_value
                 self.keywords[key] = val
 
-
-            # if successful, store the keyword value
-            # if status == 0: self.keywords[key] = val
-            # elif status == -1: 
-            #     # actually this is never called because writing a keyword value 
-            #     # to a non-writable keyword is already blocked by KTL
-            #     print('This is non-writable keyword')
-
             elif status == None:
-                print('None returned for keyword ', key)
+                print('None returned for keyword ', key, 'in the write block')
             # else: 
             #     print('Error detected in writing ', val, 'to ', key)
             #     print('status:', status, type(status))
@@ -1979,13 +1973,14 @@ class KeckLFC(object):
 
         if value == None:
             # print('SHOW_ALL_VAL read block called. doing nothing ...')
-
-            return
+            # always want to maintain it as False
+            return False
         else:
             print('SHOW_ALL_VAL write block called. Writing', value)
             if value == True:
-                print(self.keywords)
-                print(value, type(value))
+                for keyword in self.keywords:
+                    print(keyword, self.keywords[keyword], self.types[keyword])
+                # print(value, type(value))
             return 0
 
     def ICETEST(self, value=None):
