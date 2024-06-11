@@ -192,12 +192,12 @@ def postwrite(self, value):
 
 
 def speedUp(self, checks=2):
-    print(self.name, 'speeding up ...')
+    print(self.name, 'speeding up ...','setting to fast period %d' % self.fast_period)
     self.rapid_checks = checks
     self.period(self.fast_period)
 
 def slowDown(self):
-    print(self.name, 'slowing down ...')
+    print(self.name, 'slowing down ...','setting to slow period %d' % self.slow_period)
     self.rapid_checks = 0
     self.period(self.slow_period)
 
