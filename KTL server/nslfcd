@@ -198,7 +198,7 @@ def speedUp(self, checks=2):
 
 def slowDown(self):
     print(self.name, 'slowing down ...')
-    self.rapid_checks -= 1
+    self.rapid_checks = 0
     self.period(self.slow_period)
 
 def update(self, *args, **kwargs):
