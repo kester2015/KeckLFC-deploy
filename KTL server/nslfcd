@@ -175,7 +175,10 @@ def write(self, value):
     # Exceptionally, ICESTA is related to ICE connection but does not receive keyword values
     # from the Windows machine.
     if self.name != 'ICESTA':
-        self.iceclient.twoway.modifiedkeyword(self.name, value)
+        try:
+            self.iceclient.twoway.modifiedkeyword(self.name, value)
+        except Exception as e:
+            print("Error detected in write(),", self.name, e)
         self.speedUp() # after keyword read, increase the polling rate.
     
 
@@ -212,7 +215,12 @@ def update(self, *args, **kwargs):
         self.rapid_checks -= 1
 
     self.preread()
-    value = self.read()
+
+    try:
+        value = self.read()
+    except Exception as e:
+        print("Error detected in read()", self.name, e)
+        
 
     if value is not None:
         self.postread(value)
