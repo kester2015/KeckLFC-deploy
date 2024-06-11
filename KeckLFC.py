@@ -110,6 +110,7 @@ class KeckLFC(object):
         Calls the associated function, stores the returned value. 
         This is called periodically.'''
         # print('__getitem__ called for', key)
+
         val = self.funcs[key](value=None)
 
         if val != None: 
@@ -372,7 +373,7 @@ class KeckLFC(object):
 
 
     def LFC_TEMP_TEST1(self, value=None):
-        # if test_mode: return
+        if test_mode: return
         if value == None:
             daq1 = self.__LFC_USB2408_0_connect()
             daq1.connect()    
@@ -390,7 +391,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_TEMP_TEST2(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             daq1 = self.__LFC_USB2408_1_connect()
@@ -407,7 +408,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_T_GLY_RACK_IN(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             # print(self.keywords['LFC_TEMP_TEST1'])
@@ -464,7 +465,7 @@ class KeckLFC(object):
             # return
 
     def LFC_T_EOCB_OUT(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST2'])#.split(' ')
@@ -1538,7 +1539,7 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None): #r w
         # Successfully tested!
-        # if test_mode: return
+        if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
             print("VOA1550_ATTEN read block called")
