@@ -160,7 +160,8 @@ def read(self):
         value = self.iceclient.getvalue(self.name)
 
     except Exception as e:
-        print(e)
+        print("Error detected in read()", self.name, e)
+        value = None
 
     return str(value)
 
@@ -213,20 +214,21 @@ def update(self, *args, **kwargs):
         slow_down = True
     elif self.rapid_checks > 1:
         self.rapid_checks -= 1
-
+    if slow_down:
+        self.slowDown()
+        
     self.preread()
 
-    try:
-        value = self.read()
-    except Exception as e:
-        print("Error detected in read()", self.name, e)
+    # try:
+    value = self.read()
+    # except Exception as e:
+    #     print("Error detected in read()", self.name, e)
         
 
     if value is not None:
         self.postread(value)
 
-    if slow_down:
-        self.slowDown()
+
 
 # A function that parses an xml file and returns keyword names and types.
 # we may need a better way to do this
