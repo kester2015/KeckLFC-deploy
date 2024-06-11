@@ -191,19 +191,20 @@ def postwrite(self, value):
         self.set(value)
 
 
-def speedUp(self, checks=3):
+def speedUp(self, checks=2):
     print(self.name, 'speeding up ...')
     self.rapid_checks = checks
     self.period(self.fast_period)
 
 def slowDown(self):
     print(self.name, 'slowing down ...')
-    self.rapid_checks = 0
+    self.rapid_checks -= 1
     self.period(self.slow_period)
 
 def update(self, *args, **kwargs):
 
-
+    print("update() called for",self.name,"rapid_checks=%d" % self.rapid_checks)
+    
     slow_down = False
     if self.rapid_checks == 1:
         slow_down = True
@@ -321,7 +322,7 @@ def setupKeywords (service):
         # define poll rates
         subclass.slow_period = p
         subclass.fast_period = fp
-        subclass.rapid_checks = 0 # number of rapid checks after write
+        subclass.rapid_checks = 1 # Start with initial rapid check
     
 
 #

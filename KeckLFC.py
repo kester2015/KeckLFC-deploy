@@ -1408,7 +1408,7 @@ class KeckLFC(object):
             return 0  # return
         
     def LFC_YJ_SHUTTER(self, value=None): #tets r w
-        # if test_mode: return
+        if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
 
