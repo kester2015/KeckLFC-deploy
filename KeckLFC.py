@@ -116,7 +116,10 @@ class KeckLFC(object):
             # Store the keyword value in keywords dictionary
             self.keywords[key] = val
         
-            return val
+            if self.types[key] != 'double array':
+                return val
+            else:
+                return KTLarray(val)
     
     def __setitem__(self, key, val):
         '''Write keywords.
@@ -380,7 +383,8 @@ class KeckLFC(object):
             # print(temp1)
             daq1.disconnect()
             print(self.keywords['LFC_TEMP_TEST1'], type(self.keywords['LFC_TEMP_TEST1']))
-            return KTLarray(temp1)
+            return temp1 #KTLarray(temp1)
+        ## YooJung's Note: updates: now no need to convert the array types using KTLarray() function!
         else:
             return 0
 
@@ -397,19 +401,19 @@ class KeckLFC(object):
             temp1 = daq1.get_temp_all()
             # print(temp1)
             daq1.disconnect()
-            return KTLarray(temp1)
+            return temp1
         else:
             return 0
 
     def LFC_T_GLY_RACK_IN(self, value=None):
-        if test_mode: return
+        # if test_mode: return
 
         if value == None:
             # print(self.keywords['LFC_TEMP_TEST1'])
             # return self.keywords['LFC_TEMP_TEST1'].split(" ")[5]
 
-            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
-            return all_temperatures[5]
+            # all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return self.keywords['LFC_TEMP_TEST1'][5] #all_temperatures[5]
 
             # addr = 0
             # chan = 5
@@ -425,9 +429,9 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
-            print(all_temperatures)
-            return all_temperatures[4]
+            # all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            # print(all_temperatures)
+            return self.keywords['LFC_TEMP_TEST1'][4] #all_temperatures[4]
             addr = 0
             chan = 4
             daq = self.__LFC_USB2408_0_connect()
@@ -444,8 +448,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST2'])#.split(' ')
-            return all_temperatures[5]
+            # all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST2'])#.split(' ')
+            return self.keywords['LFC_TEMP_TEST2'][5] # all_temperatures[5]
             addr = 1
             chan = 5
             daq = self.__LFC_USB2408_1_connect()
@@ -462,8 +466,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST2'])#.split(' ')
-            return all_temperatures[4]
+            # all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST2'])#.split(' ')
+            return self.keywords['LFC_TEMP_TEST2'][4] #all_temperatures[4]
             addr = 1
             chan = 4
             daq = self.__LFC_USB2408_1_connect()
@@ -480,8 +484,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
-            return all_temperatures[3]
+            # all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return self.keywords['LFC_TEMP_TEST1'][3] #all_temperatures[3]
             addr = 0
             chan = 3 # Use Pritel Amplifier TEC as the rack top temperature
             daq = self.__LFC_USB2408_0_connect()
@@ -498,8 +502,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
-            return all_temperatures[0]
+            # all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return self.keywords['LFC_TEMP_TEST1'][0] #all_temperatures[0]
             addr = 0
             chan = 0 # Use Side buffle as the rack mid temperature
             daq = self.__LFC_USB2408_0_connect()
@@ -516,8 +520,8 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == None:
-            all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
-            return all_temperatures[6]
+            # all_temperatures = self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            return self.keywords['LFC_TEMP_TEST1'][6] #all_temperatures[6]
             addr = 0
             chan = 6 # Bottom rack temperature
             daq = self.__LFC_USB2408_0_connect()
@@ -534,7 +538,7 @@ class KeckLFC(object):
         if test_mode: return 
         # return
         if value == None:
-            temp_1= self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
+            temp_1= self.keywords['LFC_TEMP_TEST1'] #self.convert_type('double array', self.keywords['LFC_TEMP_TEST1'])#.split(' ')
             #temp_2=self.keywords['LFC_TEMP_TEST2']
         
 
@@ -1458,7 +1462,7 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None): #test r w
-        # if test_mode: return
+        if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
@@ -2005,7 +2009,7 @@ class KeckLFC(object):
         if value == None:
             # print('ICEARRAY read block called. doing nothing ...')
             # print(self.keywords['ICEARRAY'])
-            return KTLarray(self.keywords['ICEARRAY'])
+            return self.keywords['ICEARRAY']
             # show
             # value_to_return = []
             # import random
