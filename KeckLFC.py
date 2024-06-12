@@ -370,7 +370,7 @@ class KeckLFC(object):
 
 
     def LFC_TEMP_TEST1(self, value=None):
-        # if test_mode: return
+        if test_mode: return
         if value == None:
             daq1 = self.__LFC_USB2408_0_connect()
             daq1.connect()    
@@ -406,7 +406,7 @@ class KeckLFC(object):
             return 0
 
     def LFC_T_GLY_RACK_IN(self, value=None):
-        # if test_mode: return
+        if test_mode: return
 
         if value == None:
             # print(self.keywords['LFC_TEMP_TEST1'])
@@ -1537,7 +1537,7 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None): #r w
         # Successfully tested!
-        # if test_mode: return
+        if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
             print("VOA1550_ATTEN read block called")
@@ -2045,9 +2045,7 @@ class KeckLFC(object):
         if value == None:
             if self.keywords['TESTMODE'] == True:
                 print('TESTENUM read block called. moving on to next state ...')
-                if self.keywords['TESTMODE'] == 3:
-
-                    return int(self.keywords['TESTENUM'] % 3) + 1
+                return (self.keywords['TESTENUM'] % 3) + 1
 
         else:
             if self.keywords['TESTMODE'] == True:
@@ -2073,6 +2071,7 @@ class KeckLFC(object):
         if value == None:
             if self.keywords['TESTMODE'] == True:
                 print('TESTARRAY read block called. doing nothing ...')
+                print(self.keywords['TESTARRAY'], type(self.keywords['TESTARRAY']))
 
             return self.keywords['TESTARRAY']
 
