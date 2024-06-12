@@ -2002,29 +2002,84 @@ class KeckLFC(object):
             # modify
             #print('modify icetest called')
             return 0
-        
-    def ICEARRAY(self, value=None):
-        '''When called, randomly returns an integer value between 1 to 10'''
-        # print('ICEARRAY input value', value)
+    
+    def TESTMODE(self, value=None):
         if value == None:
-            # print('ICEARRAY read block called. doing nothing ...')
-            # print(self.keywords['ICEARRAY'])
-            return self.keywords['ICEARRAY']
-            # show
-            # value_to_return = []
-            # import random
-            # value_to_return.append(random.randint(1, 10))
-            # value_to_return.append(random.random())
-            # print('ICEARRAY setting',(value_to_return))
-            # return KTLarray(value_to_return)  #self.keywords['ICETEST']
+            return self.keywords['TESTMODE']
+        else:
+            self.keywords['ICECLK_ONOFF'] = value
+            if value == True: 
+                print("TESTMODE turned on")
+            if value == False: print("TESTMODE turned on")
+            return 0
+    
+    def TESTINT(self, value=None):
+        if value == None:
+
+            if self.keywords['TESTINT'] != None:
+                if self.keywords['TESTMODE'] == True:
+                    print('TESTINT read block called. adding 1 ...')
+                    return self.keywords['TESTINT'] + 1
+            
+        else:
+            if self.keywords['TESTMODE'] == True:
+                print('TESTMODE write block called. Writing', value)
+                return 0
+
+    def TESTFLOAT(self, value=None):
+        if value == None:
+
+            if self.keywords['TESTFLOAT'] != None:
+                if self.keywords['TESTMODE'] == True:
+                    print('TESTFLOAT read block called. dividing by 2 ...')
+                    return self.keywords['TESTFLOAT'] / 2
+            
+        else:
+            if self.keywords['TESTMODE'] == True:
+                print('TESTFLOAT write block called. Writing', value)
+                return 0
+
+        
+    def TESTENUM(self, value=None):
+
+        if value == None:
+            if self.keywords['TESTMODE'] == True:
+                print('TESTENUM read block called. moving on to next state ...')
+                if self.keywords['TESTMODE'] == 3:
+
+                    return self.keywords['TESTENUM'] % 3 + 1
 
         else:
-            print('ICEARRAY write block called. Writing', value)
-
-            # modify
-            #print('modify ICEARRAY called')
+            if self.keywords['TESTMODE'] == True:
+                print('TESTENUM write block called. Writing', value)
             return 0
 
+
+    def TESTSTRING(self, value=None):
+
+        if value == None:
+            if self.keywords['TESTMODE'] == True:
+                print('TESTSTRING read block called. polling from ICECLK ...')
+
+            return self.keywords['TESTARRAY']
+
+        else:
+            if self.keywords['TESTMODE'] == True:
+                print('TESTARRAY write block called. Writing', value)
+            return 0
+        
+    def TESTARRAY(self, value=None):
+
+        if value == None:
+            if self.keywords['TESTMODE'] == True:
+                print('TESTARRAY read block called. doing nothing ...')
+
+            return self.keywords['TESTARRAY']
+
+        else:
+            if self.keywords['TESTMODE'] == True:
+                print('TESTARRAY write block called. Writing', value)
+            return 0
 
 if __name__ == "__main__":
     lfc = KeckLFC()

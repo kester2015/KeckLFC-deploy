@@ -809,23 +809,6 @@
 		<period>10</period>
 	</keyword>
 	<keyword>
-		<name>ICEARRAY</name>
-		<type>double array</type>
-		<help level="brief">test double array</help>
-		<help level="verbose">test double array</help>
-		<capability type="write">True</capability>
-		<elements>
-			<entry>
-				<index>0</index>
-				<label>Element_0</label>
-			</entry>
-			<entry>
-				<index>1</index>
-				<label>Element_1</label>
-			</entry>
-		</elements>
-	</keyword>
-	<keyword>
 		<name>ICESTA</name>
 		<type>enumerated</type>
 		<help level="brief">Ice connection status</help>
@@ -889,4 +872,87 @@
 			</entry>
 		</values>
 	</keyword>
+	<keyword>
+		<name>TESTMODE</name>
+		<type>boolean</type>
+		<help level="brief">turn on test mode</help>
+		<help level="verbose">turn on test mode</help>
+		<capability type="write">True</capability>
+		<period>120</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>TESTINT</name>
+		<type>integer</type>
+		<help level="brief">test integer</help>
+		<help level="verbose">test integer</help>
+		<period>10</period>
+		<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+		<name>TESTFLOAT</name>
+		<type>double</type>
+		<help level="brief">test double</help>
+		<help level="verbose">test double</help>
+		<format>%.5f</format>
+		<period>10</period>
+		<capability type="write">True</capability>
+	</keyword>	
+	<keyword>
+		<name>TESTENUM</name>
+		<type>enumerated</type>
+		<help level="brief">test enumerated</help>
+		<help level="verbose">test enumerated</help>
+		<period>10</period>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>1</key>
+				<value>first state</value>
+			</entry>
+			<entry>
+				<key>2</key>
+				<value>second state</value>
+			</entry>
+			<entry>
+				<key>3</key>
+				<value>third state</value>
+			</entry>
+		</values>
+	</keyword>	
+	<keyword>
+		<name>TESTSTRING</name>
+		<type>string</type>
+		<help level="brief">test string</help>
+		<help level="verbose">test string</help>
+		<period>10</period>
+		<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+		<name>TESTARRAY</name>
+		<type>double array</type>
+		<help level="brief">test double array</help>
+		<help level="verbose">test double array</help>
+		<capability type="write">True</capability>
+		<elements>
+			<entry>
+				<index>0</index>
+				<label>Element_0</label>
+			</entry>
+			<entry>
+				<index>1</index>
+				<label>Element_1</label>
+			</entry>
+		</elements>
+	</keyword>
+
 </bundle>

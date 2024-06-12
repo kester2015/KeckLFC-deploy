@@ -33,6 +33,47 @@ Note that it may take up to the keyword read period to store the device value to
 4. To test keyword write, run
 `modify -s nslfc KEYWORDNAME=newvalue`
 
+## Details on keywords
+
+Useful references:  
+https://spg.ucolick.org/DFW/keyword.html  
+https://spg.ucolick.org/KTLXML/  
+
+KTL keywords in the dispatcher are defined as DFW.Keyword.Basic classes, and different types of keywords are defined as subclasses of it, DFW.Keyword.KEYWORDTYPE (DFW.Keyword.Integer, DFW.Keyword.String, ...). In the dispatcher code, I defined subclasses of them, `IntegerIce, DoubleIce, EnumeratedIce, StringIce, BooleanIce, DoubleArrayIce`, which inherit from the DFW.Keyword.KEYWORDTYPE classes. Each keywords' `read()`, `write()`, `postwrite()`, `update()` are modified to communicate with the ICE server. 
+
+All the KTL keyword values passed by the dispatcher are in string formats. When a user modifies the keyword value, `modifiedkeyword()` is invoked in `server.py`, setting the keyword value (`__setitem()__`) method. The string format keyword values are converted to desired keyword types here by `convert_type()`. Then they are fed to the keyword functions in the write block. If the write block returns 0, the value is stored in the keyword dictionary, `self.keywords`.
+
+When accessing the keyword values stored in the KeckLFC class in the dictionary, simply : `self.keywords[KEYWORDNAME]`. The array keyword is stored as list (was originally string with spaces... this is updated!)
+
+
+## How ICE connection works
+
+The `server.py` python script in this directory does following:
+
+1. reads list of keywords from `LFCm.xml.sin` xml file,
+2. starts KeckLFC, which has all the functions corresponding to the keywords defined.
+3. establishes ICE connection of each keyword when KTL dispatcher (ICE client) starts running.
+   
+   The dispatcher can be run in astrocombbuild (for now) by:
+   `/kroot/rel/default/sbin/nslfcd  -c /kroot/rel/default/data/nslfc/nslfc_3.conf`
+
+### Detailed explanation on how ICE connection works:
+
+When the KTL dispatcher (ICE client) is started, the dispatcher also reads list of keywords from the same xml file `LFCm.xml.sin` living in the astrocomb server.
+(** so the `LFCm.xml.sin` files in the two computers should be identical!)
+
+In the dispatcher startup, 
+In `setupKeywords()` (in KTL), each KTL keyword class is modified such that
+    - `read()` method is called periodically, which invokes `receive()` method in the LfcI class. Then it calls the associated function in KeckLFC with input value=None and stores the returned value.
+    - when a new keyword value is written from the user side, `write()` method is called in KTL, which in turn invokes `modifiedkeyword()` method in the LfcIclass. Then the keyword value from KTL is translated (convert_type in KeckLFC) and stored in KeckLFC.
+
+
+For a successful ICE connection with the KTL layer,
+1. The server (this laptop) and the client (astrocomb server) should share the same keyword list file (LFC.xml.sin).
+2. The functions that correspond to each keyword should be defined in KeckLFC. Even if the middle layer development (functions corresponding to KTL keywords) is incomplete, the functions still need to be defined. In that case, just do:
+    
+     `def KEYWORD_NAME(self, value=None): return`
+
 
 
 
@@ -56,43 +97,3 @@ The functions are defined as the same name as the keyword.
             # If it's successful, return 0
             return 0 # return 
 ```
-
-
-## How ICE connection works
-
-The `server.py` python script in this directory does following:
-
-1. reads list of keywords from `LFC.xml.sin` xml file,
-2. starts KeckLFC, which has all the functions corresponding to the keywords defined.
-3. establishes ICE connection of each keyword when KTL dispatcher (ICE client) starts running.
-   
-   The dispatcher can be run in astrocombbuild (for now) by:
-   `/kroot/rel/default/sbin/nslfcd  -c /kroot/rel/default/data/nslfc/nslfc_3.conf`
-
-* Detailed explanation on how ICE connection works:
-When the KTL dispatcher (ICE client) is started, the dispatcher also reads list of keywords from the same xml file "LFC.xml.sin" living in the astrocomb server.
-(** so the LFC.xml.sin files in the two computers should be identical!)
-In setupKeywords (in KTL), each KTL keyword class is modified such that
-    - when the keyword is read (periodically), "receive" method in the LfcI class is called which then calls the associated function in KeckLFC with input value=None and stores the returned value.
-    - when the keyword value is modified from the KTL side, callback function is invoked in KTL. Each keyword's callback function is linked to "modifiedkeyword" method in the LfcIclass. Then the keyword value from KTL is translated (convert_type in KeckLFC) and stored in KeckLFC.
-
-
-For a successful ICE connection with the KTL layer,
-1. The server (this laptop) and the client (astrocomb server) should share the same keyword list file (LFC.xml.sin).
-2. The functions that correspond to each keyword should be defined in KeckLFC. Even if the middle layer development (functions corresponding to KTL keywords) is incomplete, the functions still need to be defined. In that case, just do:
-    
-     `def KEYWORD_NAME(self, value=None): return`
-
-## Testing the ICE connection
-
-1. First run the `server.py` to start the server
-2. Start the dispatcher in irastrocombbuild (for now) by:
-   `/kroot/rel/default/sbin/nslfcd  -c /kroot/rel/default/data/nslfc/nslfc_3.conf`
-   If the connection is successful, you'll see the messages
-   ```Keyword KEYWORDNAME connected to ICE```
-3. To test if the keyword is stored in the KTL, open a terminal in irastrocombbuild and try:
-    ```show -s nslfc KEYWORDNAME```
-4. To test keyword write,
-    ```modify -s nslfc KEYWORDNAME=value```
-
-
