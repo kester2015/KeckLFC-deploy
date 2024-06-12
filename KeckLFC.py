@@ -2061,7 +2061,7 @@ class KeckLFC(object):
             if self.keywords['TESTMODE'] == True:
                 print('TESTSTRING read block called. polling from ICECLK ...')
 
-            return self.keywords['TESTARRAY']
+            return self.keywords['ICECLK']
 
         else:
             if self.keywords['TESTMODE'] == True:
