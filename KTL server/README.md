@@ -8,6 +8,7 @@
 3. `LFC.xml.sin`: this is another xml file, a trimmed version of `LFCm.xml.sin`, used as input for the KTL dispatcher. Do not edit this directly, always edit `LFCm.xml.sin`.
 4. `copy_xml.py`: this is a script for generating `LFC.xml.sin` from `LFCm.xml.sin`, and transferring the xml files and `nslfcd` dispatcher code to irastrocombbuild. This makes sure that the xml files in the Windows laptop and in the irastrocombbuild are the same.
 5. `server.py`: this is the ICE server file.
+6. `KTLIce.ice`, `config.server`, (`config.client` in irastrocombbuild): ICE related files
 
 * How to prepare read/write tests:
 
