@@ -2007,10 +2007,10 @@ class KeckLFC(object):
         if value == None:
             return self.keywords['TESTMODE']
         else:
-            self.keywords['ICECLK_ONOFF'] = value
+            self.funcs['ICECLK_ONOFF'](value = value)
             if value == True: 
                 print("TESTMODE turned on")
-            if value == False: print("TESTMODE turned on")
+            if value == False: print("TESTMODE turned off")
             return 0
     
     def TESTINT(self, value=None):
@@ -2047,7 +2047,7 @@ class KeckLFC(object):
                 print('TESTENUM read block called. moving on to next state ...')
                 if self.keywords['TESTMODE'] == 3:
 
-                    return self.keywords['TESTENUM'] % 3 + 1
+                    return int(self.keywords['TESTENUM'] % 3) + 1
 
         else:
             if self.keywords['TESTMODE'] == True:
