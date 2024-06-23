@@ -620,6 +620,11 @@ class KeckLFC(object):
 
     def LFC_CLARITY_ONOFF(self, value=None):#test read #err
         # boolean to enumerated
+
+        ## Yoo Jung's comments
+        ## if this keyword needs to be enumerated instead of boolean,
+        ## update the type and entries in LFCm.xml.sin
+
         if test_mode: return
 
         if value == None:
@@ -629,12 +634,21 @@ class KeckLFC(object):
                 status=1
             return status
         else:
+
+            ## Yoo Jung's comments
+            ## I would suggest following for this block:
+
+            # clarity = self.__LFC_CLARITY_connect()
+            # status=clarity.set_onoff(value)
+            # return 0
+
             clarity = self.__LFC_CLARITY_connect()
             status=clarity.set_onoff(value)
             status = clarity.get_status()
             if status in [1,2,3]:
                 status=1
-            return status
+            return status ## returning the status would give errors. it needs to be zero
+        
 
 
 
@@ -1412,6 +1426,12 @@ class KeckLFC(object):
 
     def LFC_PTAMP_LATCH(self, value=None):#test r #err
         if test_mode: return
+
+        ## Yoo Jung's comments:
+        ## it says in LFCm.xml.sin that this keyword type is boolean
+        ## then the value should be either 0 or 1
+        ## if you want to keep it as enumerated type, change the type and entries in LFCm.xml.sin
+
         #return
         arduino = self.__LFC_ARDUINO_connect()
         if value == None:
@@ -1432,6 +1452,9 @@ class KeckLFC(object):
             return message
         
         elif value == 1:
+            ## Yoo Jung's comments:
+            ## what is this block supposed to do?
+
             # print(f'com={i}')
             arduino.connect()
             arduino.reset_relay_latch()
@@ -1464,6 +1487,10 @@ class KeckLFC(object):
             return message
         
         if value == 1:
+
+            ## Yoo Jung's comments
+            ## this will be called when keyword value = 1 is written.
+            ## but then this will cause errors because you return 1
             
             # print(f'com={i}')
             arduino.connect()
