@@ -618,18 +618,23 @@ class KeckLFC(object):
         
 
 
-    def LFC_CLARITY_ONOFF(self, value=None):#test read
+    def LFC_CLARITY_ONOFF(self, value=None):#test read #err
         # boolean to enumerated
         if test_mode: return
 
         if value == None:
             clarity = self.__LFC_CLARITY_connect()
             status = clarity.get_status()
+            if status in [1,2,3]:
+                status=1
             return status
         else:
             clarity = self.__LFC_CLARITY_connect()
             status=clarity.set_onoff(value)
-            return 0 #status
+            status = clarity.get_status()
+            if status in [1,2,3]:
+                status=1
+            return status
 
 
 
@@ -736,12 +741,12 @@ class KeckLFC(object):
         amonic27 = self.__LFC_EDFA27_connect()
         
         if value == None:
-            amonic27.connect()
-            edfa27p=amonic27.outputPowerCh1
-            print(f'EDFA27 : {edfa27p}mw')
-            amonic27.disconnect()
-            return edfa27p
-        else:
+            # amonic27.connect()
+            # edfa27p=amonic27.outputPowerCh1
+            # print(f'EDFA27 : {edfa27p}mw')
+            # amonic27.disconnect()
+            return 
+        elif value == 1:
             amonic27.connect()
             amonic27._setChMode('apc')
             self.__sleep(0.5)
@@ -751,7 +756,9 @@ class KeckLFC(object):
             edfa27autoset=amonic27.accCh1Cur
             
             amonic27.disconnect()
-            return 0 #edfa27autoset
+            return 1 #edfa27autoset
+        else:
+            return 0
 
             
         
@@ -761,11 +768,11 @@ class KeckLFC(object):
         
 
         if value==None:
-            amonic27.connect()
-            edfa27p=amonic27.outputPowerCh1
-            #print(f'EDFA27 : {edfa27p}mw')
-            amonic27.disconnect()
-            return edfa27p
+            # amonic27.connect()
+            # edfa27p=amonic27.outputPowerCh1
+            # #print(f'EDFA27 : {edfa27p}mw')
+            # amonic27.disconnect()
+            return 
         elif value == 1:
             amonic27.connect()
             amonic27._setChMode('apc')
@@ -778,9 +785,9 @@ class KeckLFC(object):
             edfa27autoset=amonic27.accCh1Cur
             
             amonic27.disconnect()
-            return edfa27autoset
+            return 1
         else:
-            return 
+            return 0
 
  
 
@@ -915,12 +922,12 @@ class KeckLFC(object):
         
 
         if value == None:
-            amonic23.connect()
-            edfa27p=amonic23.outputPowerCh1
-            #print(f'EDFA27 : {edfa27p}mw')
-            amonic23.disconnect()
-            return edfa27p
-        else:
+            # amonic23.connect()
+            # edfa27p=amonic23.outputPowerCh1
+            # #print(f'EDFA27 : {edfa27p}mw')
+            # amonic23.disconnect()
+            return 
+        elif value==1:
             amonic23.connect()
             amonic23._setChMode('acc')
             self.__sleep(0.5)
@@ -929,7 +936,9 @@ class KeckLFC(object):
             edfa27autoset=amonic23.accCh1Cur
             
             amonic23.disconnect()
-            return edfa27autoset
+            return 1
+        else:
+            return 0
         
     def LFC_EDFA23_AUTO_ON(self, value=None): #test r
         if test_mode: return
@@ -937,11 +946,11 @@ class KeckLFC(object):
         
 
         if value==None:
-            amonic23.connect()
-            edfa27p=amonic23.outputPowerCh1
-            #print(f'EDFA27 : {edfa27p}mw')
-            amonic23.disconnect()
-            return edfa27p
+            # amonic23.connect()
+            # edfa27p=amonic23.outputPowerCh1
+            # #print(f'EDFA27 : {edfa27p}mw')
+            # amonic23.disconnect()
+            return 
         elif value == 1:
             amonic23.connect()
             amonic23._setChMode('acc')
@@ -954,9 +963,9 @@ class KeckLFC(object):
             edfa27autoset=amonic23.accCh1Cur
             
             amonic23.disconnect()
-            return edfa27autoset
+            return 1
         else:
-            return
+            return 0
 
 
     def LFC_RFAMP_I(self, value=None): #test r
@@ -1023,23 +1032,23 @@ class KeckLFC(object):
             rfampPS.disconnect()
             return rfampPS_i
         
-    def LFC_RFAMP_DEfAULT(self, value=None): #test r
+    def LFC_RFAMP_DEFAULT(self, value=None): #test r
         if test_mode: return
         rfampPS = self.__LFC_RFAMP_connect()
         
 
         if value == None:
-            rfampPS.connect()
-            rfampPS_v=rfampPS.Vout1
-            print(f'LFC_RFAMP_V : +{rfampPS_i}V')
-            self.__sleep(0.5)
-            rfampPS_i=rfampPS.Iout1
-            print(f'LFC_RFAMP_I : +{rfampPS_i}A')
-            rfampPS.disconnect()
-            return rfampPS_v, rfampPS_i
+            # rfampPS.connect()
+            # rfampPS_v=rfampPS.Vout1
+            # print(f'LFC_RFAMP_V : +{rfampPS_i}V')
+            # self.__sleep(0.5)
+            # rfampPS_i=rfampPS.Iout1
+            # print(f'LFC_RFAMP_I : +{rfampPS_i}A')
+            # rfampPS.disconnect()
+            return 
             #rio.printStatus(
 
-        else:
+        elif value==1:
             #return 0 # not testing MODIFY for now
             rfampPS.connect()
             rfampPS.Vout1=30
@@ -1049,7 +1058,9 @@ class KeckLFC(object):
             rfampPS_i=rfampPS.Iout1
             #print(f'LFC_RFAMP_V : +{rfampPS_i}V')
             rfampPS.disconnect()
-            return rfampPS_v, rfampPS_i
+            return 1
+        else:
+            return 0
         
     def LFC_RFAMP_ONOFF(self, value=None):# test r
         if test_mode: return
@@ -1127,14 +1138,14 @@ class KeckLFC(object):
         if test_mode: return
         
         if value == None:
-            rfoscPS = self.__LFC_RFOSCI_connect()
-            rfoscPS.connect()
-            rfoscPS_v=rfoscPS.Vout2
-            rfoscPS_i=rfoscPS.Iout2
-            rfoscPS.disconnect()
-            return rfoscPS_v, rfoscPS_i
+            # rfoscPS = self.__LFC_RFOSCI_connect()
+            # rfoscPS.connect()
+            # rfoscPS_v=rfoscPS.Vout2
+            # rfoscPS_i=rfoscPS.Iout2
+            # rfoscPS.disconnect()
+            return 
             
-        else:
+        elif value==1:
             rfoscPS = self.__LFC_RFOSCI_connect()
             rfoscPS.connect()
             rfoscPS.Vset2=15
@@ -1144,7 +1155,9 @@ class KeckLFC(object):
             rfoscPS_v=rfoscPS.Vout2
             rfoscPS_i=rfoscPS.Iout2
             rfoscPS.disconnect()
-            return rfoscPS_v, rfoscPS_i
+            return 1
+        else:
+            return 0
         
     def LFC_RFOSCI_ONOFF(self, value=None): #test r
         if test_mode: return
@@ -1170,23 +1183,24 @@ class KeckLFC(object):
         
         if value == None:
             srs = self.__LFC_servo_connect()
+            srs.connect()
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
-            servo_IM.connect()
+            
             
             IM_bias=servo_IM.get_output_voltage()
-            servo_IM.disconnect()
             srs.disconnect()
             return IM_bias
 
         else:
             #return 0 # not testing MODIFY for now
             srs = self.__LFC_servo_connect()
+            srs.connect()
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
-            servo_IM.connect()
+
             servo_IM.manual_output=value
             self.__sleep(0.5)
             IM_bias=servo_IM.get_output_voltage()
-            servo_IM.disconnect()
+
             srs.disconnect()
             return IM_bias
 
@@ -1208,7 +1222,7 @@ class KeckLFC(object):
             rfoscPS.disconnect()
             return rfoscPS_i
         else:
-            #return 0 # not testing MODIFY for now
+            # err bad value
             rfoscPS.connect()
             rfoscPS.Vset3=value
             self.__sleep(0.5)
@@ -1233,19 +1247,32 @@ class KeckLFC(object):
             # ws need recheck
             return 0
 
-    def LFC_WSP_ATTEN(self, value=None): #TBD
+    def LFC_WSP_ATTEN(self, value=None): #TBD always use nm as unit
         if test_mode: return
         if value == None:
             # This is called periodically
             # Insert some function to execute when this keyword is being read and return the value
             # If you don't want the KeckLFC class to modify this keyword, no need to return a value
-            return
+            return 0
 
         else:
-            # This is called when user modifies the keyword
-            # Insert some function to execute when user modifies this keyword
-            # If it's successful, return 0
-            return 0  # return
+
+            ws = self.__LFC_WSP_connect()
+            ws.connect()
+            center = 192.175
+
+            span=value
+
+            startthz = ws.__nm2thz(center + span / 2)
+            stopthz = ws.__nm2thz(center - span / 2)
+            center = (startthz + stopthz) / 2
+            span = stopthz - startthz
+
+            startf = center - span / 2
+            stopf = center + span / 2
+
+            ws.atten = lambda x: 0 if (x < stopf and x > startf) else ws.MAX_ATTEN
+            return 1  # return
 
     def LFC_PTAMP_PRE_P(self, value=None): #test r
         if test_mode: return
@@ -1278,17 +1305,21 @@ class KeckLFC(object):
         ptamp=self.__LFC_PTAMP_connect()
         
         if value == None:
-            ptamp.connect()
-            pre_p=ptamp.preAmp
-            ptamp.disconnect()
-            return pre_p
-        else:
+            # ptamp.connect()
+            # pre_p=ptamp.preAmp
+            # ptamp.disconnect()
+            return 
+        elif value==1:
             ptamp.connect()
             ptamp.preAmp = '600mA'
             self.__sleep(0.5)
             pre_p=ptamp.preAmp
             ptamp.disconnect()
-            return pre_p
+            return 1
+        else:
+            return 0
+
+    
     
     def LFC_PTAMP_PRE_I(self, value=None):#no such function
         if test_mode: return
@@ -1345,17 +1376,19 @@ class KeckLFC(object):
         ptamp=self.__LFC_PTAMP_connect()
        
         if value == None: 
-            ptamp.connect()
-            ptamp1=ptamp.pwrAmp
-            ptamp.disconnect()
-            return ptamp1
-        else:
+            # ptamp.connect()
+            # ptamp1=ptamp.pwrAmp
+            # ptamp.disconnect()
+            return 
+        elif value == 1:
             ptamp.connect()
             ptamp.pwrAmp = '4.1A'
             self.__sleep(0.5)
             ptamp1=ptamp.pwrAmp
             ptamp.disconnect()
-            return ptamp1
+            return 1
+        else:
+            return 0
 
     def LFC_PTAMP_ONOFF(self, value=None):# test r
         if test_mode: return
@@ -1377,7 +1410,7 @@ class KeckLFC(object):
             ptamp.disconnect()
             return ptact  # return
 
-    def LFC_PTAMP_LATCH(self, value=None):#test r 
+    def LFC_PTAMP_LATCH(self, value=None):#test r #err
         if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
@@ -1403,7 +1436,7 @@ class KeckLFC(object):
             arduino.connect()
             arduino.reset_relay_latch()
             arduino.disconnect()
-            return
+            return 5
 
         else:
             # This is called when user modifies the keyword
@@ -1411,7 +1444,7 @@ class KeckLFC(object):
             # If it's successful, return 0
             return 0  # return
         
-    def LFC_YJ_SHUTTER(self, value=None): #tets r w
+    def LFC_YJ_SHUTTER(self, value=None): #tets r w #err
         if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
@@ -1419,7 +1452,7 @@ class KeckLFC(object):
         if value == None:
 
             arduino.connect()
-            self.__sleep(0.1)
+            self.__sleep(0.2)
             message=arduino.get_YJ_info()
             
             if message in ['YJState\r\r\nYJ shutter is UP, YJ is shutted.']:
@@ -1427,18 +1460,21 @@ class KeckLFC(object):
             if message in ['YJState\r\r\nYJ shutter is DOWN, YJ is passing.']:
                 message = 1
             # fill in read functions
+            arduino.disconnect()
             return message
         
         if value == 1:
             
             # print(f'com={i}')
             arduino.connect()
+            self.__sleep(0.2)
             arduino.pass_YJ()
             arduino.disconnect()
-            return 0 # 1
+            return 1 # 1
 
         elif value == 0:
             arduino.connect()
+            self.__sleep(0.2)
             arduino.shut_YJ()
             arduino.disconnect()
             return 0  # return
@@ -1739,7 +1775,7 @@ class KeckLFC(object):
         return
     
     def LFC_EDFA27_INPUT_POWER(self, value=None): #r
-        if test_mode: return
+        #if test_mode: return
         amonic27 = self.__LFC_EDFA27_connect()
         if value == None:
             amonic27.connect()

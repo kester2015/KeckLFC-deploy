@@ -64,11 +64,11 @@
 		<values>
 			<entry>
 				<key>0</key>
-				<value>shut light</value>
+				<value>shut light, 0</value>
 			</entry>
 			<entry>
 				<key>1</key>
-				<value>pass light</value>
+				<value>pass light,1</value>
 			</entry>
 		</values>
 	</keyword>
@@ -512,8 +512,8 @@
 		<help level="verbose">Mini-comb RF voltage controlled variable attenuation setting</help>
 		<capability type="write">True</capability>
 		<range>
-			<minimum>0</minimum>
-			<maximum>10</maximum>
+			<minimum>-2</minimum>
+			<maximum>2</maximum>
 		</range>
 		<units>V</units>
 		<format>%.2f</format>
@@ -605,10 +605,222 @@
 			</entry>
 			<entry>
 				<key>1</key>
-				<value>on</value>
+				<value>locked</value>
 			</entry>
 		</values>
 	</keyword>
+	<keyword>
+		<name>LFC_EDFA27_INPUT_POWER</name>
+		<type>double</type>
+		<help level="brief">EDFA27 INPUT POWER check</help>
+		<help level="verbose">EDFA27 INPUT POWER check</help>
+		<capability type="write">False</capability>
+		<format>%.1f</format>
+		<range>
+			<minimum>0</minimum>
+			<maximum>20</maximum>
+		</range>
+		<units>mw</units>
+	</keyword>
+
+	<keyword>
+		<name>LFC_EDFA23_INPUT_POWER</name>
+		<type>double</type>
+		<help level="brief">EDFA23 INPUT POWER check</help>
+		<help level="verbose">EDFA23 INPUT POWER check</help>
+		<capability type="write">False</capability>
+		<format>%.1f</format>
+		<range>
+			<minimum>0</minimum>
+			<maximum>20</maximum>
+		</range>
+		<units>mw</units>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA27_P_DEFAULT</name>
+		<type>boolean</type>
+		<help level="brief">EDFA27 default POWER set</help>
+		<help level="verbose">EDFA27 defalut POWER set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
+		<name>LFC_EDFA23_P_DEFAULT</name>
+		<type>boolean</type>
+		<help level="brief">EDFA23 default POWER set</help>
+		<help level="verbose">EDFA23 defalut POWER set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
+		<name>LFC_EDFA27_AUTO_ON</name>
+		<type>boolean</type>
+		<help level="brief">EDFA27 default POWER set</help>
+		<help level="verbose">EDFA27 defalut POWER set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
+		<name>LFC_EDFA23_AUTO_ON</name>
+		<type>boolean</type>
+		<help level="brief">EDFA23 default POWER set</help>
+		<help level="verbose">EDFA23 defalut POWER set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+
+	<keyword>
+		<name>LFC_RFAMP_DEFAULT</name>
+		<type>boolean</type>
+		<help level="brief">rfamp default set</help>
+		<help level="verbose">rfamp defalut set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
+		<name>LFC_RFOSCI_DEFAULT</name>
+		<type>boolean</type>
+		<help level="brief">rfosci default set</help>
+		<help level="verbose">rfosci defalut set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+
+	
+	<keyword>
+		<name>LFC_WSP_PHASE</name>
+		<type>boolean</type>
+		<help level="brief">wsp phase</help>
+		<help level="verbose">wsp phase</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>no</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
+		<name>LFC_WSP_ATTEN</name>
+		<type>boolean</type>
+		<help level="brief">wsp atten</help>
+		<help level="verbose">wsp atten</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>no</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
+		<name>LFC_PTAMP_PRE_P_DEFAULT</name>
+		<type>boolean</type>
+		<help level="brief">ptamp pre p default set</help>
+		<help level="verbose">ptamp pre p defalut set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
+		<name>LFC_PTAMP_I_DEFAULT</name>
+		<type>boolean</type>
+		<help level="brief">ptamp i default set</help>
+		<help level="verbose">ptamp i defalut set</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>set</value>
+			</entry>
+		</values>
+	</keyword>
+
+
+
 
 	
 	
@@ -622,23 +834,6 @@
 		<help level="verbose">test integer</help>
 		<capability type="write">True</capability>
 		</keyword>
-	<keyword>
-		<name>ICEARRAY</name>
-		<type>double array</type>
-		<help level="brief">test double array</help>
-		<help level="verbose">test double array</help>
-		<capability type="write">True</capability>
-		<elements>
-			<entry>
-				<index>0</index>
-				<label>Element_0</label>
-			</entry>
-			<entry>
-				<index>1</index>
-				<label>Element_1</label>
-			</entry>
-		</elements>
-	</keyword>
 	<keyword>
 		<name>ICESTA</name>
 		<type>enumerated</type>
@@ -701,4 +896,82 @@
 			</entry>
 		</values>
 	</keyword>
+	<keyword>
+		<name>TESTMODE</name>
+		<type>boolean</type>
+		<help level="brief">turn on test mode</help>
+		<help level="verbose">turn on test mode</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>off</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>on</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>TESTINT</name>
+		<type>integer</type>
+		<help level="brief">test integer</help>
+		<help level="verbose">test integer</help>
+		<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+		<name>TESTFLOAT</name>
+		<type>double</type>
+		<help level="brief">test double</help>
+		<help level="verbose">test double</help>
+		<format>%.5f</format>
+		<capability type="write">True</capability>
+	</keyword>	
+	<keyword>
+		<name>TESTENUM</name>
+		<type>enumerated</type>
+		<help level="brief">test enumerated</help>
+		<help level="verbose">test enumerated</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>1</key>
+				<value>first state</value>
+			</entry>
+			<entry>
+				<key>2</key>
+				<value>second state</value>
+			</entry>
+			<entry>
+				<key>3</key>
+				<value>third state</value>
+			</entry>
+		</values>
+	</keyword>	
+	<keyword>
+		<name>TESTSTRING</name>
+		<type>string</type>
+		<help level="brief">test string</help>
+		<help level="verbose">test string</help>
+		<capability type="write">True</capability>
+	</keyword>
+	<keyword>
+		<name>TESTARRAY</name>
+		<type>double array</type>
+		<help level="brief">test double array</help>
+		<help level="verbose">test double array</help>
+		<capability type="write">True</capability>
+		<elements>
+			<entry>
+				<index>0</index>
+				<label>Element_0</label>
+			</entry>
+			<entry>
+				<index>1</index>
+				<label>Element_1</label>
+			</entry>
+		</elements>
+	</keyword>
+
 </bundle>
