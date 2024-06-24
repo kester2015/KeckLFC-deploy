@@ -40,24 +40,36 @@
 	</keyword>
 	<keyword>
 		<name>LFC_PTAMP_LATCH</name>
-		<type>boolean</type>
+		<type>enumerated</type>
 		<help level="brief">RESET preamp and pwramp latching circuits</help>
 		<help level="verbose">RESET preamp and pwramp latching circuits</help>
 		<capability type="write">True</capability>
 		<values>
 			<entry>
-				<key>0</key>
-				<value>off</value>
+				<key>1</key>
+				<value>ready</value>
 			</entry>
 			<entry>
-				<key>1</key>
-				<value>on</value>
+				<key>0</key>
+				<value>stop but ok after reset</value>
+			</entry>
+			<entry>
+				<key>3</key>
+				<value>too high input</value>
+			</entry>
+			<entry>
+				<key>5</key>
+				<value>too low input</value>
+			</entry>
+			<entry>
+				<key>4</key>
+				<value>unkown error</value>
 			</entry>
 		</values>
 	</keyword>
 	<keyword>
 		<name>LFC_YJ_SHUTTER</name>
-		<type>boolean</type>
+		<type>enumerated</type>
 		<help level="brief">YJ shutter status</help>
 		<help level="verbose">YJ shutter status</help>
 		<capability type="write">True</capability>
@@ -594,7 +606,7 @@
 	</keyword>
 	<keyword>
 		<name>LFC_CLARITY_ONOFF</name>
-		<type>boolean</type>
+		<type>enumerated</type>
 		<help level="brief">clarity onoff</help>
 		<help level="verbose">clarity onoff</help>
 		<capability type="write">True</capability>
@@ -749,39 +761,19 @@
 	
 	<keyword>
 		<name>LFC_WSP_PHASE</name>
-		<type>boolean</type>
+		<type>double</type>
 		<help level="brief">wsp phase</help>
 		<help level="verbose">wsp phase</help>
 		<capability type="write">True</capability>
-		<values>
-			<entry>
-				<key>0</key>
-				<value>no</value>
-			</entry>
-			<entry>
-				<key>1</key>
-				<value>set</value>
-			</entry>
-		</values>
-	</keyword>
+		</keyword>
 
 	<keyword>
 		<name>LFC_WSP_ATTEN</name>
-		<type>boolean</type>
+		<type>double</type>
 		<help level="brief">wsp atten</help>
 		<help level="verbose">wsp atten</help>
 		<capability type="write">True</capability>
-		<values>
-			<entry>
-				<key>0</key>
-				<value>no</value>
-			</entry>
-			<entry>
-				<key>1</key>
-				<value>set</value>
-			</entry>
-		</values>
-	</keyword>
+		</keyword>
 
 	<keyword>
 		<name>LFC_PTAMP_PRE_P_DEFAULT</name>

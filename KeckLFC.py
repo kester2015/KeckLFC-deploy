@@ -618,7 +618,7 @@ class KeckLFC(object):
         
 
 
-    def LFC_CLARITY_ONOFF(self, value=None):#test read #err
+    def LFC_CLARITY_ONOFF(self, value=None):#test read #err2
         # boolean to enumerated
 
         ## Yoo Jung's comments
@@ -647,7 +647,7 @@ class KeckLFC(object):
             status = clarity.get_status()
             if status in [1,2,3]:
                 status=1
-            return status ## returning the status would give errors. it needs to be zero
+            return 0 ## returning the status would give errors. it needs to be zero
         
 
 
@@ -1255,7 +1255,7 @@ class KeckLFC(object):
             d2 = value
             ws.set3rdDisper(d2,d3=0.)
             ws.disconnect()
-            return 1
+            return 0
 
         else:
             # ws need recheck
@@ -1286,7 +1286,7 @@ class KeckLFC(object):
             stopf = center + span / 2
 
             ws.atten = lambda x: 0 if (x < stopf and x > startf) else ws.MAX_ATTEN
-            return 1  # return
+            return 0  # return
 
     def LFC_PTAMP_PRE_P(self, value=None): #test r
         if test_mode: return
@@ -1443,7 +1443,7 @@ class KeckLFC(object):
             elif message =="relay is STOPPING amplifier, but will be OK_to_Amplify after reset_relay_latch.":
                 message=0
             elif message =="relay is STOPPING amplifier, because input power is too low":
-                message=2
+                message=5
             elif message =="relay is STOPPING amplifier, because input power is too high":
                 message=3
             else:
@@ -1459,7 +1459,7 @@ class KeckLFC(object):
             arduino.connect()
             arduino.reset_relay_latch()
             arduino.disconnect()
-            return 5
+            return 0
 
         else:
             # This is called when user modifies the keyword
@@ -1467,8 +1467,8 @@ class KeckLFC(object):
             # If it's successful, return 0
             return 0  # return
         
-    def LFC_YJ_SHUTTER(self, value=None): #tets r w #err
-        if test_mode: return
+    def LFC_YJ_SHUTTER(self, value=None): #tets r w #err2
+        #if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
 
@@ -1497,7 +1497,7 @@ class KeckLFC(object):
             self.__sleep(0.2)
             arduino.pass_YJ()
             arduino.disconnect()
-            return 1 # 1
+            return 0 # 1
 
         elif value == 0:
             arduino.connect()
@@ -1802,7 +1802,7 @@ class KeckLFC(object):
         return
     
     def LFC_EDFA27_INPUT_POWER(self, value=None): #r
-        #if test_mode: return
+        if test_mode: return
         amonic27 = self.__LFC_EDFA27_connect()
         if value == None:
             amonic27.connect()
