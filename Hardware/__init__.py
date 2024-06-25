@@ -1,6 +1,6 @@
 import platform
-#if platform.system() == 'Windows':
-#    from .Waveshaper import Waveshaper
+if platform.system() == 'Windows':
+    from .Waveshaper import Waveshaper
 
 from .RedPitaya import RedPitaya, FG, FPGA1
 from .Servo import Servo

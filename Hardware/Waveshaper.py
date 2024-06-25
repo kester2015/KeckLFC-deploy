@@ -78,6 +78,15 @@ class Waveshaper(Device):
             plt.ylabel('Phase (Rad)')
             plt.show()
         return beta2
+    
+    def give_2ndDisp_phase(self, x ,d2, center=1560, centerunit='nm', preview_plot=False):
+        if centerunit.upper() == 'NM':
+            center = Waveshaper.c_const / center / 1000
+        beta2 = (Waveshaper.c_const / center)**2 / (2 * np.pi * Waveshaper.c_const) * (d2 * 1e-3)
+        phase = beta2 * ((x - center) * 2 * np.pi)**2 / 2
+
+        return phase
+
 
     def set3rdDisper(self, d2, d3, center=1560, centerunit='nm', preview_plot=False):
         if centerunit.upper() == 'NM':
