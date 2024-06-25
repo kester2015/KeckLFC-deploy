@@ -38,7 +38,7 @@ class YOKOGAWAaq6375(Device):
         self.write(f':SENSE:WAVELENGTH:STOP {wavelength_stop_nm}NM')
 
     def set_sensitivity(self, sensitivity):
-        self.instrument.write(f':SENSE:SENSE {sensitivity}')
+        self.write(f':SENSE:SENSE {sensitivity}')
 
     def set_sampling_step(self, sampling_step_nm):
         self.write(f':SENSE:SWEEP:STEP {sampling_step_nm}NM')
@@ -96,6 +96,13 @@ class YOKOGAWAaq6375(Device):
         xdata = self.get_Xdata(trace)
         ydata = self.get_Ydata(trace)
         return xdata, ydata
+    
+    def single(self):
+        self.write(":INITiate:SMODe SINGle")
+        self.write(":INITiate")
+
+    def stop(self):
+        self.write(":ABOR")
 
 
 if __name__ == '__main__':
