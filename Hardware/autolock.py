@@ -104,14 +104,7 @@ class AutoRbLock():
     def scan_offset(self,step):
         amp=self.fg.get_channel_amplitude(channel=1)
         offset=self.fg.get_channel_offset(channel=1)
-        maxp=[]
-        for i in list(range(11)):
-            ofset=offset+(i-5)*0.1*amp
-            self.fg.set_channel_parameters(channel=1, freq=10, amp=amp, offset=ofset, phase=0)
-            time.sleep(24)
-            x,y=self.get_trace()
-            _,newoff,maxp1,maxv=self.cvv(x,y,step)
-            maxp.append([maxv,maxp1,newoff])
+         
         
         #maxp=np.array(maxp)
         biggest=sorted(maxp,key=lambda x:x[0],reverse=True)
