@@ -576,12 +576,12 @@ class KeckLFC(object):
         if test_mode: return
         # return
         rfamp_threshold_v=30
-        rfamp_threshold_i=4.5
+        rfamp_threshold_i=4.0
         if value == None:
             if self.keywords['LFC_RFAMP_ONOFF'] == 1:
                 voltage=self.LFC_RFAMP_V()
                 current=self.LFC_RFAMP_I()
-                if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-rfamp_threshold_i)>0.1:
+                if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-rfamp_threshold_i)>0.15:
                     self.LFC_CLOSE_ALL(1)
                     self.__sendemail('RF amplifier is off due to over voltage or over current')
                     return 1
@@ -610,8 +610,9 @@ class KeckLFC(object):
             self.LFC_PTAMP_ONOFF(0)
             self.LFC_EDFA23_ONOFF(0)
             self.LFC_EDFA27_ONOFF(0)
-            self.LFC_RFAMP_ONOFF(0)
+            
             self.LFC_RFOSCI_ONOFF(0)
+            self.LFC_RFAMP_ONOFF(0)
             self.LFC_CLARITY_ONOFF(0)
             self.__sendemail('All devices are closed')
 
@@ -1838,15 +1839,20 @@ class KeckLFC(object):
         if test_mode: return
 
         if value == 1:
-            self.LFC_RFOSCI_DEFAULT(1)
-            self.LFC_RFOSCI_ONOFF(1)
-
-            self.LFC_RFOSCI_MONITOR()
 
             self.LFC_RFAMP_DEfAULT(1)
             self.LFC_RFAMP_ONOFF(1)
 
             self.LFC_RFAMP_MONITOR()
+
+            print('RF amp start succuess')
+
+            self.LFC_RFOSCI_DEFAULT(1)
+            self.LFC_RFOSCI_ONOFF(1)
+
+            self.LFC_RFOSCI_MONITOR()
+
+
 
             freq=self.LFC_PENDULEM_FREQ(1)
 
@@ -1880,6 +1886,8 @@ class KeckLFC(object):
                     self.__sendemail('EDFA27 input power is not correct')
             else:
                 self.__sendemail('Pendulum frequency is not correct')
+
+        
 
         return 0
 
