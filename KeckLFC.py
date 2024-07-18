@@ -195,7 +195,7 @@ class KeckLFC(object):
     def __LFC_RFAMP_connect(self, value=None):
         '''Connect to RF amplifier PS 30V 4A'''
         from Hardware.InstekGppDCSupply import InstekGppDCSupply
-        return InstekGppDCSupply(addr=f'ASRL{4}::INSTR', name='RF amplifier PS 30V 4A')
+        return InstekGppDCSupply(addr=f'ASRL{24}::INSTR', name='RF amplifier PS 30V 4A')
     
     def __LFC_RFOSCI_connect(self, value=None):
         '''Connect to RF oscillator PS, CH2 15V, CH3 1V'''
@@ -1078,7 +1078,7 @@ class KeckLFC(object):
             return 0
         
     def LFC_RFAMP_ONOFF(self, value=None):# test r
-        if test_mode: return
+        #if test_mode: return
         rfampPS = self.__LFC_RFAMP_connect()
         
         if value == None:
@@ -1095,7 +1095,7 @@ class KeckLFC(object):
             self.__sleep(0.5)
             rfampPS_i=rfampPS.activation1
             rfampPS.disconnect()
-            return rfampPS_i
+            return 0
 
     def LFC_RFOSCI_I(self, value=None): #test r
         if test_mode: return
@@ -1147,7 +1147,7 @@ class KeckLFC(object):
             self.__sleep(0.5)
             rfoscPS_i=rfoscPS.Vout2
             rfoscPS.disconnect()
-            return rfoscPS_i
+            return 0
         
     def LFC_RFOSCI_DEFAULT(self, value=None): #test r
         if test_mode: return
@@ -1191,7 +1191,7 @@ class KeckLFC(object):
             self.__sleep(0.5)
             rfoscPS_i=rfoscPS.activation
             rfoscPS.disconnect()
-            return rfoscPS_i
+            return 0
 
     def LFC_IM_BIAS(self, value=None): #test r
         if test_mode: return
@@ -1217,7 +1217,7 @@ class KeckLFC(object):
             IM_bias=servo_IM.get_output_voltage()
 
             srs.disconnect()
-            return IM_bias
+            return 0
 
     def LFC_IM_RF_ATT(self, value=None): #test r
         if test_mode: return
@@ -1469,7 +1469,7 @@ class KeckLFC(object):
             return 0  # return
         
     def LFC_YJ_SHUTTER(self, value=None): #tets r w #err2
-        #if test_mode: return
+        if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
 
