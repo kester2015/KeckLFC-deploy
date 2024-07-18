@@ -1794,9 +1794,64 @@ class KeckLFC(object):
         if test_mode: return
         return
     
-    def LFC_IM_AUTO_LOCK(self, value=None):#TBD
+    def LFC_IM_AUTO_LOCK(self, value=None):#TBD big problem
         if test_mode: return
+
+        if value == 1:
+            osa = self.__LFC_OSA_connect()
+            srs = self.__LFC_servo_connect()
+            
+            srs.connect()
+            servo_IM = self.__LFC_IM_LOCK_connect(srs)
+            osa.connect()
+            servo_IM.output_mode='man'
+            servo_IM.output_upperlim = 3
+            servo_IM.output_lowerlim = -3
+            servo_IM.prop_gain=4  #-2
+            servo_IM.intg_gain=0.1   #1
+            score_best = 0
+            for v in np.arange(-2,2,0.1):
+                servo_IM.manual_output=v
+                self.__sleep(0.1)
+                x,y=osa.get_trace()
+                score_now = self.__score_eo_comb(x,y)
+                if score_now>score_best:
+                    score_best=score_now
+                    best_v=v
+            servo_IM.manual_output=best_v
+            set_point=servo_IM.measure_input
+
+            servo_IM.outoffset=best_v   
+            servo_IM.set_setpoint(set_point)
+            servo_IM.output_mode='pid'
+
         return
+    
+    def LFC_IM_ATTEN_OPTIMIZE(self, value=None):#TBD
+        if test_mode: return
+
+        if value == 1:
+            osa = self.__LFC_OSA_connect()
+            #srs = self.__LFC_servo_connect()
+            rfoscPS = self.__LFC_RFOSCI_connect()
+            rfoscPS.connect()
+            #srs.connect()
+            #servo_IM = self.__LFC_IM_LOCK_connect(srs)
+            osa.connect()
+            
+            score_best = 0
+            
+            for v in np.arange(0,1,0.02):
+                rfoscPS.Vset3=v
+                #servo_IM.manual_output=i
+                self.__sleep(0.1)
+                x,y=osa.get_trace()
+                score_now = self.__score_eo_comb(x,y)
+                if score_now>score_best:
+                    score_best=score_now
+                    best_v=v
+            rfoscPS.Vset3=best_v
+        return 0
 
     def LFC_WSP_OPTIMIZE(self, value=None):#TBD
         if test_mode: return
@@ -1851,8 +1906,9 @@ class KeckLFC(object):
             self.LFC_RFOSCI_ONOFF(1)
 
             self.LFC_RFOSCI_MONITOR()
+            self.LFC_RFAMP_MONITOR()
 
-
+            print('RF osci start succuess')
 
             freq=self.LFC_PENDULEM_FREQ(1)
 
@@ -1863,11 +1919,13 @@ class KeckLFC(object):
                 edfa27input=self.LFC_EDFA27_INPUT_POWER()
 
                 if (edfa27input<5) & (edfa27input>1):
+                    print('EDFA27 input power is correct')
                     self.LFC_EDFA27_AUTO_ON(1)
                     self.LFC_WSP_PHASE(1) #TBD
 
                     edfa23input=self.LFC_EDFA23_INPUT_POWER()
                     if (edfa23input<10) & (edfa23input>1):
+                        print('EDFA23 input power is correct')
                         self.LFC_EDFA23_AUTO_ON(1)
                         
                         self.LFC_IM_AUTO_LOCK(1)
@@ -1875,9 +1933,11 @@ class KeckLFC(object):
                         ptamp_input_status=self.LFC_PTAMP_LATCH()
 
                         if ptamp_input_status==1:
-                            return 11
+                            print('All devices are ready')
+                            return 0
                         if ptamp_input_status==0:
-                            return 10
+                            print('PTAMP input value is not correct')
+                            return 0
                         else:
                             self.__sendemail('PTAMP input value is not correct')
                     else:
