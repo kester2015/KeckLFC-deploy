@@ -133,6 +133,7 @@ class KeckLFC(object):
         
         try:
             ## Execute write block
+            print('executing the write block, set ', val, 'to ',key)
             status = self.funcs[key](value = val)
             # If successful, store the keyword value
             if status == 0: 
@@ -1077,9 +1078,11 @@ class KeckLFC(object):
         else:
             return 0
         
-    def LFC_RFAMP_ONOFF(self, value=None):# test r
-        #if test_mode: return
-        rfampPS = self.__LFC_RFAMP_connect()
+    def LFC_RFAMP_ONOFF(self, value=None):# err
+        if test_mode: return
+        try:
+            rfampPS = self.__LFC_RFAMP_connect()
+        except Exception as e: print(e)
         
         if value == None:
             rfampPS.connect()
@@ -1090,11 +1093,19 @@ class KeckLFC(object):
 
         else:
             #return 0 # not testing MODIFY for now
-            rfampPS.connect()
-            rfampPS.activation1=value
-            self.__sleep(0.5)
-            rfampPS_i=rfampPS.activation1
-            rfampPS.disconnect()
+            try:
+                rfampPS.connect()
+
+                if value == True: 
+                    rfampPS.activation1=1
+                if value == False:
+                    rfampPS.activation1=0
+                self.__sleep(0.5)
+                rfampPS_i=rfampPS.activation1
+
+                rfampPS.disconnect()
+            except Exception as e:
+                print(e)
             return 0
 
     def LFC_RFOSCI_I(self, value=None): #test r
@@ -1469,7 +1480,7 @@ class KeckLFC(object):
             return 0  # return
         
     def LFC_YJ_SHUTTER(self, value=None): #tets r w #err2
-        if test_mode: return
+        #if test_mode: return
         #return
         arduino = self.__LFC_ARDUINO_connect()
 
@@ -1478,6 +1489,7 @@ class KeckLFC(object):
             arduino.connect()
             self.__sleep(0.2)
             message=arduino.get_YJ_info()
+            print(message)
             
             if message in ['YJState\r\r\nYJ shutter is UP, YJ is shutted.']:
                 message = 0
@@ -1487,27 +1499,67 @@ class KeckLFC(object):
             arduino.disconnect()
             return message
         
-        if value == 1:
-
+        if value !=None:
             ## Yoo Jung's comments
             ## this will be called when keyword value = 1 is written.
             ## but then this will cause errors because you return 1
-            
             # print(f'com={i}')
-            arduino.connect()
-            self.__sleep(0.2)
-            arduino.pass_YJ()
-            arduino.disconnect()
+            
+            print(value)
+
+            if value==False:
+                arduino.connect()
+                print(value)
+                self.__sleep(0.2)
+
+                arduino.shut_YJ()
+                #arduino.shut_YJ()
+                #arduino.query("YJShut")
+                print('YJ shut')
+                message=arduino.get_YJ_info()
+                print(message)
+                arduino.disconnect()
+
+            if value==True:
+                arduino.connect()
+                self.__sleep(0.2)
+                arduino.pass_YJ()
+                print('YJ pass')
+                message=arduino.get_YJ_info()
+                print(message)
+                arduino.disconnect()
+
             return 0 # 1
 
-        elif value == 0:
+        # elif value == 0:
+        #     arduino.connect()
+        #     print(value)
+        #     self.__sleep(0.2)
+        #     arduino.shut_YJ()
+        #     print('YJ shut')
+        #     arduino.disconnect()
+        #     return 0  # return
+        # else:
+        #     return #KTLarray('YJ shutter value =1 or 0')
+    def LFC_YJ_SHUT(self,value=None):
+        #if test_mode: return
+
+        if value==None:
+            return 0
+
+        if value==0:
+            arduino = self.__LFC_ARDUINO_connect()
+
             arduino.connect()
+
             self.__sleep(0.2)
+
             arduino.shut_YJ()
+
             arduino.disconnect()
-            return 0  # return
-        else:
-            return #KTLarray('YJ shutter value =1 or 0')
+
+            print('YJ shut is go through')
+            return 0
         
     def LFC_YJ_ONOFF(self, value=None): #test r w
         if test_mode: return

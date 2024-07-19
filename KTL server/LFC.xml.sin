@@ -69,7 +69,7 @@
 	</keyword>
 	<keyword>
 		<name>LFC_YJ_SHUTTER</name>
-		<type>enumerated</type>
+		<type>boolean</type>
 		<help level="brief">YJ shutter status</help>
 		<help level="verbose">YJ shutter status</help>
 		<capability type="write">True</capability>
@@ -81,6 +81,19 @@
 			<entry>
 				<key>1</key>
 				<value>pass light,1</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_YJ_SHUT</name>
+		<type>enumerated</type>
+		<help level="brief">YJ shutter status</help>
+		<help level="verbose">YJ shutter status</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>shut light, 0</value>
 			</entry>
 		</values>
 	</keyword>
