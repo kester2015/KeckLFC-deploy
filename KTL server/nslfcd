@@ -331,7 +331,7 @@ def setupKeywords (service):
         # define poll rates
         subclass.slow_period = p
         subclass.fast_period = fp
-        subclass.rapid_checks = 1 # Start with initial rapid check
+        subclass.rapid_checks = 0 # Start with initial rapid check
     
 
 #

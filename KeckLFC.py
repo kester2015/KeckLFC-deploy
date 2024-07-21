@@ -100,6 +100,9 @@ class KeckLFC(object):
 
         self.funcs = func_dict
 
+        # define arduino object
+        self.arduino = None
+
 
     ########## Below are new functions, will be needed for KTL. ##########
 
@@ -1444,11 +1447,16 @@ class KeckLFC(object):
         ## then the value should be either 0 or 1
         ## if you want to keep it as enumerated type, change the type and entries in LFCm.xml.sin
 
+        if self.arduino == None: 
+            # define the arduino object
+            self.arduino = self.__LFC_ARDUINO_connect()
+            # connect
+            self.arduino.connect()
         #return
-        arduino = self.__LFC_ARDUINO_connect()
+        # arduino = self.__LFC_ARDUINO_connect()
         if value == None:
-            arduino.connect()
-            message=arduino.get_relay_status()
+            # arduino.connect()
+            message=self.arduino.get_relay_status()
             self.__sleep(0.5)
             if message =="relay sending OK_to_Amplify signal to amplifier":
                 message=1
@@ -1460,7 +1468,7 @@ class KeckLFC(object):
                 message=3
             else:
                 message=4
-            arduino.disconnect()
+            # arduino.disconnect()
             return message
         
         elif value == 1:
@@ -1468,9 +1476,9 @@ class KeckLFC(object):
             ## what is this block supposed to do?
 
             # print(f'com={i}')
-            arduino.connect()
-            arduino.reset_relay_latch()
-            arduino.disconnect()
+            # arduino.connect()
+            self.arduino.reset_relay_latch()
+            # arduino.disconnect()
             return 0
 
         else:
@@ -1480,23 +1488,28 @@ class KeckLFC(object):
             return 0  # return
         
     def LFC_YJ_SHUTTER(self, value=None): #tets r w #err2
-        #if test_mode: return
+        if test_mode: return
         #return
-        arduino = self.__LFC_ARDUINO_connect()
+        # arduino = self.__LFC_ARDUINO_connect()
+        if self.arduino == None: 
+            # define the arduino object
+            self.arduino = self.__LFC_ARDUINO_connect()
+            # connect
+            self.arduino.connect()
 
         if value == None:
 
-            arduino.connect()
+            # arduino.connect()
             self.__sleep(0.2)
-            message=arduino.get_YJ_info()
-            print(message)
+            message=self.arduino.get_YJ_info()
+            print('In reading block. immediate message from get_YJ_info():', message)
             
             if message in ['YJState\r\r\nYJ shutter is UP, YJ is shutted.']:
                 message = 0
             if message in ['YJState\r\r\nYJ shutter is DOWN, YJ is passing.']:
                 message = 1
             # fill in read functions
-            arduino.disconnect()
+            #arduino.disconnect()
             return message
         
         if value !=None:
@@ -1505,29 +1518,29 @@ class KeckLFC(object):
             ## but then this will cause errors because you return 1
             # print(f'com={i}')
             
-            print(value)
+            print('In writing block. the input value:', value)
 
             if value==False:
-                arduino.connect()
+                # arduino.connect()
                 print(value)
                 self.__sleep(0.2)
 
-                arduino.shut_YJ()
+                self.arduino.shut_YJ()
                 #arduino.shut_YJ()
                 #arduino.query("YJShut")
                 print('YJ shut')
-                message=arduino.get_YJ_info()
-                print(message)
-                arduino.disconnect()
+                message=self.arduino.get_YJ_info()
+                print('In writing block. the immediate message from get_YJ_info():', message)
+                #arduino.disconnect()
 
             if value==True:
-                arduino.connect()
+                # arduino.connect()
                 self.__sleep(0.2)
-                arduino.pass_YJ()
+                self.arduino.pass_YJ()
                 print('YJ pass')
-                message=arduino.get_YJ_info()
-                print(message)
-                arduino.disconnect()
+                message=self.arduino.get_YJ_info()
+                print('In writing block. the immediate message from get_YJ_info():', message)
+                #arduino.disconnect()
 
             return 0 # 1
 
@@ -1554,11 +1567,11 @@ class KeckLFC(object):
 
             self.__sleep(0.2)
 
-            arduino.shut_YJ()
+            #arduino.shut_YJ()
 
             arduino.disconnect()
 
-            print('YJ shut is go through')
+            print('YJ shut is disconnected')
             return 0
         
     def LFC_YJ_ONOFF(self, value=None): #test r w
@@ -1578,7 +1591,7 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None): #test r w
-        if test_mode: return
+        #if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
@@ -1586,6 +1599,10 @@ class KeckLFC(object):
             switch.connect()
             state=switch.check_status()
             switch.disconnect()
+            # if state==1:
+            #     state='YJ'
+            # if state==2:
+            #     state=='HK'
             print('LFC_2BY2_SWITCH read block called. ', state)
             return state
         else:

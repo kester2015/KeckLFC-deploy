@@ -61,7 +61,11 @@ class LfcI(Demo.Lfc):
         return self.keyword_names
 
     def shutdown(self, current):
+        print('server shutting down -- is this called?')
         self.mkl.stop_clock()
+        if self.mkl.arduino != None: 
+            self.mkl.arduino.disconnect()
+            print('arduino disconnected!')
         current.adapter.getCommunicator().shutdown()
 
 
