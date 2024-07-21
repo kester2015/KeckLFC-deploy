@@ -6,6 +6,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import sys
 import os
+
+from scipy.signal import find_peaks
+
+import os
 icetest_mode = False
 test_mode = True
 
@@ -102,6 +106,9 @@ class KeckLFC(object):
 
         # define arduino object
         self.arduino = None
+        # define waveshaer object
+        self.ws = None
+        self.ws_d2 = None
 
 
     ########## Below are new functions, will be needed for KTL. ##########
@@ -367,6 +374,27 @@ class KeckLFC(object):
         # close session
         session.quit()
 
+    def __score_eo_comb(self,osa):
+        
+        osa.wlstart=1553
+        osa.wlstop=1567
+        osa.reflevel=-40
+        osa.set_resolution(0.06)
+        
+        osa.single()
+        self.__sleep(0.5)
+        x,y=osa.get_trace()
+
+        
+        #x1=x[np.where((x>start_wl) & (x<stop_wl))] 
+        y1=y[np.where((x>1553) & (x<1567))]
+        
+        hight_shreshold=-50
+        peaks,_ = find_peaks(y1, height=hight_shreshold, distance=2, width=0.02e-9)
+        num_peaks = len(peaks)
+
+        score=np.std(y1[peaks])*-1
+        return score
 
 #--------------------------connection above----------------------------------------------
 #--------------------------functions below----------------------------------------------
@@ -573,8 +601,7 @@ class KeckLFC(object):
                     self.__sendemail('RF oscillator is off due to over voltage or over current')
                     return 1
 
-        else:
-            return 0
+        return 0
         
     def LFC_RFAMP_MONITOR(self,value=None): #TBD
         if test_mode: return
@@ -583,15 +610,22 @@ class KeckLFC(object):
         rfamp_threshold_i=4.0
         if value == None:
             if self.keywords['LFC_RFAMP_ONOFF'] == 1:
-                voltage=self.LFC_RFAMP_V()
-                current=self.LFC_RFAMP_I()
-                if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-rfamp_threshold_i)>0.15:
-                    self.LFC_CLOSE_ALL(1)
-                    self.__sendemail('RF amplifier is off due to over voltage or over current')
-                    return 1
+                if self.keywords['LFC_RFOSCI_ONOFF'] == 1:
+                    voltage=self.LFC_RFAMP_V()
+                    current=self.LFC_RFAMP_I()
+                    if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-rfamp_threshold_i)>0.15:
+                        self.LFC_CLOSE_ALL(1)
+                        self.__sendemail('RF amplifier is off due to over voltage or over current')
+                        return 1
+                if self.keywords['LFC_RFOSCI_ONOFF'] == 0:
+                    voltage=self.LFC_RFAMP_V()
+                    current=self.LFC_RFAMP_I()
+                    if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-0.7)>0.15:
+                        self.LFC_CLOSE_ALL(1)
+                        self.__sendemail('RF amplifier is off due to over voltage or over current')
+                        return 1
                 
-        else:
-            return 0
+        return 0
         
     def LFC_RF_FREQ_MONITOR(self,value=None): #TBD
         if test_mode: return
@@ -1067,19 +1101,18 @@ class KeckLFC(object):
             return 
             #rio.printStatus(
 
-        elif value==1:
+        if value==1:
             #return 0 # not testing MODIFY for now
             rfampPS.connect()
             rfampPS.Vout1=30
             self.__sleep(0.5)
-            rfampPS.Iout1=5
+            rfampPS.Iout1=4.2
             rfampPS_v=rfampPS.Vout1
             rfampPS_i=rfampPS.Iout1
             #print(f'LFC_RFAMP_V : +{rfampPS_i}V')
             rfampPS.disconnect()
-            return 1
-        else:
             return 0
+        
         
     def LFC_RFAMP_ONOFF(self, value=None):# err
         if test_mode: return
@@ -1174,7 +1207,7 @@ class KeckLFC(object):
             # rfoscPS.disconnect()
             return 
             
-        elif value==1:
+        if value==1:
             rfoscPS = self.__LFC_RFOSCI_connect()
             rfoscPS.connect()
             rfoscPS.Vset2=15
@@ -1184,8 +1217,6 @@ class KeckLFC(object):
             rfoscPS_v=rfoscPS.Vout2
             rfoscPS_i=rfoscPS.Iout2
             rfoscPS.disconnect()
-            return 1
-        else:
             return 0
         
     def LFC_RFOSCI_ONOFF(self, value=None): #test r
@@ -1262,14 +1293,23 @@ class KeckLFC(object):
     def LFC_WSP_PHASE(self, value=None):#TBD
         if test_mode: return
         #return
+        if self.ws == None:
+            self.ws = self.__LFC_WSP_connect()
+            self.ws.connect()
+
+        if value == None:
+            return self.ws_d2
+
         
         if value != None:
-            ws = self.__LFC_WSP_connect()
-            ws.connect()
+            # ws = self.__LFC_WSP_connect()
+            # ws.connect()
 
-            d2 = value
-            ws.set3rdDisper(d2,d3=0.)
-            ws.disconnect()
+            self.ws_d2 = value
+            self.ws.set3rdDisper(self.ws_d2,d3=0)
+            self.ws.setBandPass(span=5)
+            self.ws.writeProfile()
+            #self.ws.disconnect()
             return 0
 
         else:
@@ -1314,15 +1354,9 @@ class KeckLFC(object):
             self.__sleep(0.5)
             pre_p=ptamp.preAmp
             ptamp.disconnect()
-            return pre_p
-        elif value == 'default':
-            ptamp.connect()
-            ptamp.preAmp = '600mA'
-            self.__sleep(0.5)
-            pre_p=ptamp.preAmp
-            ptamp.disconnect()
-            return pre_p
-        else:
+            return 0
+        
+        if value ==  None:
             #return 0 # not testing MODIFY for now
             ptamp.connect()
             pre_p=ptamp.preAmp
@@ -1338,15 +1372,14 @@ class KeckLFC(object):
             # pre_p=ptamp.preAmp
             # ptamp.disconnect()
             return 
-        elif value==1:
+        if value==1:
             ptamp.connect()
             ptamp.preAmp = '600mA'
             self.__sleep(0.5)
             pre_p=ptamp.preAmp
             ptamp.disconnect()
-            return 1
-        else:
             return 0
+        
 
     
     
@@ -1384,16 +1417,10 @@ class KeckLFC(object):
             self.__sleep(0.5)
             ptamp1=ptamp.pwrAmp
             ptamp.disconnect()
-            return ptamp1
+            return 0
 
-        elif value == 'default':
-            ptamp.connect()
-            ptamp.pwrAmp = '3.8A'
-            self.__sleep(0.5)
-            ptamp1=ptamp.pwrAmp
-            ptamp.disconnect()
-            return ptamp1
-        else:
+        
+        if value == None:
             #return 0 # not testing MODIFY for now
             ptamp.connect()
             ptamp=ptamp.pwrAmp
@@ -1409,15 +1436,14 @@ class KeckLFC(object):
             # ptamp1=ptamp.pwrAmp
             # ptamp.disconnect()
             return 
-        elif value == 1:
+        if value == 1:
             ptamp.connect()
-            ptamp.pwrAmp = '4.1A'
+            ptamp.pwrAmp = '3.9A'
             self.__sleep(0.5)
             ptamp1=ptamp.pwrAmp
             ptamp.disconnect()
-            return 1
-        else:
             return 0
+        
 
     def LFC_PTAMP_ONOFF(self, value=None):# test r
         if test_mode: return
@@ -1430,9 +1456,9 @@ class KeckLFC(object):
             self.__sleep(0.5)
             ptact = ptamp.activation
             ptamp.disconnect()
-            return ptact
+            return 0
 
-        else:
+        if value == None:
             #return 0 # not testing MODIFY for now
             ptamp.connect()
             ptact=ptamp.activation
@@ -1823,15 +1849,25 @@ class KeckLFC(object):
             return KTLarray(state)
         #TBD
 
-    def LFC_PENDULEM_FREQ(self, value=None):
+    def LFC_PENDULEM_FREQ_MONITOR(self, value=None):
         if test_mode: return
         pen = self.__LFC_PENDULEM_connect()
         if value == None:
-            pen.connect()
-            self.__sleep(0.5)
-            pen.run()
-            freq=pen.measFreq(1)
-            return freq
+
+            if (self.keywords['LFC_RFOSCI_ONOFF'] == 1) & (self.keywords['LFC_RFAMP_ONOFF'] == 1):
+                pen.connect()
+                self.__sleep(0.5)
+                pen.run()
+                freq=pen.measFreq('c')
+                pen.disconnect()
+                if np.abs(freq-16e9)>1000:
+                    self.LFC_CLOSE_ALL()
+                    self.__sendemail('Pendulum frequency is not 16GHz')
+                    return 0
+
+                
+                return freq
+            
         #TBD
 
         
@@ -1882,8 +1918,8 @@ class KeckLFC(object):
             for v in np.arange(-2,2,0.1):
                 servo_IM.manual_output=v
                 self.__sleep(0.1)
-                x,y=osa.get_trace()
-                score_now = self.__score_eo_comb(x,y)
+                #x,y=osa.get_trace()
+                score_now = self.__score_eo_comb(osa)
                 if score_now>score_best:
                     score_best=score_now
                     best_v=v
@@ -1914,8 +1950,8 @@ class KeckLFC(object):
                 rfoscPS.Vset3=v
                 #servo_IM.manual_output=i
                 self.__sleep(0.1)
-                x,y=osa.get_trace()
-                score_now = self.__score_eo_comb(x,y)
+                #x,y=osa.get_trace()
+                score_now = self.__score_eo_comb(osa)
                 if score_now>score_best:
                     score_best=score_now
                     best_v=v
@@ -1926,35 +1962,48 @@ class KeckLFC(object):
         if test_mode: return
         return
     
-    def LFC_EDFA27_INPUT_POWER(self, value=None): #r
+    def LFC_EDFA27_INPUT_POWER_MONITOR(self, value=None): #r
         if test_mode: return
         amonic27 = self.__LFC_EDFA27_connect()
         if value == None:
-            amonic27.connect()
-            input_power=amonic27.inputPowerCh1
-            amonic27.disconnect()
+
+            if (self.keywords['LFC_CLARITY_ONOFF'] == 1):
+                
+                amonic27.connect()
+                input_power=amonic27.inputPowerCh1
+                amonic27.disconnect()
+
+                if (input_power>10) & (input_power<1):
+                    self.__sendemail('EDFA27 input power is not correct')
+
             return input_power
-        else:
-            return 0
         
-    def LFC_EDFA23_INPUT_POWER(self, value=None):#r
+        
+    def LFC_EDFA23_INPUT_POWER_MONITOR(self, value=None):#r
         if test_mode: return
         amonic23 = self.__LFC_EDFA23_connect()
         if value == None:
-            amonic23.connect()
-            input_power=amonic23.inputPowerCh1
-            amonic23.disconnect()
+            if (self.keywords['LFC_EDFA27_ONOFF'] == 1):
+                amonic23.connect()
+                input_power=amonic23.inputPowerCh1
+                amonic23.disconnect()
+                if (input_power>10) & (input_power<1):
+                    self.__sendemail('EDFA23 input power is not correct')
             return input_power
-        else:
-            return 0
         
     def LFC_ARDUINO_GET_INPUT(self, value=None):  
         if test_mode: return
-        arduino = self.__LFC_ARDUINO_connect()
+        if self.arduino == None: 
+            # define the arduino object
+            self.arduino = self.__LFC_ARDUINO_connect()
+            # connect
+            self.arduino.connect()
+
+        
         if value == None:
-            arduino.connect()
-            input=arduino.get_current_voltage()
-            arduino.disconnect()
+            #arduino.connect()
+            input=self.arduino.get_current_voltage()
+            #arduino.disconnect()
             return input
         else:
             return 0
@@ -1965,66 +2014,63 @@ class KeckLFC(object):
         if value == 1:
 
             self.LFC_RFAMP_DEfAULT(1)
+            self.__sleep(0.1)
             self.LFC_RFAMP_ONOFF(1)
+            self.__sleep(0.1)
 
-            self.LFC_RFAMP_MONITOR()
+            rfamp_monitor_return=self.LFC_RFAMP_MONITOR()
 
-            print('RF amp start succuess')
+            if rfamp_monitor_return==0:
+                print('RF amp start succuess')
+                self.LFC_RFOSCI_DEFAULT(1)
+                self.__sleep(0.1)
+                self.LFC_RFOSCI_ONOFF(1)
+                self.__sleep(0.1)
+                rfosc_monitor_return=self.LFC_RFOSCI_MONITOR()
+                rfamp_monitor_return=self.LFC_RFAMP_MONITOR()
 
-            self.LFC_RFOSCI_DEFAULT(1)
-            self.LFC_RFOSCI_ONOFF(1)
+                if (rfosc_monitor_return==0) & (rfamp_monitor_return==0):
 
-            self.LFC_RFOSCI_MONITOR()
-            self.LFC_RFAMP_MONITOR()
+                    print('RF osci start succuess')
+                    self.LFC_PENDULEM_FREQ_MONITOR()
+                    
+                    self.LFC_CLARITY_ONOFF(1)
+                    #self.LFC_EDFA27_P_DEFAULT(1)
+                    edfa27_input=self.LFC_EDFA27_INPUT_POWER_MONITOR()
+                    if (edfa27_input>1) & (edfa27_input<10):
 
-            print('RF osci start succuess')
+                        print('EDFA27 input power is correct')
+                        self.LFC_EDFA27_AUTO_ON(1)
+                        self.LFC_WSP_PHASE(1) #TBD
 
-            freq=self.LFC_PENDULEM_FREQ(1)
+                        edfa23_input=self.LFC_EDFA23_INPUT_POWER_MONITOR()
 
-            if np.abs(freq-16e9)<10:
-
-                self.LFC_CLARITY_ONOFF(1)
-                #self.LFC_EDFA27_P_DEFAULT(1)
-                edfa27input=self.LFC_EDFA27_INPUT_POWER()
-
-                if (edfa27input<5) & (edfa27input>1):
-                    print('EDFA27 input power is correct')
-                    self.LFC_EDFA27_AUTO_ON(1)
-                    self.LFC_WSP_PHASE(1) #TBD
-
-                    edfa23input=self.LFC_EDFA23_INPUT_POWER()
-                    if (edfa23input<10) & (edfa23input>1):
-                        print('EDFA23 input power is correct')
-                        self.LFC_EDFA23_AUTO_ON(1)
+                        if (edfa23_input>1) & (edfa23_input<10):
                         
-                        self.LFC_IM_AUTO_LOCK(1)
+                            print('EDFA23 input power is correct')
+                            self.LFC_EDFA23_AUTO_ON(1)
+                            self.LFC_IM_AUTO_LOCK(1)
+                            ptamp_input_status=self.LFC_PTAMP_LATCH(1)
 
-                        ptamp_input_status=self.LFC_PTAMP_LATCH()
-
-                        if ptamp_input_status==1:
-                            print('All devices are ready')
-                            return 0
-                        if ptamp_input_status==0:
-                            print('PTAMP input value is not correct')
-                            return 0
+                            if ptamp_input_status==1:
+                                print('All devices are ready')
+                                return 0
+                            
+                            else: 
+                                print('PTAMP input value is not correct')
+                                self.__sendemail('PTAMP input value is not correct')
+                                return 0
                         else:
-                            self.__sendemail('PTAMP input value is not correct')
+                            self.__sendemail('EDFA23 input power is not correct')
                     else:
-                        self.__sendemail('EDFA23 input power is not correct')
+                        self.__sendemail('EDFA27 input power is not correct')
                 else:
-                    self.__sendemail('EDFA27 input power is not correct')
-            else:
-                self.__sendemail('Pendulum frequency is not correct')
+                    self.__sendemail('RF osci start failed')
 
-        
+            else:
+                self.__sendemail('RF amp start failed')
 
         return 0
-
-
-
-
-
-
 
 
    
