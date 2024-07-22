@@ -125,6 +125,7 @@ def shutdown (*ignored):
     if main.client != None:
             
         try:
+            main.client.twoway.shutdown()
             main.client.twoway = None
 
         except:
