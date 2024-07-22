@@ -381,9 +381,9 @@ class KeckLFC(object):
         osa.reflevel=-40
         osa.set_resolution(0.06)
         
-        osa.single()
+        osa.Single()
         self.__sleep(0.5)
-        x,y=osa.get_trace()
+        x,y=osa.get_trace('a')
 
         
         #x1=x[np.where((x>start_wl) & (x<stop_wl))] 
