@@ -67,6 +67,7 @@ class LfcI(Demo.Lfc):
             self.mkl.arduino.disconnect()
             print('arduino disconnected!')
         current.adapter.getCommunicator().shutdown()
+        
 
 
 with Ice.initialize(sys.argv, 'config.server') as communicator:
