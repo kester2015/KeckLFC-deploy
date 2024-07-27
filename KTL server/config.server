@@ -20,7 +20,7 @@ Lfc.Endpoints=tcp -p 10000
 #
 # Warn about connection exceptions
 #
-Ice.Warn.Connections=2
+Ice.Warn.Connections=1
 
 #
 # Network Tracing

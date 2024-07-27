@@ -60,14 +60,20 @@ class LfcI(Demo.Lfc):
         ''' This function is used by the dispatcher '''
         return self.keyword_names
 
-    def shutdown(self, current):
-        print('server shutting down -- is this called?')
-        self.mkl.stop_clock()
+    def cleanup(self, current):
+        print('cleaning up')
+        # self.mkl.stop_clock()
         if self.mkl.arduino != None: 
             self.mkl.arduino.disconnect()
             print('arduino disconnected!')
+
+        # the command below shuts down the server. maybe we don't want that
+        # when the dispatcher shuts down
+        # current.adapter.getCommunicator().shutdown()
+    
+    def shutdown(self, current):
+        ''' currently this is not used - dispatcher shutting down the server '''
         current.adapter.getCommunicator().shutdown()
-        
 
 
 with Ice.initialize(sys.argv, 'config.server') as communicator:

@@ -1581,7 +1581,7 @@ class KeckLFC(object):
         # else:
         #     return #KTLarray('YJ shutter value =1 or 0')
     def LFC_YJ_SHUT(self,value=None):
-        #if test_mode: return
+        if test_mode: return
 
         if value==None:
             return 0
@@ -1617,7 +1617,7 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None): #test r w
-        #if test_mode: return
+        if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
@@ -2290,8 +2290,9 @@ class KeckLFC(object):
 
         if value == None:
             if self.keywords['TESTMODE'] == True:
-                print('TESTENUM read block called. moving on to next state ...')
-                return (self.keywords['TESTENUM'] % 3) + 1
+                if self.keywords['TESTENUM'] != None:
+                    print('TESTENUM read block called. moving on to next state ...')
+                    return (self.keywords['TESTENUM'] % 3) + 1
 
         else:
             if self.keywords['TESTMODE'] == True:

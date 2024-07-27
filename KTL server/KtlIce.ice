@@ -24,6 +24,7 @@ module Demo
         void modifiedkeyword(string name, string value);
         string receive(string name);
         int errorstate();
+        void cleanup();
         void shutdown();
     }
 }

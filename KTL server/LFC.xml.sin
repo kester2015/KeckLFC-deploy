@@ -635,7 +635,7 @@
 		</values>
 	</keyword>
 	<keyword>
-		<name>LFC_EDFA27_INPUT_POWER</name>
+		<name>LFC_EDFA27_INPUT_POWER_MONITOR</name>
 		<type>double</type>
 		<help level="brief">EDFA27 INPUT POWER check</help>
 		<help level="verbose">EDFA27 INPUT POWER check</help>
@@ -649,7 +649,7 @@
 	</keyword>
 
 	<keyword>
-		<name>LFC_EDFA23_INPUT_POWER</name>
+		<name>LFC_EDFA23_INPUT_POWER_MONITOR</name>
 		<type>double</type>
 		<help level="brief">EDFA23 INPUT POWER check</help>
 		<help level="verbose">EDFA23 INPUT POWER check</help>

@@ -125,11 +125,13 @@ def shutdown (*ignored):
     if main.client != None:
             
         try:
-            main.client.twoway.shutdown()
+            print('running cleanup')
+            main.client.twoway.cleanup() # clean up threads
+            # main.client.twoway.shutdown()
             main.client.twoway = None
 
-        except:
-            pass
+        except Exception as e:
+            print(e)
         main.client = None
         
 

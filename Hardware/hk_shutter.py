@@ -87,13 +87,13 @@ class hk_shutter(Device):
         kk2=self.ser.read(size=8)
 
         if res == b'0':
-            print("Shutter is 0")
+            self.info("Shutter is 0")
             return 0
         elif res == b'1':
-            print("Shutter is 1")
+            self.info("Shutter is 1")
             return 1
         else:
-            print("Shutter is not responding or buffer is not cleared")
+            self.info("Shutter is not responding or buffer is not cleared")
             return -1
         
     def set_mode(self, mode):
@@ -102,7 +102,7 @@ class hk_shutter(Device):
 
         mod=self.get_mode()
         if mode == mod:
-            print("Shutter is already set to " + str(mode) + "\n"
+            self.info("Shutter is already set to " + str(mode) + "\n"
                   "mode num:  1:manual  2:Auto  3:Single  4:Repeat  5: External Gate" )
             return mod
         if mode != mod:
@@ -115,7 +115,7 @@ class hk_shutter(Device):
             kk3=self.ser.read(size=3)
             #print(kk3)
             mod=self.get_mode()
-            print("Shutter is set to " + str(mod) + "\n"
+            self.info("Shutter is set to " + str(mod) + "\n"
                   "mode num:  1:manual  2:Auto  3:Single  4:Repeat  5: External Gate" )
             return mod
     
