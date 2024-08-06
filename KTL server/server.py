@@ -1,7 +1,7 @@
 import signal, sys, time, Ice
 
 Ice.loadSlice('KtlIce.ice')
-import Demo
+import CombIce
 
 sys.path.append('../')
 
@@ -18,7 +18,7 @@ else:
 
 
 
-class LfcI(Demo.Lfc):
+class LfcI(CombIce.Lfc):
 
     def __init__(self):
 
@@ -62,7 +62,7 @@ class LfcI(Demo.Lfc):
 
     def cleanup(self, current):
         print('cleaning up')
-        # self.mkl.stop_clock()
+        self.mkl.stop_clock()
         if self.mkl.arduino != None: 
             self.mkl.arduino.disconnect()
             print('arduino disconnected!')

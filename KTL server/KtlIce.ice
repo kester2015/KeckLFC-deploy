@@ -4,7 +4,7 @@
 
 #pragma once
 
-module Demo
+module CombIce
 {
     class Keyword
     {

@@ -120,6 +120,7 @@ class KeckLFC(object):
         # print('__getitem__ called for', key)
 
         ## Execute read block
+        # print("Executing read block of ", key)
         val = self.funcs[key](value=None)
 
         if val != None: 
@@ -1499,7 +1500,7 @@ class KeckLFC(object):
         
         elif value == 1:
             ## Yoo Jung's comments:
-            ## what is this block supposed to do?
+            ## what is this block supposed to do? 
 
             # print(f'com={i}')
             # arduino.connect()
@@ -2253,7 +2254,7 @@ class KeckLFC(object):
         if value == None:
             return self.keywords['TESTMODE']
         else:
-            self.funcs['ICECLK_ONOFF'](value = value)
+            # self.funcs['ICECLK_ONOFF'](value = value)
             if value == True: 
                 print("TESTMODE turned on")
             if value == False: print("TESTMODE turned off")

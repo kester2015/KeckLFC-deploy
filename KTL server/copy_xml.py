@@ -25,7 +25,8 @@ for keyword in keywords:
 
 # Write the modified XML to a new file
 tree.write('LFC.xml.sin')
-subprocess.run(["scp", "LFC.xml.sin", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/ktlxml/"])
-subprocess.run(["scp", "LFCm.xml.sin", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/ktlxml/"])
-subprocess.run(["scp", "nslfcd", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/dispatcher/nslfcd"])
-subprocess.run(["scp", "KtlIce.ice", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/KtlIce.ice"])
+# subprocess.run(["scp", "LFC.xml.sin", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/ktlxml/"])
+# subprocess.run(["scp", "LFCm.xml.sin", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/ktlxml/"])
+# subprocess.run(["scp", "nslfcd", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/dispatcher/nslfcd"])
+# subprocess.run(["scp", "KtlIce.ice", "combbld@irastrocombbuild.keck.hawaii.edu:/kroot/src/kss/astrocomb/KtlIce.ice"])
+print("Warning: scp to irastrocombbuild is not performed")
