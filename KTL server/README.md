@@ -2,13 +2,28 @@
 
 * Important files:
 
-1. `nslfcd`: this is the dispatcher code.
-2. `LFCm.xml.sin`: this is the full xml file, where KTL keywords are defined. Several parameters that are not inputs of the KTL dispatcher (such as normal polling rate, fast polling rate) are included.
-> Feel free to implement new keywords here
-3. `LFC.xml.sin`: this is another xml file, a trimmed version of `LFCm.xml.sin`, used as input for the KTL dispatcher. Do not edit this directly, always edit `LFCm.xml.sin`.
-4. `copy_xml.py`: this is a script for generating `LFC.xml.sin` from `LFCm.xml.sin`, and transferring the xml files and `nslfcd` dispatcher code to irastrocombbuild. This makes sure that the xml files in the Windows laptop and in the irastrocombbuild are the same.
+1. (no longer up-to-date !!) `nslfcd`: this is the dispatcher code.
+2. (no longer up-to-date !!) `LFCm.xml.sin`: this is the full xml file, where KTL keywords are defined. Several parameters that are not inputs of the KTL dispatcher (such as normal polling rate, fast polling rate) are included.
+3. (no longer up-to-date !!) `LFC.xml.sin`: this is another xml file, a trimmed version of `LFCm.xml.sin`, used as input for the KTL dispatcher. Do not edit this directly, always edit `LFCm.xml.sin`.
+4. (no longer up-to-date !!) `copy_xml.py`: this is a script for generating `LFC.xml.sin` from `LFCm.xml.sin`, and transferring the xml files and `nslfcd` dispatcher code to irastrocombbuild. This makes sure that the xml files in the Windows laptop and in the irastrocombbuild are the same.
 5. `server.py`: this is the ICE server file.
 6. `KTLIce.ice`, `config.server`, (`config.client` in irastrocombbuild): ICE related files
+
+* How to do read/write tests:
+
+1. If keyword implementation (`xml` file) needs change - either keyword type change or adding a new keyword, contact Yoo Jung.
+> All the keywords that are listed in `/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin` should have the corresponding method defined in `KeckLFC.py`.
+2. Open a terminal in irastrocomb (`ssh combbld@irastrocomb` in the PowerShell)
+3. Run the ICE server first, in Windows machine, by: `python server.py` (the `server.py` file in the current directory)
+4. When you see the message, ICE server starts ..., it's ready to start the dispatcher. In irastrocomb, do
+`astrocomb restart comb`, which starts the dispatcher
+5. To test keyword read, in irastrocomb terminal, run
+`show -s comb KEYWORDNAME`
+Note that it may take up to the keyword read period to store the device value to the dispatcher.
+6. To test keyword write, run
+`modify -s comb KEYWORDNAME=newvalue`
+
+Contents below are not up-to-date (as of Aug 6th)
 
 * How to prepare read/write tests:
 
