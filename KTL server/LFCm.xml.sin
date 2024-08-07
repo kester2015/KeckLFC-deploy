@@ -778,32 +778,39 @@
 	</keyword>
 	<keyword>
 		<name>LFC_EDFA27_INPUT_POWER_MONITOR</name>
-		<type>double</type>
-		<help level="brief">EDFA27 INPUT POWER check</help>
-		<help level="verbose">EDFA27 INPUT POWER check</help>
+		<type>boolean</type>
+		<help level="brief">edfa27 input monitor</help>
+		<help level="verbose">edfa27 input monitor</help>
 		<capability type="write">False</capability>
 		<period>120</period>
-		<format>%.1f</format>
-		<range>
-			<minimum>0</minimum>
-			<maximum>20</maximum>
-		</range>
-		<units>mw</units>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
 	</keyword>
-
 	<keyword>
 		<name>LFC_EDFA23_INPUT_POWER_MONITOR</name>
-		<type>double</type>
-		<help level="brief">EDFA23 INPUT POWER check</help>
-		<help level="verbose">EDFA23 INPUT POWER check</help>
+		<type>boolean</type>
+		<help level="brief">edfa23 input monitor</help>
+		<help level="verbose">edfa23 input monitor</help>
 		<capability type="write">False</capability>
 		<period>120</period>
-		<format>%.1f</format>
-		<range>
-			<minimum>0</minimum>
-			<maximum>20</maximum>
-		</range>
-		<units>mw</units>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
 	</keyword>
 	<keyword>
 		<name>LFC_EDFA27_P_DEFAULT</name>
