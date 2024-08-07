@@ -217,6 +217,57 @@
 		</values>
 	</keyword>
 	<keyword>
+		<name>LFC_RFOSCI_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rfosci monitor</help>
+		<capability type="write">False</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_RFAMP_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rfamp monitor</help>
+		<capability type="write">False</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_PENDULEM_FREQ_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rf freq monitor</help>
+		<capability type="write">False</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
 		<name>LFC_CLOSE_ALL</name>
 		<type>boolean</type>
 		<help level="brief">shut up all power device</help>
