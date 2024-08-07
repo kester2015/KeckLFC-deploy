@@ -1,9 +1,8 @@
-<bundle name="LFC" service="nslfc">
+<?xml version="1.0" ?>
+<bundle name="LFC" service="@KTLSERVICE@" xmlns:xsi="http://www.w3.org/2001/XML-Schema-instance">
 	<dispatcher>
-		<name>+service+_dispatch_3</name>
+		<name>@KTLSERVICE@_dispatch_1</name>
 	</dispatcher>
-	
-
 	<keyword>
 		<name>LFC_RFOSCI_ONOFF</name>
 		<type>boolean</type>
@@ -202,6 +201,66 @@
 				<value>Normal</value>
 			</entry>
 		</values>
+		<serverside>
+			<period>20</period>
+		</serverside>
+	</keyword>
+	<keyword>
+		<name>LFC_RFOSCI_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rfosci monitor</help>
+		<capability type="write">False</capability>
+		<serverside>
+			<period>20</period>
+		</serverside>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_RFAMP_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rfamp monitor</help>
+		<capability type="write">False</capability>
+		<serverside>
+			<period>20</period>
+		</serverside>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_PENDULEM_FREQ_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rf freq monitor</help>
+		<capability type="write">False</capability>
+		<serverside>
+			<period>20</period>
+		</serverside>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
 	</keyword>
 	<keyword>
 		<name>LFC_CLOSE_ALL</name>
@@ -218,10 +277,14 @@
 				<value>shut up all output</value>
 			</entry>
 		</values>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_TEMP_TEST1</name>
 		<type>double array</type>
+		<format>%.2f</format>
 		<help level="brief">Temperature test 1</help>
 		<capability type="write">False</capability>
 		<elements>
@@ -258,11 +321,14 @@
 				<label>Unconnected</label>
 			</entry>
 		</elements>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_TEMP_TEST2</name>
 		<type>double array</type>
+		<format>%.2f</format>
 		<help level="brief">Temperature test 2</help>
 		<capability type="write">False</capability>
 		<elements>
@@ -299,98 +365,124 @@
 				<label>Rubidium (Rb) Cell D2-210</label>
 			</entry>
 		</elements>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
     <keyword>
 		<name>LFC_T_GLY_RACK_IN</name>
 		<type>double</type>
+		<format>%.2f</format>
 		<help level="brief">Glycol inlet temp to instrument rack</help>
 		<help level="verbose">Glycol inlet temp to instrument rack</help>
 		<capability type="write">False</capability>
-		<format>%.2f</format> 
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_T_GLY_RACK_OUT</name>
 		<type>double</type>
+		<format>%.2f</format>
 		<help level="brief">Glycol outlet temp from instrument rack</help>
 		<help level="verbose">Glycol outlet temp from instrument rack</help>
 		<capability type="write">False</capability>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_T_EOCB_IN</name>
 		<type>double</type>
+		<format>%.2f</format>
 		<help level="brief">Glycol inlet temp to EO comb board</help>
 		<help level="verbose">Glycol inlet temp to EO comb board</help>
 		<capability type="write">False</capability>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_T_EOCB_OUT</name>
 		<type>double</type>
+		<format>%.2f</format>
 		<help level="brief">Glycol outlet temp from EO comb board</help>
 		<help level="verbose">Glycol outlet temp from EO comb board</help>
 		<capability type="write">False</capability>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_T_RACK_TOP</name>
 		<type>double</type>
+		<format>%.2f</format>
 		<help level="brief">Instrument rack top temp</help>
 		<help level="verbose">Instrument rack top temp</help>
 		<capability type="write">False</capability>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_T_RACK_MID</name>
 		<type>double</type>
+		<format>%.2f</format>
 		<help level="brief">Instrument rack middle temp</help>
 		<help level="verbose">Instrument rack middle temp</help>
 		<capability type="write">False</capability>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_T_RACK_BOT</name>
 		<type>double</type>
+		<format>%.2f</format>
 		<help level="brief">Instrument rack bottom temp</help>
 		<help level="verbose">Instrument rack bottom temp</help>
 		<capability type="write">False</capability>
-		<format>%.2f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_RIO_T</name>
 		<type>double</type>
-		<help level="brief">RIO pump laser temperature</help>
-		<help level="verbose">RIO pump laser temperature</help>
-		<capability type="write">True</capability>
+		<units>C</units>
+		<format>%.1f</format>
 		<range>
 			<minimum>-5</minimum>
 			<maximum>75</maximum>
 		</range>
-		<units>C</units>
-		<format>%.1f</format>
+		<help level="brief">RIO pump laser temperature</help>
+		<help level="verbose">RIO pump laser temperature</help>
+		<capability type="write">True</capability>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_RIO_I</name>
 		<type>double</type>
+		<units>mA</units>
+		<format>%.1f</format>
 		<help level="brief">RIO pump laser current</help>
 		<help level="verbose">RIO pump laser current</help>
 		<capability type="write">True</capability>
-		<units>mA</units>
-		<format>%.1f</format>
 	</keyword>
 	<keyword>
 		<name>LFC_EDFA27_P</name>
 		<type>double</type>
-		<help level="brief">Small  EDFA (500 mW) 1 output power</help>
-		<help level="verbose">Small  EDFA (500 mW) 1 output power</help>
-		<capability type="write">True</capability>
+		<units>mW</units>
+		<format>%.1f</format>
 		<range>
 			<minimum>0</minimum>
 			<maximum>630</maximum>
 		</range>
-		<units>mW</units>
-		<format>%.1f</format>
+		<help level="brief">Small  EDFA (500 mW) 1 output power</help>
+		<help level="verbose">Small  EDFA (500 mW) 1 output power</help>
+		<capability type="write">True</capability>
 	</keyword>
 	<keyword>
 		<name>LFC_EDFA27_ONOFF</name>
@@ -412,15 +504,15 @@
 	<keyword>
 		<name>LFC_EDFA13_P</name>
 		<type>double</type>
-		<help level="brief">Small EDFA (20 mW) 2 output power</help>
-		<help level="verbose">Small EDFA (20 mW) 2 output power</help>
-		<capability type="write">True</capability>
+		<units>mW</units>
+		<format>%.1f</format>
 		<range>
 			<minimum>0</minimum>
 			<maximum>20</maximum>
 		</range>
-		<units>mW</units>
-		<format>%.1f</format>
+		<help level="brief">Small EDFA (20 mW) 2 output power</help>
+		<help level="verbose">Small EDFA (20 mW) 2 output power</help>
+		<capability type="write">True</capability>
 	</keyword>
 	<keyword>
 		<name>LFC_EDFA13_ONOFF</name>
@@ -543,7 +635,6 @@
 		<units>V</units>
 		<format>%.2f</format>
 	</keyword>
-	
 	<keyword>
 		<name>LFC_PTAMP_PRE_P</name>
 		<type>double</type>
@@ -599,15 +690,18 @@
 	<keyword>
 		<name>LFC_WGD_T</name>
 		<type>double</type>
-		<help level="brief">Waveguide TEC control</help>
-		<help level="verbose">Waveguide TEC control</help>
-		<capability type="write">True</capability>
+		<units>C</units>
 		<format>%.1f</format>
 		<range>
 			<minimum>22.5</minimum>
 			<maximum>23.5</maximum>
 		</range>
-		<units>C</units>
+		<help level="brief">Waveguide TEC control</help>
+		<help level="verbose">Waveguide TEC control</help>
+		<capability type="write">True</capability>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_PPLN_T</name>
@@ -616,6 +710,9 @@
 		<help level="verbose">PPLN TEC control</help>
 		<capability type="write">True</capability>
 		<format>%.1f</format>
+		<serverside>
+			<period>20</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>LFC_CLARITY_ONOFF</name>
@@ -636,30 +733,43 @@
 	</keyword>
 	<keyword>
 		<name>LFC_EDFA27_INPUT_POWER_MONITOR</name>
-		<type>double</type>
-		<help level="brief">EDFA27 INPUT POWER check</help>
-		<help level="verbose">EDFA27 INPUT POWER check</help>
+		<type>boolean</type>
+		<help level="brief">edfa27 input monitor</help>
+		<help level="verbose">edfa27 input monitor</help>
 		<capability type="write">False</capability>
-		<format>%.1f</format>
-		<range>
-			<minimum>0</minimum>
-			<maximum>20</maximum>
-		</range>
-		<units>mw</units>
+		<serverside>
+			<period>120</period>
+		</serverside>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
 	</keyword>
-
 	<keyword>
 		<name>LFC_EDFA23_INPUT_POWER_MONITOR</name>
-		<type>double</type>
-		<help level="brief">EDFA23 INPUT POWER check</help>
-		<help level="verbose">EDFA23 INPUT POWER check</help>
+		<type>boolean</type>
+		<help level="brief">edfa23 input monitor</help>
+		<help level="verbose">edfa23 input monitor</help>
 		<capability type="write">False</capability>
-		<format>%.1f</format>
-		<range>
-			<minimum>0</minimum>
-			<maximum>20</maximum>
-		</range>
-		<units>mw</units>
+		<serverside>
+			<period>120</period>
+		</serverside>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
 	</keyword>
 	<keyword>
 		<name>LFC_EDFA27_P_DEFAULT</name>
@@ -678,7 +788,6 @@
 			</entry>
 		</values>
 	</keyword>
-
 	<keyword>
 		<name>LFC_EDFA23_P_DEFAULT</name>
 		<type>boolean</type>
@@ -696,7 +805,6 @@
 			</entry>
 		</values>
 	</keyword>
-
 	<keyword>
 		<name>LFC_EDFA27_AUTO_ON</name>
 		<type>boolean</type>
@@ -714,7 +822,6 @@
 			</entry>
 		</values>
 	</keyword>
-
 	<keyword>
 		<name>LFC_EDFA23_AUTO_ON</name>
 		<type>boolean</type>
@@ -732,8 +839,6 @@
 			</entry>
 		</values>
 	</keyword>
-
-
 	<keyword>
 		<name>LFC_RFAMP_DEFAULT</name>
 		<type>boolean</type>
@@ -751,7 +856,6 @@
 			</entry>
 		</values>
 	</keyword>
-
 	<keyword>
 		<name>LFC_RFOSCI_DEFAULT</name>
 		<type>boolean</type>
@@ -769,25 +873,20 @@
 			</entry>
 		</values>
 	</keyword>
-
-
-	
 	<keyword>
 		<name>LFC_WSP_PHASE</name>
 		<type>double</type>
 		<help level="brief">wsp phase</help>
 		<help level="verbose">wsp phase</help>
 		<capability type="write">True</capability>
-		</keyword>
-
+	</keyword>
 	<keyword>
 		<name>LFC_WSP_ATTEN</name>
 		<type>double</type>
 		<help level="brief">wsp atten</help>
 		<help level="verbose">wsp atten</help>
 		<capability type="write">True</capability>
-		</keyword>
-
+	</keyword>
 	<keyword>
 		<name>LFC_PTAMP_PRE_P_DEFAULT</name>
 		<type>boolean</type>
@@ -805,7 +904,6 @@
 			</entry>
 		</values>
 	</keyword>
-
 	<keyword>
 		<name>LFC_PTAMP_I_DEFAULT</name>
 		<type>boolean</type>
@@ -823,22 +921,16 @@
 			</entry>
 		</values>
 	</keyword>
-
-
-
-
-	
-	
-	
-
-
 	<keyword>
 		<name>ICETEST</name>
 		<type>integer</type>
 		<help level="brief">test integer</help>
 		<help level="verbose">test integer</help>
 		<capability type="write">True</capability>
-		</keyword>
+		<serverside>
+			<period>10</period>
+		</serverside>
+	</keyword>
 	<keyword>
 		<name>ICESTA</name>
 		<type>enumerated</type>
@@ -859,6 +951,9 @@
 				<value>Initializing</value>
 			</entry>
 		</values>
+		<serverside>
+			<period>10</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>ICECLK</name>
@@ -866,7 +961,10 @@
 		<help level="brief">current time returned by ICE</help>
 		<help level="verbose">current time returned by ICE</help>
 		<capability type="write">True</capability>
-		</keyword>
+		<serverside>
+			<period>15</period>
+		</serverside>
+	</keyword>
 	<keyword>
 		<name>ICECLK_ONOFF</name>
 		<type>boolean</type>
@@ -883,6 +981,9 @@
 				<value>on</value>
 			</entry>
 		</values>
+		<serverside>
+			<period>120</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>SHOW_ALL_VAL</name>
@@ -900,6 +1001,9 @@
 				<value>on</value>
 			</entry>
 		</values>
+		<serverside>
+			<period>120</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>TESTMODE</name>
@@ -924,6 +1028,9 @@
 		<help level="brief">test integer</help>
 		<help level="verbose">test integer</help>
 		<capability type="write">True</capability>
+		<serverside>
+			<period>10</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>TESTFLOAT</name>
@@ -932,7 +1039,10 @@
 		<help level="verbose">test double</help>
 		<format>%.5f</format>
 		<capability type="write">True</capability>
-	</keyword>	
+		<serverside>
+			<period>10</period>
+		</serverside>
+	</keyword>
 	<keyword>
 		<name>TESTENUM</name>
 		<type>enumerated</type>
@@ -953,13 +1063,19 @@
 				<value>third state</value>
 			</entry>
 		</values>
-	</keyword>	
+		<serverside>
+			<period>10</period>
+		</serverside>
+	</keyword>
 	<keyword>
 		<name>TESTSTRING</name>
 		<type>string</type>
 		<help level="brief">test string</help>
 		<help level="verbose">test string</help>
 		<capability type="write">True</capability>
+		<serverside>
+			<period>10</period>
+		</serverside>
 	</keyword>
 	<keyword>
 		<name>TESTARRAY</name>
@@ -977,6 +1093,8 @@
 				<label>Element_1</label>
 			</entry>
 		</elements>
+		<serverside>
+			<period>120</period>
+		</serverside>
 	</keyword>
-
 </bundle>
