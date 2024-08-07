@@ -191,6 +191,58 @@
 		</values>
 	</keyword>
 	<keyword>
+		<name>LFC_RFOSCI_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rfosci monitor</help>
+		<capability type="write">False</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_RFAMP_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rfamp monitor</help>
+		<capability type="write">False</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_PENDULEM_FREQ_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">rf freq monitor</help>
+		<capability type="write">False</capability>
+		<period>20</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+
+	<keyword>
 		<name>LFC_CLOSE_ALL</name>
 		<type>boolean</type>
 		<help level="brief">shut up all power device</help>
@@ -680,6 +732,42 @@
 		<capability type="write">True</capability>
 		<period>20</period>
 		<format>%.1f</format>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA27_INPUT_POWER_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">edfa27 input monitor</help>
+		<help level="verbose">edfa27 input monitor</help>
+		<capability type="write">False</capability>
+		<period>120</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_EDFA23_INPUT_POWER_MONITOR</name>
+		<type>boolean</type>
+		<help level="brief">edfa23 input monitor</help>
+		<help level="verbose">edfa23 input monitor</help>
+		<capability type="write">False</capability>
+		<period>120</period>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>normal</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>fault</value>
+			</entry>
+		</values>
 	</keyword>
 	<keyword>
 		<name>LFC_CLARITY_ONOFF</name>

@@ -628,20 +628,20 @@ class KeckLFC(object):
                 
         return 0
         
-    def LFC_RF_FREQ_MONITOR(self,value=None): #TBD
-        if test_mode: return
-        # return
-        rf_freq_threshold=16e9
-        if value == None:
-            if (self.keywords['LFC_RFAMP_ONOFF'] == 1) and (self.keywords['LFC_RFOSCI_ONOFF'] == 1):
+    # def LFC_RF_FREQ_MONITOR(self,value=None): #TBD
+    #     if test_mode: return
+    #     # return
+    #     rf_freq_threshold=16e9
+    #     if value == None:
+    #         if (self.keywords['LFC_RFAMP_ONOFF'] == 1) and (self.keywords['LFC_RFOSCI_ONOFF'] == 1):
 
-                freq=self.LFC_PENDULEM_FREQ()
-                if np.abs(freq-rf_freq_threshold)>10:
-                    self.LFC_CLOSE_ALL(1)
-                    self.__sendemail('RF frequency is not 16 GHz, all devices are closed')
-                    return 1
-        else:
-            return 0
+    #             freq=self.LFC_PENDULEM_FREQ()
+    #             if np.abs(freq-rf_freq_threshold)>10:
+    #                 self.LFC_CLOSE_ALL(1)
+    #                 self.__sendemail('RF frequency is not 16 GHz, all devices are closed')
+    #                 return 1
+        
+    #     return 0
 
     def LFC_CLOSE_ALL(self, value=None):
         return
@@ -1864,10 +1864,10 @@ class KeckLFC(object):
                 if np.abs(freq-16e9)>1000:
                     self.LFC_CLOSE_ALL()
                     self.__sendemail('Pendulum frequency is not 16GHz')
-                    return 0
+                    return 1
 
                 
-                return freq
+        return 0
             
         #TBD
 
@@ -1976,8 +1976,9 @@ class KeckLFC(object):
 
                 if (input_power>10) & (input_power<1):
                     self.__sendemail('EDFA27 input power is not correct')
+                    return 1
 
-            return input_power
+        return 0
         
         
     def LFC_EDFA23_INPUT_POWER_MONITOR(self, value=None):#r
@@ -1990,7 +1991,8 @@ class KeckLFC(object):
                 amonic23.disconnect()
                 if (input_power>10) & (input_power<1):
                     self.__sendemail('EDFA23 input power is not correct')
-            return input_power
+                    return 1
+        return 0
         
     def LFC_ARDUINO_GET_INPUT(self, value=None):  
         if test_mode: return
@@ -2038,7 +2040,7 @@ class KeckLFC(object):
                     self.LFC_CLARITY_ONOFF(1)
                     #self.LFC_EDFA27_P_DEFAULT(1)
                     edfa27_input=self.LFC_EDFA27_INPUT_POWER_MONITOR()
-                    if (edfa27_input>1) & (edfa27_input<10):
+                    if (edfa27_input==0) :
 
                         print('EDFA27 input power is correct')
                         self.LFC_EDFA27_AUTO_ON(1)
@@ -2046,7 +2048,7 @@ class KeckLFC(object):
 
                         edfa23_input=self.LFC_EDFA23_INPUT_POWER_MONITOR()
 
-                        if (edfa23_input>1) & (edfa23_input<10):
+                        if (edfa23_input==0):
                         
                             print('EDFA23 input power is correct')
                             self.LFC_EDFA23_AUTO_ON(1)
