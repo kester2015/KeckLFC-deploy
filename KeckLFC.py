@@ -862,13 +862,15 @@ class KeckLFC(object):
             if test_mode: return
             amonic27.connect()
             #return 0 # not testing MODIFY for now
+            pt_dict={True:1,False:0}
+            value = pt_dict[value]
             amonic27.accCh1Status=value
             amonic27.activation=value
             self.__sleep(0.5)
             edfa27onoff=amonic27.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
             amonic27.disconnect()
-            return edfa27onoff
+            return 0
 
     def LFC_EDFA13_P(self, value=None):
         if test_mode: return
@@ -908,12 +910,14 @@ class KeckLFC(object):
         else:
             #return 0 # not testing MODIFY for now
             amonic13.connect()
+            pt_dict={True:1,False:0}
+            value = pt_dict[value]
             amonic13.accCh1Status=value
             self.__sleep(0.5)
             edfa27onoff=amonic13.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
             amonic13.disconnect()
-            return edfa27onoff
+            return 0
 
     def LFC_EDFA23_P(self, value=None): # test r
         if test_mode: return
@@ -962,13 +966,15 @@ class KeckLFC(object):
         else:
             #return 0 # not testing MODIFY for now
             amonic23.connect()
+            pt_dict={True:1,False:0}
+            value = pt_dict[value]
             amonic23.accCh1Status=value
             amonic23.activation=value
             self.__sleep(0.5)
             edfa27onoff=amonic23.accCh1Status
             print(f'EDFA27 : '+edfa27onoff)
             amonic23.disconnect()
-            return edfa27onoff
+            return 0
         
     def LFC_EDFA23_P_DEFAULT(self, value=None): #test r w
         if test_mode: return
@@ -1233,6 +1239,8 @@ class KeckLFC(object):
         else:
             #return 0 # not testing MODIFY for now
             rfoscPS.connect()
+            pt_dict={True:1,False:0}
+            value = pt_dict[value]
             rfoscPS.activation=value
             self.__sleep(0.5)
             rfoscPS_i=rfoscPS.activation
@@ -1361,6 +1369,7 @@ class KeckLFC(object):
             #return 0 # not testing MODIFY for now
             ptamp.connect()
             pre_p=ptamp.preAmp
+            #print(f'preamp is {pre_p}')
             ptamp.disconnect()
             return pre_p
         
@@ -1393,7 +1402,7 @@ class KeckLFC(object):
         if test_mode: return
         #return
         ptamp=self.__LFC_PTAMP_connect()
-        if value != None:
+        if value == None:
 
             ptamp.connect()
 
@@ -1416,7 +1425,7 @@ class KeckLFC(object):
             ptamp.connect()
             ptamp.pwrAmp = f'{value}'+'A'
             self.__sleep(0.5)
-            ptamp1=ptamp.pwrAmp
+            #ptamp1=ptamp.pwrAmp
             ptamp.disconnect()
             return 0
 
@@ -1424,9 +1433,9 @@ class KeckLFC(object):
         if value == None:
             #return 0 # not testing MODIFY for now
             ptamp.connect()
-            ptamp=ptamp.pwrAmp
+            ptamp_i=ptamp.pwrAmp
             ptamp.disconnect()
-            return ptamp  # return
+            return ptamp_i  # return
         
     def LFC_PTAMP_I_DEFAULT(self, value=None): #test r
         if test_mode: return
@@ -1453,9 +1462,14 @@ class KeckLFC(object):
 
         if value != None:
             ptamp.connect()
+
+            #print(f'value is {value}', type(value))
+            pt_dict={True:1,False:0}
+            value = pt_dict[value]
             ptamp.activation = value
             self.__sleep(0.5)
-            ptact = ptamp.activation
+            #ptact = ptamp.activation
+
             ptamp.disconnect()
             return 0
 
@@ -1463,6 +1477,8 @@ class KeckLFC(object):
             #return 0 # not testing MODIFY for now
             ptamp.connect()
             ptact=ptamp.activation
+            status_dict={'ON':1,'OFF':0}
+            ptact=status_dict[ptact]
             ptamp.disconnect()
             return ptact  # return
 

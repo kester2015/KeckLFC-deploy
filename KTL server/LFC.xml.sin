@@ -665,7 +665,7 @@
 		<capability type="write">True</capability>
 		<range>
 			<minimum>0</minimum>
-			<maximum>4.2</maximum>
+			<maximum>4.8</maximum>
 		</range>
 		<units>Amp</units>
 		<format>%.2f</format>
@@ -921,6 +921,14 @@
 			</entry>
 		</values>
 	</keyword>
+	<keyword>
+		<name>LFC_MINICOMB_AUTO_SETUP</name>
+		<type>boolean</type>
+		<help level="brief">LFC_MINICOMB_AUTO_SETUP</help>
+		<help level="verbose">LFC_MINICOMB_AUTO_SETUP</help>
+		<capability type="write">True</capability>
+	</keyword>
+
 	<keyword>
 		<name>ICETEST</name>
 		<type>integer</type>
