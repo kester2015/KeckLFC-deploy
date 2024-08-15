@@ -110,6 +110,12 @@ class KeckLFC(object):
         self.ws = None
         self.ws_d2 = None
 
+        # clock
+        self.clock = None
+        self.keywords['ICECLK_ONOFF'] = True
+        self.start_clock()
+        
+
 
     ########## Below are new functions, will be needed for KTL. ##########
 
@@ -2226,6 +2232,14 @@ class KeckLFC(object):
             if value == 2: # disconnect command
                 print('ICE - KTL disconnected!')
             return 0
+        
+    def ICESTA2(self, value=None):
+
+        if value == None:
+            # print("connection status checked (ICESTA2), notifying it's good")
+            return 1
+        
+        
 
     def start_clock(self):
         self._stop_clock = False
@@ -2236,7 +2250,7 @@ class KeckLFC(object):
     def stop_clock(self):
         print('\t\t\tstop clock')
         self._stop_clock = True
-        self.clock.join()
+        if self.clock != None: self.clock.join()
 
     def SHOW_ALL_VAL(self, value=None):
 
@@ -2272,7 +2286,7 @@ class KeckLFC(object):
         if value == None:
             return self.keywords['TESTMODE']
         else:
-            # self.funcs['ICECLK_ONOFF'](value = value)
+            self.funcs['ICECLK_ONOFF'](value = value)
             if value == True: 
                 print("TESTMODE turned on")
             if value == False: print("TESTMODE turned off")

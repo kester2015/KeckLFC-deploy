@@ -62,10 +62,10 @@ class LfcI(CombIce.Lfc):
 
     def cleanup(self, current):
         print('cleaning up')
-        self.mkl.stop_clock()
-        if self.mkl.arduino != None: 
-            self.mkl.arduino.disconnect()
-            print('arduino disconnected!')
+        # if self.mkl.clock != None: self.mkl.stop_clock()
+        # if self.mkl.arduino != None: 
+        #     self.mkl.arduino.disconnect()
+        #     print('arduino disconnected!')
 
         # the command below shuts down the server. maybe we don't want that
         # when the dispatcher shuts down
@@ -77,7 +77,7 @@ class LfcI(CombIce.Lfc):
 
 
 with Ice.initialize(sys.argv, 'config.server') as communicator:
-    signal.signal(signal.SIGINT, lambda signum, frame: communicator.shutdown())
+    signal.signal(signal.SIGINT, lambda signum, frame: communicator.shutdown()) # this was originally communicator.shutdown(). not sure what the difference is
 
     #
     # The communicator initialization removes all Ice-related arguments from argv

@@ -921,13 +921,13 @@
 			</entry>
 		</values>
 	</keyword>
-	<keyword>
+	<!-- <keyword> ## <values> need to be set! Disabling this for now b/c this causes errors
 		<name>LFC_MINICOMB_AUTO_SETUP</name>
 		<type>boolean</type>
 		<help level="brief">LFC_MINICOMB_AUTO_SETUP</help>
 		<help level="verbose">LFC_MINICOMB_AUTO_SETUP</help>
 		<capability type="write">True</capability>
-	</keyword>
+	</keyword> -->
 
 	<keyword>
 		<name>ICETEST</name>
@@ -961,6 +961,26 @@
 		</values>
 		<serverside>
 			<period>10</period>
+		</serverside>
+	</keyword>
+	<keyword>
+		<name>ICESTA2</name>
+		<type>boolean</type>
+		<help level="brief">Ice connection status</help>
+		<help level="verbose">Ice connection status, defined by dispatcher reading status from the ICE server by request</help>
+		<capability type="write">False</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>No answer</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>Answered</value>
+			</entry>
+		</values>
+		<serverside>
+			<period>1</period>
 		</serverside>
 	</keyword>
 	<keyword>

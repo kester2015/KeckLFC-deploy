@@ -1,0 +1,675 @@
+#! @KPYTHON3@
+#
+# kpython safely sets RELDIR, KROOT, LROOT, and PYTHONPATH before invoking
+# the actual Python interpreter.
+
+#
+# #
+# Required libraries.
+# #
+#
+
+
+import os
+import atexit
+import configparser
+import DFW                  # provided by kroot/util/dfw
+import getopt
+import ktl                  # provided by kroot/ktl/keyword/python
+import logging
+import signal
+import subprocess
+import sys
+import threading
+import time
+import traceback
+import types
+
+# Load ICE
+import Ice, IcePy
+
+
+def main():
+
+
+    parseCommandLine()      # Need to know where the config file is.
+    parseConfigFile()
+    parseCommandLine()      # Parse the command line again, so that it
+                            # overwrites options set by the config file.
+                            # This feature is not currently used.
+
+    checkSanity()
+
+
+    # Set handlers to shut down cleanly in all situations.
+
+    atexit.register(shutdown)
+    signal.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGTERM, shutdown)
+
+
+    # Start up our KTL backend.
+    ice_file = main.config.get('main', 'ice')
+    Ice.loadSlice(ice_file)
+
+    main.Service = DFW.Service(main.config.get('main', 'service'),
+                main.config.get('main', 'stdiosvc'),
+                setupKeywords)
+
+
+    status = "DISP%dSTA" % (main.dispatcher)
+    main.Service[status].set('ready')
+
+    icestatus = 'ICESTA'
+    main.Service[icestatus].set('Initializing')
+
+
+
+    while main.shutdown.is_set() == False:
+
+        # First try to connect to ICE
+        try:
+            # While ICE is set to "Initializing"
+            while main.Service[icestatus].value == '3':
+
+                print('ICE connection initialized. Start connection ...')
+
+                # Connect to ICE server
+                with Ice.initialize(main.client.clientconfig) as communicator:
+                    main.Service[icestatus].set('Connected') # change the state to "Connected"
+                    print('ICE status changed to "connected"')
+
+                    # Run the communicator. It runs while the ice state is "Connected"
+                    main.client.run(communicator)
+
+                # ICE disconnected
+                print('ICE communicator disconnected')
+                main.Service[icestatus].set('Disconnected')
+
+                # If server is OFF or keyword icesta is set to "Disconnected", run without ICE
+                print('Dispatcher running without ICE')
+
+        except:
+            exception = traceback.format_exception(*sys.exc_info())
+            exception = '\n'.join(exception)
+            sys.stderr.write(exception + '\n')
+            continue
+
+        try:
+            main.shutdown.wait(5)
+        except (KeyboardInterrupt, SystemExit):
+            break
+
+
+## End of Main
+
+
+
+main.config = configparser.ConfigParser()
+main.config_file = None
+main.dispatcher = 1
+main.client = None
+main.Service = None
+main.shutdown = threading.Event()
+main.version = '$Revision: 91165 $'.split()[1]
+
+
+def shutdown(*ignored):
+    main.shutdown.set()
+
+
+    if main.Service != None:
+        status = "DISP%dSTA" % (main.dispatcher)
+        main.Service[status].set('shutting down')
+        main.Service.shutdown()
+        main.Service = None
+
+    ######## shut down ICE
+    if main.client != None:
+
+        try:
+            print('running cleanup')
+            main.client.twoway.cleanup() # clean up threads
+            # main.client.twoway.shutdown()
+            main.client.twoway = None
+
+        except Exception as e:
+            print(e)
+        main.client = None
+
+
+#
+# #
+# Functions related to setting up keywords
+# #
+#
+
+# Each keyword needs a new function: a function to connect to ICE
+# and needs to communicate with the LFC laptop when keyword read is invoked.
+# When running setupKeywords, the functions below are defined as
+# methods of the keywords.
+
+
+def ice_connect(self):
+    ''' Function that connects keyword to ICE '''
+    keyword = ktl.cache('@KTLSERVICE@', self.name)
+    keyword.monitor()
+
+    # Exceptionally, ICESTA uses the specific callback function.
+    if self.name == 'ICESTA':
+        keyword.callback(self.ice_client.callbackfunc)
+
+
+def ice_read(self):
+    ''' When reading the keyword value, communicate with the LFC laptop to get tha value '''
+    value = self.ice_client.getvalue(self.name)
+    return str(value)
+
+
+def ice_write(self, value):
+    ''' Just a print function for debugging '''
+    print('keyword write function called in write() method. writing the value ', value)
+    # value = str(keyword['binary'])
+    #print('callbackfunc value',value)
+    # Communicate with the server that the keyword value changed.
+
+    # Exceptionally, ICESTA is related to ICE connection but does not receive keyword values
+    # from the Windows machine.
+    if self.name != 'ICESTA':
+
+        self.ice_client.twoway.modifiedkeyword(self.name, value)
+
+        self.speed_up()#speedUp() # after keyword read, increase the polling rate.
+
+
+def ice_postwrite(self, value):
+    print('in postwrite, input value', value)
+
+    # time.sleep(1) # no longer need time delay
+    if self.name != 'ICESTA':
+        self.update() # keyword read after write
+
+    if self.name == 'ICESTA':
+        print('ICESTA value', value)
+        self.set(value)
+
+
+def ice_speed_up(self, checks=2):
+    self.rapid_checks = checks
+    self.period(self.fast_period)
+
+def ice_slow_down(self):
+    self.rapid_checks = 0
+    self.period(self.slow_period)
+
+def ice_update(self, *args, **kwargs):
+
+    # print("update() called for",self.name,"rapid_checks=%d" % self.rapid_checks)
+
+    slow_down = False
+    if self.rapid_checks == 1:
+        slow_down = True
+    elif self.rapid_checks > 1:
+        self.rapid_checks -= 1
+
+    if slow_down == True:
+        self.slow_down()#slowDown()
+
+    self.preread()
+    value = self.read()
+
+    if value is not None:
+        self.postread(value)
+
+
+
+
+class IceBoolean(DFW.Keyword.Boolean):
+    def __init__(self, *args, **kwargs):
+        self.ice_connect = types.MethodType(ice_connect, self)
+        self.slow_down = types.MethodType(ice_slow_down, self)
+        self.speed_up = types.MethodType(ice_speed_up, self)
+
+        self.rapid_checks = 0
+        self.fast_period = 3
+        self.slow_period = 120
+
+        DFW.Keyword.Boolean.__init__(self, *args, **kwargs)
+
+        self.postwrite = types.MethodType(ice_postwrite, self)
+        self.read = types.MethodType(ice_read, self)
+        self.update = types.MethodType(ice_update, self)
+        self.write = types.MethodType(ice_write, self)
+
+        try:
+            slow_period = self.serverside('period')
+        except ValueError:
+            pass
+        else:
+            self.slow_period = int(slow_period)
+
+        self.period(self.slow_period)
+
+
+class IceDouble(DFW.Keyword.Double):
+    def __init__(self, *args, **kwargs):
+        self.ice_connect = types.MethodType(ice_connect, self)
+        self.slow_down = types.MethodType(ice_slow_down, self)
+        self.speed_up = types.MethodType(ice_speed_up, self)
+
+        self.rapid_checks = 0
+        self.fast_period = 3
+        self.slow_period = 120
+
+        DFW.Keyword.Double.__init__(self, *args, **kwargs)
+
+        self.postwrite = types.MethodType(ice_postwrite, self)
+        self.read = types.MethodType(ice_read, self)
+        self.update = types.MethodType(ice_update, self)
+        self.write = types.MethodType(ice_write, self)
+
+        try:
+            slow_period = self.serverside('period')
+        except ValueError:
+            pass
+        else:
+            self.slow_period = int(slow_period)
+
+        self.period(self.slow_period)
+
+
+class IceDoubleArray(DFW.Keyword.DoubleArray):
+    def __init__(self, *args, **kwargs):
+        self.ice_connect = types.MethodType(ice_connect, self)
+        self.slow_down = types.MethodType(ice_slow_down, self)
+        self.speed_up = types.MethodType(ice_speed_up, self)
+
+        self.rapid_checks = 0
+        self.fast_period = 3
+        self.slow_period = 120
+
+        DFW.Keyword.DoubleArray.__init__(self, *args, **kwargs)
+
+        self.postwrite = types.MethodType(ice_postwrite, self)
+        self.read = types.MethodType(ice_read, self)
+        self.update = types.MethodType(ice_update, self)
+        self.write = types.MethodType(ice_write, self)
+
+        try:
+            slow_period = self.serverside('period')
+        except ValueError:
+            pass
+        else:
+            self.slow_period = int(slow_period)
+
+        self.period(self.slow_period)
+
+
+class IceEnumerated(DFW.Keyword.Enumerated):
+    def __init__(self, *args, **kwargs):
+        self.ice_connect = types.MethodType(ice_connect, self)
+        self.slow_down = types.MethodType(ice_slow_down, self)
+        self.speed_up = types.MethodType(ice_speed_up, self)
+
+        self.rapid_checks = 0
+        self.fast_period = 3
+        self.slow_period = 120
+
+        DFW.Keyword.Enumerated.__init__(self, *args, **kwargs)
+
+        self.postwrite = types.MethodType(ice_postwrite, self)
+        self.read = types.MethodType(ice_read, self)
+        self.update = types.MethodType(ice_update, self)
+        self.write = types.MethodType(ice_write, self)
+
+        try:
+            slow_period = self.serverside('period')
+        except ValueError:
+            pass
+        else:
+            self.slow_period = int(slow_period)
+
+        self.period(self.slow_period)
+
+
+class IceInteger(DFW.Keyword.Integer):
+    def __init__(self, *args, **kwargs):
+        self.ice_connect = types.MethodType(ice_connect, self)
+        self.slow_down = types.MethodType(ice_slow_down, self)
+        self.speed_up = types.MethodType(ice_speed_up, self)
+
+        self.rapid_checks = 0
+        self.fast_period = 3
+        self.slow_period = 120
+
+        DFW.Keyword.Integer.__init__(self, *args, **kwargs)
+
+        self.postwrite = types.MethodType(ice_postwrite, self)
+        self.read = types.MethodType(ice_read, self)
+        self.update = types.MethodType(ice_update, self)
+        self.write = types.MethodType(ice_write, self)
+
+        try:
+            slow_period = self.serverside('period')
+        except ValueError:
+            pass
+        else:
+            self.slow_period = int(slow_period)
+
+        self.period(self.slow_period)
+
+
+class IceString(DFW.Keyword.String):
+    def __init__(self, *args, **kwargs):
+        self.ice_connect = types.MethodType(ice_connect, self)
+        self.slow_down = types.MethodType(ice_slow_down, self)
+        self.speed_up = types.MethodType(ice_speed_up, self)
+
+        self.rapid_checks = 0
+        self.fast_period = 3
+        self.slow_period = 120
+
+        DFW.Keyword.String.__init__(self, *args, **kwargs)
+
+        self.postwrite = types.MethodType(ice_postwrite, self)
+        self.read = types.MethodType(ice_read, self)
+        self.update = types.MethodType(ice_update, self)
+        self.write = types.MethodType(ice_write, self)
+
+        try:
+            slow_period = self.serverside('period')
+        except ValueError:
+            pass
+        else:
+            self.slow_period = int(slow_period)
+
+        self.period(self.slow_period)
+
+
+
+def setupKeywords(service):
+
+    dispatcher = main.dispatcher
+
+    prefix = 'DISP' + str(dispatcher)
+    DFW.Keyword.Enumerated(prefix + 'STA', service, 'initializing')
+    StopKeyword(prefix + 'STOP', service, False)
+    DFW.Keyword.String(prefix + 'VER', service, main.version)
+    DFW.Keyword.Integer('ICENCALL', service, 0)
+
+    # Start Ice service first
+    ice_client = IceClient()
+
+    main.client = ice_client
+
+    # Parsing the XML directly like this is undesirable; in this case, we just
+    # want to establish "Ice" keywords for any keyword defined in the LFC
+    # bundle.
+
+    lfc_bundle = service.xml.bundles['lfc']
+
+    for keyword_node in lfc_bundle.childNodes:
+        if keyword_node.localName != 'keyword':
+            continue
+
+        keyword_name = keyword_node.ktlxml_keyword_name
+        keyword_attributes = service.xml.attributes(keyword_name)
+        keyword_type = keyword_attributes['type']
+
+        if keyword_type == 'boolean':
+            new_keyword = IceBoolean(keyword_name, service)
+        elif keyword_type == 'double':
+            new_keyword = IceDouble(keyword_name, service)
+        elif keyword_type == 'double array':
+            new_keyword = IceDoubleArray(keyword_name, service)
+        elif keyword_type == 'enumerated':
+            new_keyword = IceEnumerated(keyword_name, service)
+        elif keyword_type == 'integer':
+            new_keyword = IceInteger(keyword_name, service)
+        elif keyword_type == 'string':
+            new_keyword = IceString(keyword_name, service)
+        else:
+           raise ValueError('unhandled Ice keyword type in LFC bundle: ' + keyword_type)
+
+        new_keyword.ice_client = ice_client
+
+        print("Keyword",keyword_name,"defined",new_keyword.fast_period,new_keyword.slow_period)
+#
+# #
+# ICE classes.
+# #
+#
+
+class IceClient:
+
+    # ICE Client class.
+
+    def __init__(self):
+
+        # Setup Ice communication
+        config_path = main.config.get('main', 'iceclient')
+        self.clientconfig = config_path
+
+
+    def getvalue(self, name):
+        ''' This function is called when keyword value is read '''
+        value = self.twoway.receive(name)
+        #print('getvalue called,',name,value)
+        return value
+
+    def callbackfunc(self, keyword):
+        ''' This function is called when keyword value is changed '''
+        #print('callbackfunc called for keyword',keyword)
+        # KTL callback function
+        if keyword['populated'] == False:
+            return
+
+        try:
+            value = str(keyword['binary'])
+            self.twoway.modifiedkeyword(keyword['name'], value)
+        except:
+            print('Error in callbackfunc')
+            return
+
+
+
+
+    def run(self, communicator):
+
+        import CombIce
+
+        print('start running ice')
+
+        # Establish the connection
+        self.twoway = CombIce.LfcPrx.checkedCast(
+        communicator.propertyToProxy('Lfc.Proxy').ice_twoway().ice_secure(False))
+
+        print('established connection')
+
+        # It may take some time for the dispatcher to start running.
+        # Wait for 3 seconds before trying to make connection with ICE.
+
+        time.sleep(3)
+        print('ICE connection starts')
+
+        # Get the keyword list to monitor from the ICE server
+        keylist = self.twoway.keylist()
+        print('ICE is monitoring keywords:', keylist)
+        '''
+        while main.Service['ICESTA'].value == '1':
+            for k in keylist:
+                try:
+                    main.Service[k].ice_connect()
+                    print('Keyword %s connected to ICE' % k)
+                except Exception as e:
+                    print('Keyword %s is not connected to ICE' % k)
+            print("some interruption?'")
+            main.Service['ICESTA'].value=='2'
+        '''
+        try:
+            for k in keylist:
+                try:
+                    main.Service[k].ice_connect()
+                    print('Keyword %s connected to ICE' % k)
+                except Exception as e:
+                    print('Keyword %s is not connected to ICE' % k)
+                    print('error: ', e)
+
+            # while ICE status is set to "Connected"
+            while main.Service['ICESTA'].value == '1':
+
+                try:
+                    time.sleep(3)
+                    #print( communicator.isShutdown())#: print("communicator shut down")
+                except:# (KeyboardInterrupt, SystemExit):
+                    print("some interruption??")
+                    break
+            print("ICESTA not connected ??")
+
+
+        except:
+            print('ICE status is set to disconnected (message from communicator.run)')
+            return
+
+
+
+#'''
+#
+# #
+# Helper functions.
+# #
+#
+
+def usage(verbose=False):
+    ''' How to invoke this program.
+    '''
+
+    output = "Usage: %s -c config_file [options]" % (sys.argv[0])
+
+    if verbose == False:
+        print(output)
+        return
+
+    output = output + '''
+
+Required flags:
+
+    -c filename         Overall configuration file location
+    --config=filename       Default: None
+
+Optional flags:
+
+    -h,-?            Print verbose help (this output)
+    --help
+'''
+
+    print(output)
+
+
+
+class StopKeyword(DFW.Keyword.Boolean):
+
+    def write(self, value):
+
+        if value == '1':
+            main.shutdown.set()
+
+# end of class StopKeyword
+
+
+def parseCommandLine():
+
+    executable = sys.argv[0]
+    arguments = sys.argv[1:]
+
+    if len(arguments) == 0:
+        help = True
+    else:
+        help = False
+
+    flags = '?c:h'
+    long_options = ('config=', 'help')
+
+    options, arguments = getopt.gnu_getopt(arguments, flags, long_options)
+
+
+    for option, value in options:
+
+        if option == '-?' or option == '-h' or option == '--help':
+            help = True
+
+        elif option == '-c' or option == '--config':
+            main.config_file = validateFile(value)
+
+
+    if help == True:
+        usage(verbose=True)
+        sys.exit(0)
+
+
+
+def parseConfigFile():
+
+    if main.config_file is None:
+        return
+
+    main.config.read(main.config_file)
+
+    dispatcher = main.config.get('main', 'dispatcher')
+    (service, dispatch, number) = dispatcher.split('_')
+    main.dispatcher = int(number)
+
+
+
+def checkSanity():
+    ''' Raise exceptions if something is wrong with the runtime
+        configuration, as specified by the configuration file and
+        on the command line.
+    '''
+
+    if main.config_file is None:
+        raise ValueError('no configuration file specified')
+
+    sections = ('main',)
+
+    for section in sections:
+
+        if main.config.has_section(section):
+            pass
+        else:
+            raise configparser.NoSectionError("[%s]" % (section))
+
+
+    main.config.get('main', 'service')
+    main.config.get('main', 'stdiosvc')
+
+
+
+def validateFile(filename):
+
+    if os.path.isabs(filename):
+        pass
+    else:
+        filename = os.path.abspath(filename)
+
+    if os.path.isfile(filename):
+        pass
+    else:
+        raise ValueError("file does not exist: '%s'" % (filename))
+
+    return filename
+
+
+
+
+#
+# #
+# Execute the main() function defined at the head of the file.
+# #
+#
+
+if __name__ == '__main__':
+    main()
+
+
+# vim: set expandtab tabstop=8 softtabstop=4 shiftwidth=4 autoindent:
