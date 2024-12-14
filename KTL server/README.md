@@ -16,19 +16,19 @@ The dispatcher and the ICE server are still in the development phase, and are cu
 
 Normally, the ICE server and the dispatcher (ICE client) should be always running and connected via ICE. This can be checked from the KTL side using the ICESTA keyword by
 
-->**show -s comb icesta**<-
+```show -s comb icesta```
 
 If it says “Connected”, the ICE server and the dispatcher connection is normal. Ready to use show/modify commands to read/set the LFC status.
 
 If it says **“Disconnected”**, this is because either the ICE server is not running, or the ICE server is running but the ICE connection is lost (this can happen when the ICE server is restarted). If the ICE server is not running, someone has to start the ICE server from the LFC laptop (nothing can be done from the KTL side). This can be done by Jinhao or Yoo Jung (as of Aug 16th, 2024). If the ICE server is running but the ICE connection is lost, a KTL user can retry the connection by
 
-->**modify -s comb icesta=3**<-
+```modify -s comb icesta=3```
 
 Then after a few seconds, try the show command again to check the status. 
 
 To make sure if the ICE connection is successful, ICECLK keyword can be useful,
 
-->**show -s comb iceclk**<-
+```show -s comb iceclk```
 
 This keyword is updated every 15 seconds. This keyword value should be real-time (<15 seconds) if the ICE connection is established.
 
