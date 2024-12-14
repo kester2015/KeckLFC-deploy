@@ -46,13 +46,13 @@ If for some reason these commands do not work, one may try restarting the dispat
 
 ### Starting the server
 Simply start the ICE server by
-``` ruby
+``` 
 python server.py
 ```
 
 ### Starting the dispatcher
 Log in to irastrocomb and start the dispatcher
-``` ruby
+``` 
 ssh combbld@irastrocomb
 astrocomb start comb
 ```
@@ -66,21 +66,21 @@ Always make sure that
 
 To deploy changes in `LFC.xml.sin`, follow these steps:
 1. copy `LFC.xml.sin` file to irastrocombbuild
-``` ruby
-scp LFC.xml.sin combbld@irastrocombbuild:/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin`
+``` 
+scp LFC.xml.sin combbld@irastrocombbuild:/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin
 ```
 2. log in to irastrocombbuild and make install
-``` ruby
+``` 
 ssh combbld@irastrocombbuild
 cd /kroot/src/kss/astrocomb/comb/
 make install
 ```
 3. deploy to irastrocomb
-``` ruby
+``` 
 kdeploy -a
 ```
 4. log into irastrocomb and restart the dispatcher
-``` ruby
+``` 
 ssh combbld@irastrocomb
 astrocomb restart comb
 ```
@@ -90,7 +90,7 @@ astrocomb restart comb
 
 The KTL dispatcher code is `combd.sin`.
 Edit the file and copy to irastrocombbuild
-``` ruby
+``` 
 scp combd.sin combbld@irastrocombbuild:/kroot/src/kss/astrocomb/comb/dispatcher/combd.sin`
 ```
 and do the same make install and kdeploy steps
