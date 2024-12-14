@@ -1,55 +1,102 @@
-## How to test keyword read/write
+# Comb KTL service Overview
 
-* Important files:
+The software controlling the LFC (KeckLFC) lives in the Windows machine, and this is interfaced with the KTL service “comb” (running in IRASTROCOMB server) via the ICE. 
 
-1. (no longer up-to-date !!) `nslfcd`: this is the dispatcher code.
-2. (no longer up-to-date !!) `LFCm.xml.sin`: this is the full xml file, where KTL keywords are defined. Several parameters that are not inputs of the KTL dispatcher (such as normal polling rate, fast polling rate) are included.
-3. (no longer up-to-date !!) `LFC.xml.sin`: this is another xml file, a trimmed version of `LFCm.xml.sin`, used as input for the KTL dispatcher. Do not edit this directly, always edit `LFCm.xml.sin`.
-4. (no longer up-to-date !!) `copy_xml.py`: this is a script for generating `LFC.xml.sin` from `LFCm.xml.sin`, and transferring the xml files and `nslfcd` dispatcher code to irastrocombbuild. This makes sure that the xml files in the Windows laptop and in the irastrocombbuild are the same.
-5. `server.py`: this is the ICE server file.
-6. `KTLIce.ice`, `config.server`, (`config.client` in irastrocombbuild): ICE related files
+The `server.py` file in this directory is the ICE server script. 
+The KTL dispatcher "comb" is the ICE client.
 
-* How to do read/write tests:
+A user can access the LFC-related keywords via "comb" KTL dispatcher (ICE client),
+which then talks to the ICE server to poll or modify keyword values.
 
-1. If keyword implementation (`xml` file) needs change - either keyword type change or adding a new keyword, contact Yoo Jung.
-> All the keywords that are listed in `/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin` should have the corresponding method defined in `KeckLFC.py`.
-2. Open a terminal in irastrocomb (`ssh combbld@irastrocomb` in the PowerShell)
-3. Run the ICE server first, in Windows machine, by: `python server.py` (the `server.py` file in the current directory)
-4. When you see the message, ICE server starts ..., it's ready to start the dispatcher. In irastrocomb, do
-`astrocomb restart comb`, which starts the dispatcher
-5. To test keyword read, in irastrocomb terminal, run
-`show -s comb KEYWORDNAME`
-Note that it may take up to the keyword read period to store the device value to the dispatcher.
-6. To test keyword write, run
-`modify -s comb KEYWORDNAME=newvalue`
+To operate the comb through the KTL, the ICE server should be running and the ICE connection should be established. 
 
-Contents below are not up-to-date (as of Aug 6th)
+The dispatcher and the ICE server are still in the development phase, and are currently running with limited keywords (as of Aug 16th, 2024). 
 
-* How to prepare read/write tests:
+# Establishing the ICE connection
 
-0. Implement keywords in `LFCm.xml.sin` and related functions in `KeckLFC.py`.
-> All the keywords that are listed in `LFCm.xml.sin` should have the corresponding method defined in `KeckLFC.py`.
-> KTLXML documentation: https://spg.ucolick.org/KTLXML/
-1. Transfer most up-to-date dispatcher and xml files to irastrocombbuild, by running `copy_xml.py`. 
-2. Open two terminals in irastrocombbuild. (`ssh combbld@irastrocombbuild` in the PowerShell)
-3. In one of the terminals, go to `/kroot/src/kss/astrocomb/`, and compile the dispatcher by `make install`.
+Normally, the ICE server and the dispatcher (ICE client) should be always running and connected via ICE. This can be checked from the KTL side using the ICESTA keyword by
+
+->**show -s comb icesta**<-
+
+If it says “Connected”, the ICE server and the dispatcher connection is normal. Ready to use show/modify commands to read/set the LFC status.
+
+If it says **“Disconnected”**, this is because either the ICE server is not running, or the ICE server is running but the ICE connection is lost (this can happen when the ICE server is restarted). If the ICE server is not running, someone has to start the ICE server from the LFC laptop (nothing can be done from the KTL side). This can be done by Jinhao or Yoo Jung (as of Aug 16th, 2024). If the ICE server is running but the ICE connection is lost, a KTL user can retry the connection by
+
+->**modify -s comb icesta=3**<-
+
+Then after a few seconds, try the show command again to check the status. 
+
+To make sure if the ICE connection is successful, ICECLK keyword can be useful,
+
+->**show -s comb iceclk**<-
+
+This keyword is updated every 15 seconds. This keyword value should be real-time (<15 seconds) if the ICE connection is established.
+
+If for some reason these commands do not work, one may try restarting the dispatcher (see the dispatcher basics section below). If none of these work contact Yoo Jung (hoping that doesn’t happen)
+
+# Notes for developers
+
+### Important files in the LFC windows laptop
+
+1. `combd.sin`: this is the dispatcher code.
+2. `LFC.xml.sin`: this is the full xml file, where KTL keywords are defined. 
+3. `server.py`: this is the ICE server file.
+4. `KTLIce.ice`, `config.server`, (`config.client` in irastrocombbuild): ICE related files
 
 
-Now you are ready to test! If you haven't made changes in `LFCm.xml.sin` or `nslfcd`, these steps 0-3 can be skipped.
+### Starting the server
+Simply start the ICE server by
+``` ruby
+python server.py
+```
 
-* How to test read/write:
+### Starting the dispatcher
+Log in to irastrocomb and start the dispatcher
+``` ruby
+ssh combbld@irastrocomb
+astrocomb start comb
+```
 
-1. Run the ICE server first, in Windows machine, by: `python server.py` (the `server.py` file in the current directory)
-2. When you see the message, ICE server starts ..., it's ready to start the dispatcher. In irastrocombbuild, run
-`/kroot/rel/default/sbin/nslfcd  -c /kroot/rel/default/data/nslfc/nslfc_3.conf`
-If the ICE connection is successful, you'll see the messages "Keyword KEYWORDNAME is connected to ICE". 
-3. To test keyword read, in another irastrocombbuild terminal, run
-`show -s nslfc KEYWORDNAME`
-Note that it may take up to the keyword read period to store the device value to the dispatcher.
-4. To test keyword write, run
-`modify -s nslfc KEYWORDNAME=newvalue`
+### Making changes to keywords 
 
-## Details on keywords
+The keywords are defined in `LFC.xml.sin` file in this directory.
+Always make sure that 
+1. corresponding methods of all the keywords in `LFC.xml.sin` file are defined in `KeckLFC.py`.
+2. `LFC.xml.sin` file in this directory (the file used by ICE server) and `LFC.xml.sin` file in irastrocombbuild server (/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin) are the same and are deployed to irastrocomb (the file used by KTL dispatcher, the ICE client).
+
+To deploy changes in `LFC.xml.sin`, follow these steps:
+1. copy `LFC.xml.sin` file to irastrocombbuild
+``` ruby
+scp LFC.xml.sin combbld@irastrocombbuild:/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin`
+```
+2. log in to irastrocombbuild and make install
+``` ruby
+ssh combbld@irastrocombbuild
+cd /kroot/src/kss/astrocomb/comb/
+make install
+```
+3. deploy to irastrocomb
+``` ruby
+kdeploy -a
+```
+4. log into irastrocomb and restart the dispatcher
+``` ruby
+ssh combbld@irastrocomb
+astrocomb restart comb
+```
+
+
+### Making changes to dispatcher code
+
+The KTL dispatcher code is `combd.sin`.
+Edit the file and copy to irastrocombbuild
+``` ruby
+scp combd.sin combbld@irastrocombbuild:/kroot/src/kss/astrocomb/comb/dispatcher/combd.sin`
+```
+and do the same make install and kdeploy steps
+
+
+### Details on keywords
 
 Useful references:  
 https://spg.ucolick.org/DFW/keyword.html  
@@ -62,7 +109,7 @@ All the KTL keyword values passed by the dispatcher are in string formats. When 
 When accessing the keyword values stored in the KeckLFC class in the dictionary, simply : `self.keywords[KEYWORDNAME]`. The array keyword is stored as list (was originally string with spaces... this is updated!)
 
 
-## How ICE connection works
+### How ICE connection works
 
 The `server.py` python script in this directory does following:
 
@@ -70,13 +117,11 @@ The `server.py` python script in this directory does following:
 2. starts KeckLFC, which has all the functions corresponding to the keywords defined.
 3. establishes ICE connection of each keyword when KTL dispatcher (ICE client) starts running.
    
-   The dispatcher can be run in astrocombbuild (for now) by:
-   `/kroot/rel/default/sbin/nslfcd  -c /kroot/rel/default/data/nslfc/nslfc_3.conf`
 
 ### Detailed explanation on how ICE connection works:
 
-When the KTL dispatcher (ICE client) is started, the dispatcher also reads list of keywords from the same xml file `LFCm.xml.sin` living in the astrocomb server.
-(** so the `LFCm.xml.sin` files in the two computers should be identical!)
+When the KTL dispatcher (ICE client) is started, the dispatcher also reads list of keywords from the same xml file `LFC.xml.sin` living in the astrocomb server.
+(** so the `LFC.xml.sin` files in the two computers should be identical!)
 
 In the dispatcher startup, 
 In `setupKeywords()` (in KTL), each KTL keyword class is modified such that
@@ -92,9 +137,7 @@ For a successful ICE connection with the KTL layer,
 
 
 
-
-
-## KTL keywords and linking to the KeckLFC class
+### KTL keywords and linking to the KeckLFC class
 
 In `KeckLFC.py`, the KeckLFC class reads the xml file `LFC.xml.sin`, stores the keyword names and values as dictionaries in `self.keywords`.
 The functions are defined as the same name as the keyword.
