@@ -600,7 +600,9 @@ class KeckLFC(object):
         rfosci_threshold_v=15
         rfosci_threshold_i=0.4
         if value == None:
-            if self.keywords['LFC_RFOSCI_ONOFF'] == 1:
+            print('RFOSCI value', self.keywords['LFC_RFOSCI_ONOFF'])
+            status_list=[1,True,'ON']
+            if (self.keywords['LFC_RFOSCI_ONOFF'] in status_list):
                 voltage=self.LFC_RFOSCI_V()
                 current=self.LFC_RFOSCI_I()
                 if np.abs(voltage-rfosci_threshold_v)>1 or np.abs(current-rfosci_threshold_i)>0.1:
@@ -615,19 +617,21 @@ class KeckLFC(object):
         # return
         rfamp_threshold_v=30
         rfamp_threshold_i=4.0
+        status_list=[1,True,'ON']
+        stop_list=[0,False,'OFF']
         if value == None:
-            if self.keywords['LFC_RFAMP_ONOFF'] == 1:
-                if self.keywords['LFC_RFOSCI_ONOFF'] == 1:
+            if self.keywords['LFC_RFAMP_ONOFF'] in status_list:
+                if self.keywords['LFC_RFOSCI_ONOFF'] in status_list:
                     voltage=self.LFC_RFAMP_V()
                     current=self.LFC_RFAMP_I()
-                    if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-rfamp_threshold_i)>0.15:
+                    if (np.abs(voltage-rfamp_threshold_v)>1) or (np.abs(current-rfamp_threshold_i)>0.15):
                         self.LFC_CLOSE_ALL(1)
                         self.__sendemail('RF amplifier is off due to over voltage or over current')
                         return 1
-                if self.keywords['LFC_RFOSCI_ONOFF'] == 0:
+                if self.keywords['LFC_RFOSCI_ONOFF'] in stop_list:
                     voltage=self.LFC_RFAMP_V()
                     current=self.LFC_RFAMP_I()
-                    if np.abs(voltage-rfamp_threshold_v)>1 or np.abs(current-0.7)>0.15:
+                    if (np.abs(voltage-rfamp_threshold_v)>1) or (np.abs(current-0.7)>0.15):
                         self.LFC_CLOSE_ALL(1)
                         self.__sendemail('RF amplifier is off due to over voltage or over current')
                         return 1
@@ -653,11 +657,16 @@ class KeckLFC(object):
         return
         if value==1:
             self.LFC_PTAMP_ONOFF(0)
+            self.__sleep(0.1)
             self.LFC_EDFA23_ONOFF(0)
+            self.__sleep(0.1)
             self.LFC_EDFA27_ONOFF(0)
+            self.__sleep(0.1)
             
             self.LFC_RFOSCI_ONOFF(0)
+            self.__sleep(0.1)
             self.LFC_RFAMP_ONOFF(0)
+            self.__sleep(0.1)
             self.LFC_CLARITY_ONOFF(0)
             self.__sendemail('All devices are closed')
 
@@ -1306,7 +1315,7 @@ class KeckLFC(object):
             return rfoscPS_i
 
     def LFC_WSP_PHASE(self, value=None):#TBD
-        if test_mode: return
+        # if test_mode: return
         #return
         if self.ws == None:
             self.ws = self.__LFC_WSP_connect()
@@ -1489,7 +1498,7 @@ class KeckLFC(object):
             return ptact  # return
 
     def LFC_PTAMP_LATCH(self, value=None):#test r #err
-        if test_mode: return
+        #if test_mode: return
 
         ## Yoo Jung's comments:
         ## it says in LFCm.xml.sin that this keyword type is boolean
@@ -1537,7 +1546,7 @@ class KeckLFC(object):
             return 0  # return
         
     def LFC_YJ_SHUTTER(self, value=None): #tets r w #err2
-        if test_mode: return
+        # if test_mode: return
         #return
         # arduino = self.__LFC_ARDUINO_connect()
         if self.arduino == None: 
@@ -1640,7 +1649,7 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None): #test r w
-        if test_mode: return
+        # if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
@@ -1691,7 +1700,7 @@ class KeckLFC(object):
         return self.LFC_2BY2_SWITCH(value)
         
     def LFC_HK_SHUTTER(self, value=None): #read r w
-        if test_mode: return
+        # if test_mode: return
         #return
         hks = self.__LFC_HK_SHUTTER_connect()
         if value == None:
@@ -1719,7 +1728,7 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None): #r w
         # Successfully tested!
-        if test_mode: return
+        # if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
             print("VOA1550_ATTEN read block called")
@@ -1756,7 +1765,7 @@ class KeckLFC(object):
         return self.LFC_VOA1550_ATTEN(value)
         
     def LFC_VOA1310_ATTEN(self, value=None):#r w
-        if test_mode: return
+        # if test_mode: return
         voa = self.__VOA1310_connect()
         if value == None:
             voa.connect()
@@ -1788,7 +1797,7 @@ class KeckLFC(object):
         
     def LFC_VOA2000_ATTEN(self, value=None):# rw
         # Successfully tested!
-        if test_mode: return
+        # if test_mode: return
         voa = self.__VOA2000_connect()
         if value == None:
             voa.connect()
@@ -1875,16 +1884,17 @@ class KeckLFC(object):
     def LFC_PENDULEM_FREQ_MONITOR(self, value=None):
         if test_mode: return
         pen = self.__LFC_PENDULEM_connect()
+        status_list=[1,True,'ON']
         if value == None:
 
-            if (self.keywords['LFC_RFOSCI_ONOFF'] == 1) & (self.keywords['LFC_RFAMP_ONOFF'] == 1):
+            if (self.keywords['LFC_RFOSCI_ONOFF'] in status_list) & (self.keywords['LFC_RFAMP_ONOFF'] in status_list):
                 pen.connect()
                 self.__sleep(0.5)
                 pen.run()
                 freq=pen.measFreq('c')
                 pen.disconnect()
                 if np.abs(freq-16e9)>1000:
-                    self.LFC_CLOSE_ALL()
+                    self.LFC_CLOSE_ALL(1)
                     self.__sendemail('Pendulum frequency is not 16GHz')
                     return 1
 
@@ -1988,15 +1998,16 @@ class KeckLFC(object):
     def LFC_EDFA27_INPUT_POWER_MONITOR(self, value=None): #r
         if test_mode: return
         amonic27 = self.__LFC_EDFA27_connect()
+        status_list=[1,True,'ON']
         if value == None:
 
-            if (self.keywords['LFC_CLARITY_ONOFF'] == 1):
+            if (self.keywords['LFC_CLARITY_ONOFF'] in status_list):
                 
                 amonic27.connect()
                 input_power=amonic27.inputPowerCh1
                 amonic27.disconnect()
 
-                if (input_power>10) & (input_power<1):
+                if (input_power>10) or (input_power<1):
                     self.__sendemail('EDFA27 input power is not correct')
                     return 1
 
@@ -2006,12 +2017,13 @@ class KeckLFC(object):
     def LFC_EDFA23_INPUT_POWER_MONITOR(self, value=None):#r
         if test_mode: return
         amonic23 = self.__LFC_EDFA23_connect()
+        status_list=[1,True,'ON']
         if value == None:
-            if (self.keywords['LFC_EDFA27_ONOFF'] == 1):
+            if (self.keywords['LFC_EDFA27_ONOFF'] in status_list):
                 amonic23.connect()
                 input_power=amonic23.inputPowerCh1
                 amonic23.disconnect()
-                if (input_power>10) & (input_power<1):
+                if (input_power>10) or (input_power<1):
                     self.__sendemail('EDFA23 input power is not correct')
                     return 1
         return 0

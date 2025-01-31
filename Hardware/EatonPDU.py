@@ -11,8 +11,8 @@ class EatonPDU(Device):
         # self.inst.read_termination = '\r\n'  # read_termination is not specified by default.
         self.inst.write_termination = '\r\n'  # write_termination is '\r\n' by default.
 
-        self.__username = "kecklfc" # default password is "admin"
-        self.__password = "astrocomb" # default password is its serial number # 192.168.0.160
+        self.__username = "lfc" # default password is "admin"
+        self.__password = "lfc@keck" # default password is its serial number # 192.168.0.160
         # self.__password = "H619N29036" # 192.168.0.143
         self.max_login_attempt = 5
         # self.loggedin = False # no longer needed because of loggedin is a property now.

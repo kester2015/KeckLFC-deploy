@@ -21,6 +21,10 @@ class Clarity(Device):
         # self.__default_Cur_mA = 150 # in unit of 1mA
         # self.__default_T_C = 19.181 # degC
 
+    def printStatus():
+        #TODO: ADD
+        pass
+
     def connect(self):
         self.connected = True
         self.info(self.devicename+": connected.")

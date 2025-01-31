@@ -149,7 +149,7 @@
 		<help level="verbose">set attenuation in db</help>
 		<capability type="write">True</capability>
 		<serverside>
-			<period>21600</period>
+			<period>1800</period>
 		</serverside>
 		<units>dB</units>
 		<format>%.2f</format>
@@ -165,7 +165,7 @@
 		<help level="verbose">set attenuation in db</help>
 		<capability type="write">True</capability>
 		<serverside>
-			<period>21600</period>
+			<period>1800</period>
 		</serverside>
 		<units>dB</units>
 		<format>%.2f</format>
@@ -181,7 +181,7 @@
 		<help level="verbose">set attenuation in db</help>
 		<capability type="write">True</capability>
 		<serverside>
-			<period>21600</period>
+			<period>1800</period>
 		</serverside>
 		<units>dB</units>
 		<format>%.2f</format>
