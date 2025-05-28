@@ -8,63 +8,53 @@
 # Reconfigure logger
 import os, sys, warnings, inspect
 
-# ------------ Logger start ------------
-from loguru import logger
+# # ------------ Logger start ------------
+# from loguru import logger
 
-def get_call_kwargs(level=1):
-    frame = inspect.currentframe().f_back
-    for _ in range(level):  # get the level-th frame
-        frame = frame.f_back
-    code_obj = frame.f_code
-    return dict(
-        function_module=os.path.basename(code_obj.co_filename),
-        function_name=code_obj.co_name,
-        function_line=frame.f_lineno,
-    )
+# def get_call_kwargs(level=1):
+#     frame = inspect.currentframe().f_back
+#     for _ in range(level):  # get the level-th frame
+#         frame = frame.f_back
+#     code_obj = frame.f_code
+#     return dict(
+#         function_module=os.path.basename(code_obj.co_filename),
+#         function_name=code_obj.co_name,
+#         function_line=frame.f_lineno,
+#     )
 
-def send_log_file_via_email(fname):
-    import win32com.client
-    ol = win32com.client.Dispatch('Outlook.Application')
-    # size of the new email
-    olmailitem = 0x0
-    newmail = ol.CreateItem(olmailitem)
-    newmail.Subject = '[Regular] [Keck LFC] log file rotated: ' + str(os.path.split(fname)[1])
-    newmail.To = 'maodonggao@outlook.com; stephanie.leifer@aero.org; jge2@caltech.edu'
-    # newmail.CC='maodonggao@outlook.com'
-    newmail.Body = '[Automatically Generated Email] \n\n' + 'Hello, \n\n Attached are the rotated data logging file at Keck. Email sent for backup only. \n\n Best, \n Maodong'
+# def send_log_file_via_email(fname):
+#     import win32com.client
+#     ol = win32com.client.Dispatch('Outlook.Application')
+#     # size of the new email
+#     olmailitem = 0x0
+#     newmail = ol.CreateItem(olmailitem)
+#     newmail.Subject = '[Regular] [Keck LFC] log file rotated: ' + str(os.path.split(fname)[1])
+#     newmail.To = 'maodonggao@outlook.com; stephanie.leifer@aero.org; jge2@caltech.edu'
+#     # newmail.CC='maodonggao@outlook.com'
+#     newmail.Body = '[Automatically Generated Email] \n\n' + 'Hello, \n\n Attached are the rotated data logging file at Keck. Email sent for backup only. \n\n Best, \n Maodong'
 
-    newmail.Attachments.Add(fname)
-    newmail.Send()
-    print(f'Log file {fname} sent')
+#     newmail.Attachments.Add(fname)
+#     newmail.Send()
+#     print(f'Log file {fname} sent')
 
-log_template = os.path.expanduser(
-    r'~\Desktop\Keck\Logs\test_{time:YYYY-MM-DD_HH-mm-ss}.log'
-)
-
-# 移除默认的 logger
-logger.remove()
-
-# 日志输出格式
-logger_format = (
-    "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
-    "<level>{level: <8}</level> | "
-    "<cyan>{extra[devicename]}</cyan> | "
-    "<cyan>{extra[function_module]}</cyan>:"
-    "<cyan>{extra[function_name]}</cyan>:"
-    "<cyan>{extra[function_line]}</cyan>\n"
-    "<level>{message}</level>"
-)
-
-logger.add(sys.stderr, format=logger_format, level="INFO")  # recover console print
-logger.add(log_template, format=logger_format, level="INFO", rotation="1 MB", retention=50, enqueue=True,
-           compression=send_log_file_via_email)  # 1MB per file, 50 files max
-logger.bind(devicename="Device").info('logger initialized', **get_call_kwargs(level=0))
+# fname = os.path.expanduser(r'~\Desktop\Keck\Logs\test.log')
+# logger.remove()  # remove logger with default format
+# logger_format = (
+#     "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
+#     "<level>{level: <8}</level> | "
+#     "<cyan>{extra[devicename]}</cyan> | "
+#     "<cyan>{extra[function_module]}</cyan>:<cyan>{extra[function_name]}</cyan>:<cyan>{extra[function_line]}</cyan>\n"
+#     "<level>{message}</level>")
+# logger.add(sys.stderr, format=logger_format, level="INFO")  # recover console print
+# logger.add(fname, format=logger_format, level="INFO", rotation="1 MB", retention=50, enqueue=True,
+#            compression=send_log_file_via_email)  # 1MB per file, 50 files max
+# logger.bind(devicename="Device").info('logger initialized', **get_call_kwargs(level=0))
 
 # ------------ Logger end ------------
 
 
 # Base class for devices
-class Device:
+class test_Device:
     import pyvisa
     rm = pyvisa.ResourceManager()
 
@@ -85,7 +75,7 @@ class Device:
                 if self.isVISA:
                     self.inst.open()
                 self.connected = True
-                self.info(self.devicename + " connected")
+                #self.info(self.devicename + " connected")
                 return 1
             except Exception as e:
                 self.error(f"Error:{e}")
@@ -97,7 +87,7 @@ class Device:
             if self.isVISA:
                 self.inst.close()
             self.connected = False
-            self.info(self.devicename + " disconnected")
+            #self.info(self.devicename + " disconnected")
             return 1
         return 0
 
@@ -109,25 +99,28 @@ class Device:
 
     def query(self, cmd):
         return self.inst.query(cmd)
-
-    # logging
-    logger = logger
     
-    def debug(self, x, name='', level=1):
-        logger.debug(x, devicename=name or self.devicename, **get_call_kwargs(level))
-        # print(x)
+    def clean_test(self):
+        return self.inst.clear()
 
-    def info(self, x, name='', level=1):
-        logger.info(x, devicename=name or self.devicename, **get_call_kwargs(level))
-        # print(x)
+    # # logging
+    # logger = logger
+    
+    # def debug(self, x, name='', level=1):
+    #     logger.debug(x, devicename=name or self.devicename, **get_call_kwargs(level))
+    #     # print(x)
 
-    def warning(self, x, name='', level=1):
-        logger.warning(x, devicename=name or self.devicename, **get_call_kwargs(level))
-        warnings.warn(x)
+    # def info(self, x, name='', level=1):
+    #     logger.info(x, devicename=name or self.devicename, **get_call_kwargs(level))
+    #     # print(x)
 
-    def error(self, x, name='', level=1):
-        logger.error(x, devicename=name or self.devicename, **get_call_kwargs(level))
-        # raise Exception(x)
+    # def warning(self, x, name='', level=1):
+    #     logger.warning(x, devicename=name or self.devicename, **get_call_kwargs(level))
+    #     warnings.warn(x)
+
+    # def error(self, x, name='', level=1):
+    #     logger.error(x, devicename=name or self.devicename, **get_call_kwargs(level))
+    #     # raise Exception(x)
 
 
 
