@@ -163,8 +163,11 @@ You should see something like "Successfully installed ..." in the terminal if th
 > `cd C:\Program Files (x86)\Finisar\WaveManager\waveshaper\api\python3`
 
 > Run the setup.py script via this command:
+>
+> conda activate lfc-env
+> pip install .                    (note there is a space and a dot at end)
 
-> `python setup.py install`
+> `python setup.py install`(this command is outdated and invalid, add by jinhao 2025-06-04)
 
 **If you get access denied errors, you may need to run these commands as administrator. To do this, right click on the Command Prompt icon and select ‘Run as administrator’. Then repeat this step over again. Also don't forget to check you are in the right environment. You should see (lfc-env) in the command prompt. (If not please run `conda activate lfc-env` in terminal.)**
 
@@ -275,6 +278,7 @@ This is most straightforward way to download the repository. But you will not be
 >Note added by Greg: Needed to click on the windows button install, NOT the “installer” or “.zip” or “CLI” buttons.
 
 ### 5.2: Open your project folder in VScode and select the python environment
+add by jinhao: select python environment is optional
 
 - 1. Open your project folder in VScode
 
@@ -291,6 +295,8 @@ This is most straightforward way to download the repository. But you will not be
 ***This step is OPTIONAL at the beginning.***
 
 > Note: VScode has already provided user friendly interface to install extensions. And those extensions typically can be installed ***when you actually need them***. So you don't necessarily need to follow the following instructions and install all the extensions at the beginning.
+>
+> add by jinhao 2025-06-04: open the vscode, there are 6 buttons on the upper left side(left column): explorer , search, source control, run and debug, extensions(ctrl+shift+X), remote explorer. click extensions(or type ctrl+shift+X). then search the python extension, jupyter extension, git extension. click the install button.
 
 - 1. Install python extension in VScode
 
