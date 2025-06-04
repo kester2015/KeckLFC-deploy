@@ -165,6 +165,7 @@ You should see something like "Successfully installed ..." in the terminal if th
 > Run the setup.py script via this command:
 >
 > conda activate lfc-env
+> 
 > pip install .                    (note there is a space and a dot at end)
 
 > `python setup.py install`(this command is outdated and invalid, add by jinhao 2025-06-04)
