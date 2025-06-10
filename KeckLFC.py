@@ -114,6 +114,7 @@ class KeckLFC(object):
         self.clock = None
         self.keywords['ICECLK_ONOFF'] = True
         self.start_clock()
+        self.comb_status = None
         
 
 
@@ -654,6 +655,7 @@ class KeckLFC(object):
     #     return 0
 
     def LFC_CLOSE_ALL(self, value=None):
+        self.__sendemail('LFC_CLOSE_ALL is triggered')
         return
         if value==1:
             self.LFC_PTAMP_ONOFF(0)
@@ -2044,6 +2046,244 @@ class KeckLFC(object):
             return input
         else:
             return 0
+    
+    def LFC_CHECK_STATUS(self, value=None):
+        # ptamp test
+        ptamp = self.__LFC_PTAMP_connect()
+        ptamp.connect()
+        self.__sleep(0.2)
+        ptact=ptamp.activation
+        status_dict={'ON':1,'OFF':0}
+        ptact=status_dict[ptact]
+        self.__sleep(0.2)
+        ptamp.disconnect()
+        if ptact == 1:
+            ptamp_prime = 2
+        else:
+            ptamp_prime = 1
+        # EDFA23 test
+        amonic23 = self.__LFC_EDFA23_connect()
+        amonic23.connect()
+        self.__sleep(0.2)
+        amonic23onoff=amonic23.accCh1Status
+        self.__sleep(0.2)
+        if ( amonic23onoff == 1):
+            amonic23_input_power=amonic23.inputPowerCh1
+            
+            if ( amonic23_input_power > 10) or ( amonic23_input_power < 1):
+                self.__sendemail('EDFA23 input power is not correct')
+            amonic23_prime = 3
+        else:
+            amonic23_prime = 1
+        self.__sleep(0.2)
+        amonic23.disconnect()
+        # EDFA27 test
+        amonic27 = self.__LFC_EDFA27_connect()
+        amonic27.connect()
+        self.__sleep(0.2)
+        amonic27onoff=amonic27.accCh1Status
+        self.__sleep(0.2)
+        if ( amonic27onoff == 1):
+            amonic27_input_power=amonic27.inputPowerCh1
+            
+            if ( amonic27_input_power > 10) or ( amonic27_input_power < 1):
+                self.__sendemail('EDFA27 input power is not correct')
+            amonic27_prime = 5
+        else:
+            amonic27_prime = 1
+        self.__sleep(0.2)
+        amonic27.disconnect()
+        # RFOSCI test
+        rfoscPS = self.__LFC_RFOSCI_connect()
+        rfoscPS.connect()
+        self.__sleep(0.2)
+        rfoscPS_onoff=rfoscPS.activation
+        self.__sleep(0.2)
+        if ( rfoscPS_onoff == 1):
+            rfoscPS_v=rfoscPS.Vout2
+            self.__sleep(0.2)
+            rfoscPS_i=rfoscPS.Iout2
+            
+            if np.abs(rfoscPS_v-15) > 1 or np.abs(rfoscPS_i-0.4) > 0.12:
+                self.__sendemail('RFOSCI voltage or current is not correct')
+            rfoscPS_prime = 7
+        else:
+            rfoscPS_prime = 1
+        self.__sleep(0.2)
+        rfoscPS.disconnect()
+        # RFAMP test
+        rfamp = self.__LFC_RFAMP_connect()
+        rfamp.connect()
+        self.__sleep(0.2)
+        rfamp_onoff=rfamp.activation1
+        self.__sleep(0.2)
+        if ( rfamp_onoff == 1):
+            rfamp_threshold_v=30
+            rfamp_threshold_i=4.0
+
+            if rfoscPS_onoff == 1:
+                rfamp_voltage=rfamp.Vout1
+                self.__sleep(0.2)
+                rfamp_current=rfamp.Iout1
+                if (np.abs(rfamp_voltage-rfamp_threshold_v)>3) or (np.abs(rfamp_current-rfamp_threshold_i)>0.15):
+                    self.LFC_CLOSE_ALL(1)
+                    self.__sendemail('RF amplifier is off due to over voltage or over current')
+                rfamp_prime = 11
+            if rfoscPS_onoff == 0:
+                if (np.abs(rfamp_voltage)>0.1) or (np.abs(rfamp_current)>0.1):
+                    self.LFC_CLOSE_ALL(1)
+                    self.__sendemail('RF amplifier is off due to activation without RFOSCI')
+        else:
+            rfamp_prime = 1
+        self.__sleep(0.2)
+        rfamp.disconnect()
+        # Pendulem test
+        pendulem = self.__LFC_PENDULEM_connect()
+        pendulem.connect()
+        self.__sleep(0.2)
+                
+        if rfoscPS_onoff == 1 and rfamp_onoff == 1:
+            pendulem.run()
+            self.__sleep(0.2)
+            freq=pendulem.measFreq('c')
+            self.__sleep(0.2)
+            if np.abs(freq-16e9)>1000:
+                self.LFC_CLOSE_ALL(1)
+                self.__sendemail('Pendulum frequency is not 16GHz')
+            pendulem_prime = 13
+        else:
+            pendulem_prime = 1
+        self.__sleep(0.2)
+        pendulem.disconnect()
+
+        final = ptamp_prime * amonic23_prime * amonic27_prime * rfoscPS_prime * rfamp_prime * pendulem_prime
+
+        if final == 2*3*5*7*11*13:
+            self.comb_status = 'FULL COMB'
+        elif final == 3*5*7*11*13:
+            self.comb_status = 'STANDBY'
+        elif final == 1:
+            self.comb_status = 'OFF'
+        else:
+            self.comb_status = 'STRANGE STATE'
+            self.__sendemail(f'LFC is in strange state. Please check the status of each device. status code: {final}')
+        return self.comb_status
+        
+    def LFC_SET_STANDBY(self, value=None):
+        """
+        Write keyword to set LFC to STANDBY.
+        """
+        # 只有在 KTL write 时才处理（value != None）
+        if value == 1:
+            status = self.LFC_CHECK_STATUS()  # 获取当前状态
+            # 从 FULL COMB -> close Pritel -> STANDBY
+            if status == 'FULL COMB':
+
+                ptamp=self.__LFC_PTAMP_connect()
+                self.__sleep(0.5)
+                ptamp.pwrAmp = '0A'
+                self.__sleep(0.5)
+                ptamp.preAmp = 0
+                self.__sleep(0.5)
+                ptamp.activation = 0
+                self.__sleep(0.5)
+                ptamp.disconnect()  
+                 
+                self.comb_status = 'STANDBY'
+            # 从 OFF -> full minicomb setup -> STANDBY
+            elif status == 'OFF':
+                self.LFC_MINICOMB_AUTO_SETUP(1)  # 你的 auto setup 脚本
+                self.comb_status = 'STANDBY'
+            # 如果已经 STANDBY，则不动
+            elif status == 'STANDBY':
+                pass  # 什么都不做
+            else:
+                self.__sendemail(f'LFC_SET_STANDBY encountered unexpected status: {status}')
+            return 0
+        else:
+            # KTL read: 返回当前状态
+            return self.comb_status
+
+    def LFC_SET_FULL_COMB(self, value=None):
+        """
+        Write keyword to set LFC to FULL COMB.
+        """
+        if value == 1:
+            status = self.LFC_CHECK_STATUS()  # 获取当前状态
+            # 已是 FULL COMB 不动
+            if status == 'FULL COMB':
+                #todo with Pritel
+                pass
+            # STANDBY -> 打开 Pritel -> FULL COMB
+            elif status == 'STANDBY':
+
+                self.LFC_PTAMP_LATCH(1)  # 确保 PTAMP 已经准备好
+                # 这里假设 PTAMP 已经连接好
+                self.__sleep(0.5)
+                ptamp=self.__LFC_PTAMP_connect()
+                self.__sleep(0.5)
+                ptamp.preAmp = 600
+                self.__sleep(0.5)
+                ptamp.activation = 1
+                self.__sleep(0.5)
+                ptamp.pwrAmp = '4A'
+                self.__sleep(10)
+                ptamp.disconnect()
+                # to do with Pritel
+                self.comb_status = 'FULL COMB'
+            # OFF -> 先做一次 minicomb setup -> Pritel -> FULL COMB
+            elif status == 'OFF':
+                self.LFC_MINICOMB_AUTO_SETUP(1)
+                self.__sleep(5)  # 等待设备稳定
+                self.LFC_PTAMP_LATCH(1)  # 确保 PTAMP 已经准备好
+                # 这里假设 PTAMP 已经连接好
+                self.__sleep(0.5)
+                ptamp=self.__LFC_PTAMP_connect()
+                self.__sleep(0.5)
+                ptamp.preAmp = 600
+                self.__sleep(0.5)
+                ptamp.activation = 1
+                self.__sleep(0.5)
+                ptamp.pwrAmp = '4A'
+                self.__sleep(10)
+                ptamp.disconnect()
+                self.comb_status = 'FULL COMB'
+            return 0
+        else:
+            return self.comb_status
+
+    def LFC_SET_OFF(self, value=None):
+        """
+        Write keyword to set LFC to OFF.
+        """
+        if value == 1:
+            status = self.LFC_CHECK_STATUS()  # 获取当前状态
+            # 如果是 FULL COMB 或 STANDBY，就一路倒回去关
+            if status in ('FULL COMB', 'STANDBY'):
+                ptamp=self.__LFC_PTAMP_connect()
+                self.__sleep(0.5)
+                ptamp.pwrAmp = '0A'
+                self.__sleep(0.5)
+                ptamp.preAmp = 0
+                self.__sleep(0.5)
+                ptamp.activation = 0
+                self.__sleep(0.5)
+                ptamp.disconnect()
+                self.LFC_CLOSE_ALL(1)  # 关闭所有设备
+                # … 如有其它设备也一并关闭 …
+                self.comb_status = 'OFF'
+            # 如果已经 OFF，什么都不做
+            elif status == 'OFF':
+                pass  # 什么都不做
+            else:
+                self.__sendemail(f'LFC_SET_OFF encountered unexpected status: {status}')
+            return 0
+        else:
+            return self.comb_status
+
+
+
+
         
     def LFC_MINICOMB_AUTO_SETUP(self, value=None):#TBD
         if test_mode: return
