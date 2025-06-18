@@ -881,6 +881,7 @@ class KeckLFC(object):
             #return 0 # not testing MODIFY for now
             pt_dict={True:1,False:0}
             value = pt_dict[value]
+
             amonic27.accCh1Status=value
             amonic27.activation=value
             self.__sleep(0.5)
@@ -985,6 +986,7 @@ class KeckLFC(object):
             amonic23.connect()
             pt_dict={True:1,False:0}
             value = pt_dict[value]
+            
             amonic23.accCh1Status=value
             amonic23.activation=value
             self.__sleep(0.5)
@@ -1935,37 +1937,65 @@ class KeckLFC(object):
         return
     
     def LFC_IM_AUTO_LOCK(self, value=None):#TBD big problem
-        if test_mode: return
+        #if test_mode: return
 
-        if value == 1:
-            osa = self.__LFC_OSA_connect()
+        if value in [1,True]:
+            #osa = self.__LFC_OSA_connect()
             srs = self.__LFC_servo_connect()
             
             srs.connect()
             servo_IM = self.__LFC_IM_LOCK_connect(srs)
-            osa.connect()
+            #osa.connect()
             servo_IM.output_mode='man'
             servo_IM.output_upperlim = 3
             servo_IM.output_lowerlim = -3
-            servo_IM.prop_gain=4  #-2
+            servo_IM.prop_gain=2  #-2
             servo_IM.intg_gain=0.1   #1
-            score_best = 0
-            for v in np.arange(-2,2,0.1):
-                servo_IM.manual_output=v
-                self.__sleep(0.1)
+            #score_best = 0
+
+                
                 #x,y=osa.get_trace()
-                score_now = self.__score_eo_comb(osa)
-                if score_now>score_best:
-                    score_best=score_now
-                    best_v=v
-            servo_IM.manual_output=best_v
-            set_point=servo_IM.measure_input
+                #score_now = self.__score_eo_comb(osa)
+                # if score_now>score_best:
+                #     score_best=score_now
+                #     best_v=v
+            v_values = np.arange(-2.0, 1.0, 0.02)
+            inputs = []
+            for v in v_values:
+                servo_IM.manual_output = v
+                self.__sleep(0.2)
+                inputs.append(servo_IM.measure_input)
+            inputs = np.array(inputs)
 
-            servo_IM.outoffset=best_v   
+            # 找到 max/min 及其索引
+            idx_max = np.argmax(inputs)
+            idx_min = np.argmin(inputs)
+            v_max, v_min = v_values[idx_max], v_values[idx_min]
+            max_in, min_in = inputs[idx_max], inputs[idx_min]
+
+            # 计算斜率，并正负决定 prop_gain 符号
+            slope = (max_in - min_in) / (v_max - v_min)
+            if slope < 0:
+                servo_IM.prop_gain = -abs(servo_IM.prop_gain)
+
+            # 计算中点，选最接近中点的 v 作为 best_v
+            target = (max_in + min_in) / 2
+            best_idx = int(np.argmin(np.abs(inputs - target)))
+            best_v = v_values[best_idx]
+
+            # 应用最佳电压
+            servo_IM.manual_output = best_v
+            set_point = servo_IM.measure_input
+            servo_IM.outoffset = best_v
             servo_IM.set_setpoint(set_point)
-            servo_IM.output_mode='pid'
 
-        return
+            servo_IM.output_mode='pid'
+            self.__sleep(0.5)
+            srs.disconnect()
+
+            return 1
+        else:
+            return 0  # If value is not 1, do nothing and return 0
     
     def LFC_IM_ATTEN_OPTIMIZE(self, value=None):#TBD
         if test_mode: return
@@ -2119,13 +2149,13 @@ class KeckLFC(object):
         self.__sleep(0.2)
         if ( rfamp_onoff == 1):
             rfamp_threshold_v=30
-            rfamp_threshold_i=4.0
+            rfamp_threshold_i=4.1
 
             if rfoscPS_onoff == 1:
                 rfamp_voltage=rfamp.Vout1
                 self.__sleep(0.2)
                 rfamp_current=rfamp.Iout1
-                if (np.abs(rfamp_voltage-rfamp_threshold_v)>3) or (np.abs(rfamp_current-rfamp_threshold_i)>0.15):
+                if (np.abs(rfamp_voltage-rfamp_threshold_v)>3) or (np.abs(rfamp_current-rfamp_threshold_i)>0.3):
                     self.LFC_CLOSE_ALL(1)
                     self.__sendemail('RF amplifier is off due to over voltage or over current')
                 rfamp_prime = 11
@@ -2174,7 +2204,7 @@ class KeckLFC(object):
         Write keyword to set LFC to STANDBY.
         """
         # 只有在 KTL write 时才处理（value != None）
-        if value == 1:
+        if value in [1, True]:
             status = self.LFC_CHECK_STATUS()  # 获取当前状态
             # 从 FULL COMB -> close Pritel -> STANDBY
             if status == 'FULL COMB':
@@ -2286,67 +2316,88 @@ class KeckLFC(object):
 
         
     def LFC_MINICOMB_AUTO_SETUP(self, value=None):#TBD
-        if test_mode: return
+        #if test_mode: return
 
         if value == 1:
 
-            self.LFC_RFAMP_DEfAULT(1)
-            self.__sleep(0.1)
-            self.LFC_RFAMP_ONOFF(1)
-            self.__sleep(0.1)
+            #self.LFC_RFAMP_DEfAULT(1)
+            rfampPS = self.__LFC_RFAMP_connect()
+            
+            rfampPS.connect()
+            self.__sleep(0.5)
+            rfampPS.Vout1=30
+            self.__sleep(0.5)
+            rfampPS.Iout1=4.2
 
-            rfamp_monitor_return=self.LFC_RFAMP_MONITOR()
+            
+            self.__sleep(0.5)
+            #self.LFC_RFAMP_ONOFF(1)
+            rfampPS.activation1=1
+            self.__sleep(0.3)
+            rfampPS.disconnect()
 
-            if rfamp_monitor_return==0:
-                print('RF amp start succuess')
-                self.LFC_RFOSCI_DEFAULT(1)
-                self.__sleep(0.1)
-                self.LFC_RFOSCI_ONOFF(1)
-                self.__sleep(0.1)
-                rfosc_monitor_return=self.LFC_RFOSCI_MONITOR()
-                rfamp_monitor_return=self.LFC_RFAMP_MONITOR()
+            #self.LFC_RFOSCI_DEfAULT(1)
+            rfoscPS = self.__LFC_RFOSCI_connect()
+            rfoscPS.connect()
+            self.__sleep(0.5)
+            rfoscPS.Vset2=15
+            self.__sleep(0.5)
+            rfoscPS.Iset2=3
+            self.__sleep(0.5)
+            #self.LFC_RFOSCI_ONOFF(1)
+            rfoscPS.activation=1
+            self.__sleep(0.3)
+            rfoscPS.disconnect()
+            
+            #self.LFC_EDFA27_DEfAULT(1)
+            amonic27 = self.__LFC_EDFA27_connect()
+            amonic27.connect()
+            self.__sleep(0.5)
+            
+            amonic27_input_power=amonic27.inputPowerCh1
+            if ( amonic27_input_power <10 ) and ( amonic27_input_power >1):
+                amonic27._setChMode('apc')
+                self.__sleep(0.5)
+                amonic27.accCh1Cur='450mw'
+                self.__sleep(0.5)
+                amonic27.accCh1Status= 1
+                self.__sleep(0.5)
+                amonic27.activation= 1
+                self.__sleep(0.5)
+                amonic27.disconnect()
 
-                if (rfosc_monitor_return==0) & (rfamp_monitor_return==0):
-
-                    print('RF osci start succuess')
-                    self.LFC_PENDULEM_FREQ_MONITOR()
-                    
-                    self.LFC_CLARITY_ONOFF(1)
-                    #self.LFC_EDFA27_P_DEFAULT(1)
-                    edfa27_input=self.LFC_EDFA27_INPUT_POWER_MONITOR()
-                    if (edfa27_input==0) :
-
-                        print('EDFA27 input power is correct')
-                        self.LFC_EDFA27_AUTO_ON(1)
-                        self.LFC_WSP_PHASE(1) #TBD
-
-                        edfa23_input=self.LFC_EDFA23_INPUT_POWER_MONITOR()
-
-                        if (edfa23_input==0):
+                #self.LFC_EDFA23_DEfAULT(1)
+                amonic23 = self.__LFC_EDFA23_connect()
+                amonic23.connect()
+                self.__sleep(0.5)
+                amonic23_input_power=amonic23.inputPowerCh1
+                if ( amonic23_input_power <10 ) and ( amonic23_input_power >1):
                         
-                            print('EDFA23 input power is correct')
-                            self.LFC_EDFA23_AUTO_ON(1)
-                            self.LFC_IM_AUTO_LOCK(1)
-                            ptamp_input_status=self.LFC_PTAMP_LATCH(1)
+                        amonic23._setChMode('acc')
+                        self.__sleep(0.5)
+                        amonic23.accCh1Cur='80mA'
+                        self.__sleep(0.5)
+                        amonic23.accCh1Status= 1
+                        amonic23.activation= 1
+                        self.__sleep(0.5)
+                        amonic23.disconnect()
+                        self.__sleep(0.5)
+                        self.LFC_IM_AUTO_LOCK(1) # auto lock IM
+                        
 
-                            if ptamp_input_status==1:
-                                print('All devices are ready')
-                                return 0
-                            
-                            else: 
-                                print('PTAMP input value is not correct')
-                                self.__sendemail('PTAMP input value is not correct')
-                                return 0
-                        else:
-                            self.__sendemail('EDFA23 input power is not correct')
-                    else:
-                        self.__sendemail('EDFA27 input power is not correct')
+
                 else:
-                    self.__sendemail('RF osci start failed')
+                    self.__sendemail('EDFA23 input power is not correct')
+                    amonic23.disconnect()
 
             else:
-                self.__sendemail('RF amp start failed')
+                self.__sendemail('EDFA27 input power is not correct')
+                amonic27.disconnect()
+                
+            
 
+
+  
         return 0
 
 
