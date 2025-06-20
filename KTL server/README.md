@@ -50,6 +50,7 @@ Simply start the ICE server by
 cd .\KeckLFC-main  
 cd .\KeckLFC   
 cd ".\KTL server\" 
+
 & C:/Users/KeckLFC/.conda/envs/lfc-env/python.exe "c:/Users/KeckLFC/KeckLFC-main/KeckLFC/KTL server/server.py"          
 
 (final result:)PS C:\Users\KeckLFC\KeckLFC-main\KeckLFC\KTL server> & C:/Users/KeckLFC/.conda/envs/lfc-env/python.exe "c:/Users/KeckLFC/KeckLFC-main/KeckLFC/KTL server/server.py"
