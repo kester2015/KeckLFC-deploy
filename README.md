@@ -331,6 +331,20 @@ You can find more information about Ni-Max in https://knowledge.ni.com/Knowledge
 **Follow the instructions in [https://www.ni.com/en-us/support/downloads/drivers/download.ni-max.html](https://www.ni.com/en-us/support/downloads/drivers/download.ni-max.html) to install Ni-Max.**
 
 > Note added by Greg: If the above link is broken, you may search 'Ni Max download' in Google or in NI.com. The link should be easy to find.
+> add by jinhao 2025/06/19: the version for all (2023 Q1 or Q3 is good enough) 
+
+https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html#477807
+
+https://www.ni.com/en/support/downloads/drivers/download.ni-visa.html#565016
+
+https://www.ni.com/en/support/downloads/drivers/download.ni-488-2.html#559044
+
+https://www.ni.com/en/support/downloads/drivers/download.system-configuration.html#565004
+
+to download the driver and software you need to login, I have logged in for you, here is my account:
+account name: diwenchaodao@gmail.com
+passcode:gjh20000303
+the login info is auto recorded.
 
 
 ## Step 8: Install NI-488.2 package
