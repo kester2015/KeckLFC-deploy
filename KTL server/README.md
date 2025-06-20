@@ -46,6 +46,9 @@ If for some reason these commands do not work, one may try restarting the dispat
 
 ### Starting the server
 Simply start the ICE server by
+
+PS C:\Users\KeckLFC\KeckLFC-main\KeckLFC\KTL server> & C:/Users/KeckLFC/.conda/envs/lfc-env/python.exe "c:/Users/KeckLFC/KeckLFC-main/KeckLFC/KTL server/server.py"
+
 ``` 
 python server.py
 ```
