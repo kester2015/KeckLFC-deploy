@@ -655,22 +655,26 @@ class KeckLFC(object):
     #     return 0
 
     def LFC_CLOSE_ALL(self, value=None):
-        self.__sendemail('LFC_CLOSE_ALL is triggered')
-        return
+
+        #if test_mode: return
+        if value == None:
+            pass
+
         if value==1:
-            self.LFC_PTAMP_ONOFF(0)
-            self.__sleep(0.1)
-            self.LFC_EDFA23_ONOFF(0)
-            self.__sleep(0.1)
-            self.LFC_EDFA27_ONOFF(0)
-            self.__sleep(0.1)
+            self.__sendemail('LFC_CLOSE_ALL is triggered, time is '+time.strftime('%Y-%m-%d %H:%M:%S'))
+            # self.LFC_PTAMP_ONOFF(0)
+            # self.__sleep(0.1)
+            # self.LFC_EDFA23_ONOFF(0)
+            # self.__sleep(0.1)
+            # self.LFC_EDFA27_ONOFF(0)
+            # self.__sleep(0.1)
             
-            self.LFC_RFOSCI_ONOFF(0)
-            self.__sleep(0.1)
-            self.LFC_RFAMP_ONOFF(0)
-            self.__sleep(0.1)
-            self.LFC_CLARITY_ONOFF(0)
-            self.__sendemail('All devices are closed')
+            # self.LFC_RFOSCI_ONOFF(0)
+            # self.__sleep(0.1)
+            # self.LFC_RFAMP_ONOFF(0)
+            # self.__sleep(0.1)
+            # self.LFC_CLARITY_ONOFF(0)
+            # self.__sendemail('All devices are closed')
 
         
 
@@ -1434,27 +1438,28 @@ class KeckLFC(object):
             return
 
     def LFC_PTAMP_I(self, value=None): #test r
-        if test_mode: return
+        #if test_mode: return
         #return
 
-        ptamp=self.__LFC_PTAMP_connect()
-        
-
         if value != None:
-            ptamp.connect()
-            ptamp.pwrAmp = f'{value}'+'A'
-            self.__sleep(0.5)
-            #ptamp1=ptamp.pwrAmp
-            ptamp.disconnect()
-            return 0
+            if value < 4.2:
+                ptamp=self.__LFC_PTAMP_connect()
+                ptamp.connect()
+                ptamp.pwrAmp = f'{value}'+'A'
+                self.__sleep(0.5)
+                actual_ptamp=ptamp.pwrAmp
+                self.__sleep(0.5)
+                ptamp.disconnect()
+                return actual_ptamp
 
         
         if value == None:
+            pass
             #return 0 # not testing MODIFY for now
-            ptamp.connect()
-            ptamp_i=ptamp.pwrAmp
-            ptamp.disconnect()
-            return ptamp_i  # return
+            # ptamp.connect()
+            # ptamp_i=ptamp.pwrAmp
+            # ptamp.disconnect()
+            # return ptamp_i  # return
         
     def LFC_PTAMP_I_DEFAULT(self, value=None): #test r
         if test_mode: return
@@ -1550,7 +1555,7 @@ class KeckLFC(object):
             return 0  # return
         
     def LFC_YJ_SHUTTER(self, value=None): #tets r w #err2
-        # if test_mode: return
+        if test_mode: return
         #return
         # arduino = self.__LFC_ARDUINO_connect()
         if self.arduino == None: 
@@ -1653,7 +1658,7 @@ class KeckLFC(object):
 
 
     def LFC_2BY2_SWITCH(self, value=None): #test r w
-        # if test_mode: return
+        if test_mode: return
         # Both keyword read and write are tested!
         # if test_mode: return
         switch = self.__LFC_2BY2_SWITCH_connect()
@@ -1704,7 +1709,7 @@ class KeckLFC(object):
         return self.LFC_2BY2_SWITCH(value)
         
     def LFC_HK_SHUTTER(self, value=None): #read r w
-        # if test_mode: return
+        if test_mode: return
         #return
         hks = self.__LFC_HK_SHUTTER_connect()
         if value == None:
@@ -1732,7 +1737,7 @@ class KeckLFC(object):
           
     def LFC_VOA1550_ATTEN(self, value=None): #r w
         # Successfully tested!
-        # if test_mode: return
+        if test_mode: return
         voa = self.__LFC_VOA1550_connect()
         if value == None:
             print("VOA1550_ATTEN read block called")
@@ -1801,7 +1806,7 @@ class KeckLFC(object):
         
     def LFC_VOA2000_ATTEN(self, value=None):# rw
         # Successfully tested!
-        # if test_mode: return
+        if test_mode: return
         voa = self.__VOA2000_connect()
         if value == None:
             voa.connect()
@@ -1938,6 +1943,8 @@ class KeckLFC(object):
     
     def LFC_IM_AUTO_LOCK(self, value=None):#TBD big problem
         #if test_mode: return
+        if value == None:
+            pass
 
         if value in [1,True]:
             #osa = self.__LFC_OSA_connect()
@@ -1994,8 +2001,8 @@ class KeckLFC(object):
             srs.disconnect()
 
             return 1
-        else:
-            return 0  # If value is not 1, do nothing and return 0
+        
+        return 0  # If value is not 1, do nothing and return 0
     
     def LFC_IM_ATTEN_OPTIMIZE(self, value=None):#TBD
         if test_mode: return
@@ -2087,7 +2094,7 @@ class KeckLFC(object):
         ptact=status_dict[ptact]
         self.__sleep(0.2)
         ptamp.disconnect()
-        if ptact == 1:
+        if ptact in [1, True, 'ON','on']:
             ptamp_prime = 2
         else:
             ptamp_prime = 1
@@ -2097,7 +2104,7 @@ class KeckLFC(object):
         self.__sleep(0.2)
         amonic23onoff=amonic23.accCh1Status
         self.__sleep(0.2)
-        if ( amonic23onoff == 1):
+        if ( amonic23onoff in [1, True, 'ON', 'on']):
             amonic23_input_power=amonic23.inputPowerCh1
             
             if ( amonic23_input_power > 10) or ( amonic23_input_power < 1):
@@ -2113,7 +2120,7 @@ class KeckLFC(object):
         self.__sleep(0.2)
         amonic27onoff=amonic27.accCh1Status
         self.__sleep(0.2)
-        if ( amonic27onoff == 1):
+        if ( amonic27onoff in [1, True, 'ON', 'on']):
             amonic27_input_power=amonic27.inputPowerCh1
             
             if ( amonic27_input_power > 10) or ( amonic27_input_power < 1):
@@ -2125,16 +2132,20 @@ class KeckLFC(object):
         amonic27.disconnect()
         # RFOSCI test
         rfoscPS = self.__LFC_RFOSCI_connect()
-        rfoscPS.connect()
+        try:
+            rfoscPS.connect()
+        except Exception as e:
+            self.__sleep(1)
+            rfoscPS = self.__LFC_RFOSCI_connect()
         self.__sleep(0.2)
         rfoscPS_onoff=rfoscPS.activation
         self.__sleep(0.2)
-        if ( rfoscPS_onoff == 1):
+        if ( rfoscPS_onoff in [1, True, 'ON', 'on']):
             rfoscPS_v=rfoscPS.Vout2
             self.__sleep(0.2)
             rfoscPS_i=rfoscPS.Iout2
             
-            if np.abs(rfoscPS_v-15) > 1 or np.abs(rfoscPS_i-0.4) > 0.12:
+            if np.abs(rfoscPS_v-15) > 2 or np.abs(rfoscPS_i-0.4) > 0.1:
                 self.__sendemail('RFOSCI voltage or current is not correct')
             rfoscPS_prime = 7
         else:
@@ -2143,15 +2154,19 @@ class KeckLFC(object):
         rfoscPS.disconnect()
         # RFAMP test
         rfamp = self.__LFC_RFAMP_connect()
-        rfamp.connect()
+        try:
+            rfamp.connect()
+        except Exception as e:
+            self.__sleep(1)
+            rfamp = self.__LFC_RFAMP_connect()
         self.__sleep(0.2)
         rfamp_onoff=rfamp.activation1
         self.__sleep(0.2)
-        if ( rfamp_onoff == 1):
+        if ( rfamp_onoff in [1, True, 'ON', 'on']):
             rfamp_threshold_v=30
-            rfamp_threshold_i=4.1
+            rfamp_threshold_i=4.0
 
-            if rfoscPS_onoff == 1:
+            if rfoscPS_onoff in [1, True, 'ON', 'on']:
                 rfamp_voltage=rfamp.Vout1
                 self.__sleep(0.2)
                 rfamp_current=rfamp.Iout1
@@ -2159,7 +2174,7 @@ class KeckLFC(object):
                     self.LFC_CLOSE_ALL(1)
                     self.__sendemail('RF amplifier is off due to over voltage or over current')
                 rfamp_prime = 11
-            if rfoscPS_onoff == 0:
+            if rfoscPS_onoff in [0, False, 'OFF', 'off']:
                 if (np.abs(rfamp_voltage)>0.1) or (np.abs(rfamp_current)>0.1):
                     self.LFC_CLOSE_ALL(1)
                     self.__sendemail('RF amplifier is off due to activation without RFOSCI')
@@ -2172,7 +2187,7 @@ class KeckLFC(object):
         pendulem.connect()
         self.__sleep(0.2)
                 
-        if rfoscPS_onoff == 1 and rfamp_onoff == 1:
+        if rfoscPS_onoff in [1, True, 'ON', 'on'] and rfamp_onoff in [1, True, 'ON', 'on']:
             pendulem.run()
             self.__sleep(0.2)
             freq=pendulem.measFreq('c')
@@ -2188,26 +2203,31 @@ class KeckLFC(object):
 
         final = ptamp_prime * amonic23_prime * amonic27_prime * rfoscPS_prime * rfamp_prime * pendulem_prime
 
-        if final == 2*3*5*7*11*13:
+        if final == 2*3*5*7*11*13: #= 30030
             self.comb_status = 'FULL COMB'
-        elif final == 3*5*7*11*13:
+            return final
+        elif final == 3*5*7*11*13: #= 15015
             self.comb_status = 'STANDBY'
+            return final
         elif final == 1:
             self.comb_status = 'OFF'
+            return final
         else:
             self.comb_status = 'STRANGE STATE'
             self.__sendemail(f'LFC is in strange state. Please check the status of each device. status code: {final}')
-        return self.comb_status
+        return 0
         
     def LFC_SET_STANDBY(self, value=None):
         """
         Write keyword to set LFC to STANDBY.
         """
+        if value is None:
+            pass  # KTL read: do nothing, just return current status
         # 只有在 KTL write 时才处理（value != None）
         if value in [1, True]:
             status = self.LFC_CHECK_STATUS()  # 获取当前状态
             # 从 FULL COMB -> close Pritel -> STANDBY
-            if status == 'FULL COMB':
+            if status == 30030:  # FULL COMB
 
                 ptamp=self.__LFC_PTAMP_connect()
                 self.__sleep(0.5)
@@ -2220,32 +2240,36 @@ class KeckLFC(object):
                 ptamp.disconnect()  
                  
                 self.comb_status = 'STANDBY'
+                return 15015
             # 从 OFF -> full minicomb setup -> STANDBY
-            elif status == 'OFF':
+            elif status == 1:  # OFF
                 self.LFC_MINICOMB_AUTO_SETUP(1)  # 你的 auto setup 脚本
                 self.comb_status = 'STANDBY'
+                return 15015  # 返回 STANDBY 的状态码
             # 如果已经 STANDBY，则不动
-            elif status == 'STANDBY':
-                pass  # 什么都不做
+            elif status == 15015:  # STANDBY
+                return 15015  # 已经是 STANDBY 状态
             else:
                 self.__sendemail(f'LFC_SET_STANDBY encountered unexpected status: {status}')
             return 0
-        else:
-            # KTL read: 返回当前状态
-            return self.comb_status
+        # else:
+        #     # KTL read: 返回当前状态
+        #     return self.comb_status
 
     def LFC_SET_FULL_COMB(self, value=None):
         """
         Write keyword to set LFC to FULL COMB.
         """
-        if value == 1:
+        if value is None:
+            pass
+        if value in [1, True]:
             status = self.LFC_CHECK_STATUS()  # 获取当前状态
             # 已是 FULL COMB 不动
-            if status == 'FULL COMB':
+            if status == 30030:  # FULL COMB
                 #todo with Pritel
                 pass
             # STANDBY -> 打开 Pritel -> FULL COMB
-            elif status == 'STANDBY':
+            elif status == 15015:  # STANDBY
 
                 self.LFC_PTAMP_LATCH(1)  # 确保 PTAMP 已经准备好
                 # 这里假设 PTAMP 已经连接好
@@ -2256,13 +2280,14 @@ class KeckLFC(object):
                 self.__sleep(0.5)
                 ptamp.activation = 1
                 self.__sleep(0.5)
-                ptamp.pwrAmp = '4A'
+                ptamp.pwrAmp = '3.9A'
                 self.__sleep(10)
                 ptamp.disconnect()
                 # to do with Pritel
                 self.comb_status = 'FULL COMB'
+                return 30030  # 返回 FULL COMB 的状态码
             # OFF -> 先做一次 minicomb setup -> Pritel -> FULL COMB
-            elif status == 'OFF':
+            elif status == 1:  # OFF
                 self.LFC_MINICOMB_AUTO_SETUP(1)
                 self.__sleep(5)  # 等待设备稳定
                 self.LFC_PTAMP_LATCH(1)  # 确保 PTAMP 已经准备好
@@ -2274,22 +2299,27 @@ class KeckLFC(object):
                 self.__sleep(0.5)
                 ptamp.activation = 1
                 self.__sleep(0.5)
-                ptamp.pwrAmp = '4A'
+                ptamp.pwrAmp = '3.9A'
                 self.__sleep(10)
                 ptamp.disconnect()
                 self.comb_status = 'FULL COMB'
+                return 30030
             return 0
-        else:
-            return self.comb_status
+        # else:
+        #     return self.comb_status
 
     def LFC_SET_OFF(self, value=None):
         """
         Write keyword to set LFC to OFF.
+
         """
+        if test_mode: return
+        if value is None:
+            pass
         if value == 1:
             status = self.LFC_CHECK_STATUS()  # 获取当前状态
             # 如果是 FULL COMB 或 STANDBY，就一路倒回去关
-            if status in ('FULL COMB', 'STANDBY'):
+            if status in ('FULL COMB', 'STANDBY', 30030, 15015):
                 ptamp=self.__LFC_PTAMP_connect()
                 self.__sleep(0.5)
                 ptamp.pwrAmp = '0A'
@@ -2300,8 +2330,10 @@ class KeckLFC(object):
                 self.__sleep(0.5)
                 ptamp.disconnect()
                 self.LFC_CLOSE_ALL(1)  # 关闭所有设备
+                self.__sendemail('LFC_SET_OFF executed: All devices are turned off. Please check the system.')
                 # … 如有其它设备也一并关闭 …
                 self.comb_status = 'OFF'
+                return 1  # 返回 OFF 的状态码
             # 如果已经 OFF，什么都不做
             elif status == 'OFF':
                 pass  # 什么都不做
@@ -2317,6 +2349,8 @@ class KeckLFC(object):
         
     def LFC_MINICOMB_AUTO_SETUP(self, value=None):#TBD
         #if test_mode: return
+        if value == None:
+            pass
 
         if value == 1:
 
@@ -2383,6 +2417,7 @@ class KeckLFC(object):
                         amonic23.disconnect()
                         self.__sleep(0.5)
                         self.LFC_IM_AUTO_LOCK(1) # auto lock IM
+                        return 1
                         
 
 
@@ -2393,10 +2428,6 @@ class KeckLFC(object):
             else:
                 self.__sendemail('EDFA27 input power is not correct')
                 amonic27.disconnect()
-                
-            
-
-
   
         return 0
 

@@ -299,7 +299,7 @@
 			</entry>
 		</values>
 		<serverside>
-			<period>20</period>
+			<period>1800</period>
 		</serverside>
 	</keyword>
 	<keyword>
@@ -675,7 +675,7 @@
 			<minimum>0</minimum>
 			<maximum>4</maximum>
 		</range>
-		<units>W</units>
+		<units>A</units>
 		<format>%.1f</format>
 	</keyword>
 	<keyword>
@@ -684,11 +684,14 @@
 		<help level="brief">High-power EDFA pump current</help>
 		<help level="verbose">High-power EDFA pump current</help>
 		<capability type="write">True</capability>
+		<serverside>
+			<period>1800</period>
+		</serverside>
 		<range>
 			<minimum>0</minimum>
-			<maximum>4.8</maximum>
+			<maximum>4.2</maximum>
 		</range>
-		<units>Amp</units>
+		<units>A</units>
 		<format>%.2f</format>
 	</keyword>
 	<keyword>
@@ -943,6 +946,87 @@
 				<key>1</key>
 				<value>set</value>
 			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_IM_AUTO_LOCK</name>
+		<type>boolean</type>
+		<help level="brief">Im auto lock</help>
+		<help level="verbose">im auto lock</help>
+		<capability type="write">True</capability>
+		<values>
+			<entry>
+				<key>0</key>
+				<value>Fault</value>
+			</entry>
+			<entry>
+				<key>1</key>
+				<value>Done</value>
+			</entry>
+		</values>
+	</keyword>
+	<keyword>
+		<name>LFC_CHECK_STATUS</name>
+		<type>integer</type>
+		<help level="brief">ptamp i default set</help>
+		<help level="verbose">ptamp i defalut set</help>
+		<capability type="write">True</capability>
+		<serverside>
+			<period>1800</period>
+		</serverside>
+	
+	</keyword>
+	<keyword>
+		<name>LFC_SET_STANDBY</name>
+		<type>integer</type>
+		<help level="brief">ptamp i default set</help>
+		<help level="verbose">ptamp i defalut set</help>
+		<capability type="write">True</capability>
+		<serverside>
+			<period>1800</period>
+		</serverside>
+	</keyword>
+	<keyword>
+		<name>LFC_SET_FULL_COMB</name>
+		<type>integer</type>
+		<help level="brief">ptamp i default set</help>
+		<help level="verbose">ptamp i defalut set</help>
+		<capability type="write">True</capability>
+		<serverside>
+			<period>1800</period>
+		</serverside>
+
+	</keyword>
+	<keyword>
+		<name>LFC_SET_OFF</name>
+		<type>integer</type>
+		<help level="brief">ptamp i default set</help>
+		<help level="verbose">ptamp i defalut set</help>
+		<capability type="write">True</capability>
+		<serverside>
+			<period>1800</period>
+		</serverside>
+	
+	</keyword>
+	<keyword>
+		<name>LFC_MINICOMB_AUTO_SETUP</name>
+		<type>enumerated</type>
+		<help level="brief">ptamp i default set</help>
+		<help level="verbose">ptamp i defalut set</help>
+		<capability type="write">True</capability>
+		<serverside>
+			<period>1800</period>
+		</serverside>
+		<values>
+			<entry>
+				<key>1</key>
+				<value>DONE</value>
+			</entry>
+			<entry>
+				<key>0</key>
+				<value>WRONG</value>
+			</entry>
+			
 		</values>
 	</keyword>
 	<!-- <keyword> ## <values> need to be set! Disabling this for now b/c this causes errors
