@@ -47,7 +47,12 @@ If for some reason these commands do not work, one may try restarting the dispat
 ### Starting the server
 Simply start the ICE server by
 
-PS C:\Users\KeckLFC\KeckLFC-main\KeckLFC\KTL server> & C:/Users/KeckLFC/.conda/envs/lfc-env/python.exe "c:/Users/KeckLFC/KeckLFC-main/KeckLFC/KTL server/server.py"
+cd .\KeckLFC-main  
+cd .\KeckLFC   
+cd ".\KTL server\" 
+& C:/Users/KeckLFC/.conda/envs/lfc-env/python.exe "c:/Users/KeckLFC/KeckLFC-main/KeckLFC/KTL server/server.py"          
+
+(final result:)PS C:\Users\KeckLFC\KeckLFC-main\KeckLFC\KTL server> & C:/Users/KeckLFC/.conda/envs/lfc-env/python.exe "c:/Users/KeckLFC/KeckLFC-main/KeckLFC/KTL server/server.py"
 
 ``` 
 python server.py
@@ -70,7 +75,7 @@ Always make sure that
 To deploy changes in `LFC.xml.sin`, follow these steps:
 1. copy `LFC.xml.sin` file to irastrocombbuild
 ``` 
-scp LFC.xml.sin combbld@irastrocombbuild:/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin
+scp LFC.xml.sin combbld@irastrocombbuild:/kroot/src/kss/astrocomb/comb/ktlxml/LFC.xml.sin (in ice server)
 ```
 2. log in to irastrocombbuild and make install
 ``` 
